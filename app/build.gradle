@@ -1,27 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: "com.github.kt3k.coveralls"
-apply plugin: 'jacoco'
-
-task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'createDebugCoverageReport']) {
-
-    reports {
-        xml.enabled = true
-        html.enabled = true
-    }
-
-    def fileFilter = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*']
-    def debugTree = fileTree(dir: "$project.buildDir/intermediates/classes/debug", excludes: fileFilter)
-    def kotlinDebugTree = fileTree(dir: "${buildDir}/tmp/kotlin-classes/debug", excludes: fileFilter)
-    def mainSrc = "$project.projectDir/src/main/java"
-
-    sourceDirectories = files([mainSrc])
-    classDirectories = files([debugTree], [kotlinDebugTree])
-    executionData = fileTree(dir: project.buildDir, includes: [
-            'jacoco/testDebugUnitTest.exec', 'outputs/code-coverage/connected/*coverage.ec'
-    ])
-}
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 27
@@ -38,14 +18,15 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
-        debug {
-            testCoverageEnabled true
-        }
     }
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
+
     testOptions {
         unitTests {
             includeAndroidResources = true
-            returnDefaultValues = true
         }
     }
 }
@@ -55,12 +36,14 @@ ext {
     constraint = "1.1.0-beta3"
     rxJava = "2.1.7"
     rxAndroid = "2.0.1"
+    rxKotlin = "2.2.0"
     butterknife = "8.8.1"
     glassfish = "10.0-b28"
     dagger = "2.13"
-    paging = "1.0.0-alpha4"
+    paging = "1.0.0-alpha4-1"
     archComponents = "1.0.0"
     junit = "4.12"
+    robo = "3.5.1"
     runner = "1.0.1"
     espresso = "3.0.1"
 }
@@ -73,6 +56,9 @@ dependencies {
     implementation "com.android.support:appcompat-v7:$support"
     implementation "com.android.support:recyclerview-v7:$support"
     implementation "com.android.support:design:$support"
+    implementation "com.android.support:support-v4:$support"
+    implementation "com.android.support:recyclerview-v7:$support"
+    implementation "com.android.support:cardview-v7:$support"
     implementation "com.android.support.constraint:constraint-layout:$constraint"
 
     //Android Architecture Components
@@ -83,31 +69,28 @@ dependencies {
     implementation "android.arch.lifecycle:reactivestreams:$archComponents"
     implementation "android.arch.persistence.room:runtime:$archComponents"
     implementation "android.arch.persistence.room:rxjava2:$archComponents"
-    implementation 'com.android.support:support-v4:27.0.2'
-    implementation 'com.android.support:recyclerview-v7:27.0.2'
-    annotationProcessor "android.arch.persistence.room:compiler:$archComponents"
+    kapt "android.arch.persistence.room:compiler:$archComponents"
 
     //Rx
     implementation "io.reactivex.rxjava2:rxjava:$rxJava"
     implementation "io.reactivex.rxjava2:rxandroid:$rxAndroid"
+    implementation "io.reactivex.rxjava2:rxkotlin:$rxKotlin"
 
     //Dagger
     implementation "org.glassfish:javax.annotation:$glassfish"
     implementation "com.google.dagger:dagger:$dagger"
     implementation "com.google.dagger:dagger-android:$dagger"
     implementation "com.google.dagger:dagger-android-support:$dagger"
-    annotationProcessor "com.google.dagger:dagger-compiler:$dagger"
-    annotationProcessor "com.google.dagger:dagger-android-processor:$dagger"
+    kapt "com.google.dagger:dagger-compiler:$dagger"
+    kapt "com.google.dagger:dagger-android-processor:$dagger"
 
     //Testing
     testImplementation "junit:junit:$junit"
     testImplementation "android.arch.core:core-testing:$archComponents"
     testImplementation "android.arch.persistence.room:testing:$archComponents"
     testImplementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    testImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
+    testImplementation "org.robolectric:robolectric:$robo"
     androidTestImplementation "com.android.support.test:runner:$runner"
     androidTestImplementation "com.android.support.test.espresso:espresso-core:$espresso"
-}
-
-coveralls {
-    jacocoReportPath = "${buildDir}/reports/coverage/debug/report.xml"
 }

@@ -5,5 +5,8 @@ import android.arch.lifecycle.ViewModel
 /**
  * @author Nicholas Doglio
  */
-class NoteListViewModel: ViewModel() {
+class NoteListViewModel : ViewModel() {
+    override fun onCleared() {
+        super.onCleared()
+    }
 }
