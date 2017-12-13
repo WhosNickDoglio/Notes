@@ -1,13 +1,13 @@
 package com.nicholasdoglio.notes.data
 
 import android.arch.persistence.room.Room
-import junit.framework.Assert
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
+import kotlin.test.assertEquals
 
 @RunWith(RobolectricTestRunner::class)
 class NoteDaoTestRobo {
@@ -47,18 +47,18 @@ class NoteDaoTestRobo {
 
         val retrievedNote = noteDatabase.noteDao().getNote(4)
 
-        Assert.assertEquals(retrievedNote.noteId, fourthNote.noteId)
-        Assert.assertEquals(retrievedNote.title, fourthNote.title)
-        Assert.assertEquals(retrievedNote.contents, fourthNote.contents)
+        assertEquals(retrievedNote.noteId, fourthNote.noteId)
+        assertEquals(retrievedNote.title, fourthNote.title)
+        assertEquals(retrievedNote.contents, fourthNote.contents)
     }
 
     @Test
     fun getNote() {
         val retrievedNote = noteDatabase.noteDao().getNote(1)
 
-        Assert.assertEquals(retrievedNote.noteId, firstNote.noteId)
-        Assert.assertEquals(retrievedNote.title, firstNote.title)
-        Assert.assertEquals(retrievedNote.contents, firstNote.contents)
+        assertEquals(retrievedNote.noteId, firstNote.noteId)
+        assertEquals(retrievedNote.title, firstNote.title)
+        assertEquals(retrievedNote.contents, firstNote.contents)
     }
 
     @Test
