@@ -26,12 +26,6 @@ interface NoteDao {
     fun deleteNote(note: Note)
 
     /**
-     * Wipe out all the notes at once
-     */
-    @Query("DELETE * FROM NOTE")
-    fun deleteAllNotes()
-
-    /**
      * returns the selected note from the database
      */
     @Query("SELECT * From Note WHERE noteId = :id")

@@ -68,11 +68,6 @@ class NoteDaoTestRobo {
 
 
     @Test
-    fun deleteAllNotes() {
-        noteDatabase.noteDao().deleteAllNotes()
-    }
-
-    @Test
     fun getAllNotes() {
         val allNotes = noteDatabase.noteDao().getAllNotes()
     }
