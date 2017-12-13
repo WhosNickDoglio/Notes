@@ -2,19 +2,16 @@ package com.nicholasdoglio.notes.data
 
 import android.arch.persistence.room.Room
 import android.support.test.InstrumentationRegistry
-import junit.framework.Assert.assertEquals
+import junit.framework.Assert
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import kotlin.test.assertEquals
 
-/**
- * @author Nicholas Doglio
- */
 class NoteDaoTest {
+
     private lateinit var noteDatabase: NoteDatabase
-    private lateinit var firstNote: Note
-    private lateinit var secondNote: Note
-    private lateinit var thirdNote: Note
+    private lateinit var testNote: Note
 
     @Before
     fun setUp() {
@@ -24,9 +21,7 @@ class NoteDaoTest {
                 .allowMainThreadQueries()
                 .build()
 
-        firstNote = Note(1, "first note title", "first note contents")
-        secondNote = Note(2, "second note title", "second note contents")
-        thirdNote = Note(3, "third note title", "third note contents")
+        testNote = Note(1, "test note title", "test note contents")
     }
 
     @After
@@ -35,11 +30,29 @@ class NoteDaoTest {
     }
 
     @Test
-    fun insertData() {
-        noteDatabase.noteDao().createNote(firstNote)
+    fun insertNote() {
+        noteDatabase.noteDao().createNote(testNote)
 
-        val note = noteDatabase.noteDao().getNote(1).blockingGet()
+        val retrievedNote = noteDatabase.noteDao().getNote(1)
 
-        assertEquals(note.id, firstNote.id)
+        Assert.assertEquals(retrievedNote.noteId, testNote.noteId)
+        Assert.assertEquals(retrievedNote.title, testNote.title)
+        Assert.assertEquals(retrievedNote.contents, testNote.contents)
+    }
+
+    @Test
+    fun getNote() {
+        val retrievedNote = noteDatabase.noteDao().getNote(1)
+
+    }
+
+    @Test
+    fun deleteNote() {
+        assertEquals(1, 1)
+    }
+
+    @Test
+    fun getAllNotes() {
+        assertEquals(1, 1)
     }
 }

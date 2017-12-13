@@ -6,7 +6,9 @@ import android.arch.persistence.room.RoomDatabase
 /**
  * @author Nicholas Doglio
  */
+
 @Database(entities = arrayOf(Note::class), version = 1)
 abstract class NoteDatabase : RoomDatabase() {
+
     abstract fun noteDao(): NoteDao
 }
