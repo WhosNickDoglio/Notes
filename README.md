@@ -4,6 +4,7 @@
 [![API](https://img.shields.io/badge/API-19%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=19)
 [![Build Status](https://travis-ci.org/WhosNickDoglio/Notes.svg?branch=master)](https://travis-ci.org/WhosNickDoglio/Notes)
 [![codecov](https://codecov.io/gh/WhosNickDoglio/Notes/branch/master/graph/badge.svg)](https://codecov.io/gh/WhosNickDoglio/Notes)
+
 A small Note taking application to play with Kotlin and other libaries
  
 Talk about single activity applications vs one activity per flow
