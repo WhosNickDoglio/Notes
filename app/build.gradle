@@ -93,5 +93,6 @@ dependencies {
     testImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
     testImplementation "org.robolectric:robolectric:$robo"
     androidTestImplementation "com.android.support.test:runner:$runner"
+    androidTestImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
     androidTestImplementation "com.android.support.test.espresso:espresso-core:$espresso"
 }
