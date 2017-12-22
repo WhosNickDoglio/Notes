@@ -1,11 +1,12 @@
 package com.nicholasdoglio.notes.ui.list
 
 import android.arch.lifecycle.ViewModel
+import com.nicholasdoglio.notes.data.NoteDatabase
 
 /**
  * @author Nicholas Doglio
  */
-class NoteListViewModel : ViewModel() {
+class NoteListViewModel(private val database: NoteDatabase) : ViewModel() {
 
     override fun onCleared() {
         super.onCleared()
