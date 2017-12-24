@@ -13,9 +13,9 @@ import kotlin.test.assertEquals
 class NoteDaoTest {
 
     private lateinit var noteDatabase: NoteDatabase
-    private lateinit var firstNote: Note
-    private lateinit var secondNote: Note
-    private lateinit var thirdNote: Note
+    private val firstTestNote: Note = Note(1, "first note title", "first note contents")
+    private val secondTestNote: Note = Note(2, "second note title", "second note contents")
+
 
     @Before
     fun setUp() {
@@ -25,49 +25,47 @@ class NoteDaoTest {
                 .allowMainThreadQueries()
                 .build()
 
-        firstNote = Note(1, "first note title", "first note contents")
-        secondNote = Note(2, "second note title", "second note contents")
-        thirdNote = Note(3, "third note title", "third note contents")
-
-        noteDatabase.noteDao().createNote(firstNote)
-        noteDatabase.noteDao().createNote(secondNote)
-        noteDatabase.noteDao().createNote(thirdNote)
+        noteDatabase.noteDao().createNote(firstTestNote)
+        noteDatabase.noteDao().createNote(secondTestNote)
     }
 
+
     @After
-    fun tearDown() {
+    fun closeDatabase() {
         noteDatabase.close()
     }
 
     @Test
     fun insertNote() {
-        val fourthNote = Note(4, "fourth note title", "fourth note contents")
+        val thirdTestNote = Note(3, "third note title", "third note contents")
 
-        noteDatabase.noteDao().createNote(fourthNote)
+        noteDatabase.noteDao().createNote(thirdTestNote)
 
-        val retrievedNote = noteDatabase.noteDao().getNote(4)
+        val retrievedNote = noteDatabase.noteDao().getNote(3)
 
-        assertEquals(retrievedNote.noteId, fourthNote.noteId)
-        assertEquals(retrievedNote.title, fourthNote.title)
-        assertEquals(retrievedNote.contents, fourthNote.contents)
+        assertEquals(retrievedNote.noteId, thirdTestNote.noteId)
+        assertEquals(retrievedNote.title, thirdTestNote.title)
+        assertEquals(retrievedNote.contents, thirdTestNote.contents)
     }
 
     @Test
     fun getNote() {
         val retrievedNote = noteDatabase.noteDao().getNote(1)
 
-        assertEquals(retrievedNote.noteId, firstNote.noteId)
-        assertEquals(retrievedNote.title, firstNote.title)
-        assertEquals(retrievedNote.contents, firstNote.contents)
+        assertEquals(retrievedNote.noteId, firstTestNote.noteId)
+        assertEquals(retrievedNote.title, firstTestNote.title)
+        assertEquals(retrievedNote.contents, firstTestNote.contents)
     }
 
     @Test
     fun deleteNote() {
-        assertEquals(1, 1)
+        noteDatabase.noteDao().deleteNote(firstTestNote)
+
+        assertEquals(noteDatabase.noteDao().getNumberOfItems(), 1)
     }
 
     @Test
     fun getAllNotes() {
-        assertEquals(1, 1)
+        //Look at AAC Github samples to figure out how to best test a PagedList
     }
 }

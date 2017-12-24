@@ -26,7 +26,7 @@ interface NoteDao {
     fun deleteNote(note: Note)
 
     /**
-     * returns the selected note from the database
+     * Returns the selected note from the database
      */
     @Query("SELECT * From Note WHERE noteId = :id")
     fun getNote(id: Long): Note
@@ -36,5 +36,11 @@ interface NoteDao {
      */
     @Query("SELECT * FROM Note")
     fun getAllNotes(): DataSource.Factory<Int, Note>
+
+    /**
+     * Gets the total number of items in the Note table, really just used for testing
+     */
+    @Query("SELECT COUNT(*) FROM Note")
+    fun getNumberOfItems(): Int
 
 }
