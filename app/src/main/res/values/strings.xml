@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">Notes</string>
 
+    <!--Note Fragment-->
     <string name="title_hint">Title</string>
-    <string name="note_hint">write your note here!</string>
+    <string name="note_hint">Write your note here!</string>
+    <string name="saveButtonDescription">Check mark to save this note</string>
+    <string name="delete_note">Trash can to delete this note</string>
 </resources>

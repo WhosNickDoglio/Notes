@@ -6,10 +6,10 @@ apply plugin: 'jacoco-android'
 
 android {
     compileSdkVersion 27
-    buildToolsVersion '27.0.2'
+    buildToolsVersion '27.0.3'
     defaultConfig {
         applicationId "com.nicholasdoglio.notes"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
@@ -38,21 +38,22 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 
 ext {
+    anko = "0.10.4"
     support = "27.0.2"
     constraint = "1.1.0-beta4"
-    rxJava = "2.1.7"
-    rxAndroid = "2.0.1"
-    rxKotlin = "2.2.0"
-    butterknife = "8.8.1"
     dagger = "2.14.1"
     paging = "1.0.0-alpha4-1"
     archComponents = "1.0.0"
+    rxJava = "2.1.7"
+    rxAndroid = "2.0.1"
+    rxKotlin = "2.2.0"
+    rxBinding = "2.0.0"
     junit = "4.12"
     robo = "3.6.1"
     runner = "1.0.1"
@@ -72,6 +73,9 @@ dependencies {
     implementation "com.android.support:cardview-v7:$support"
     implementation "com.android.support.constraint:constraint-layout:$constraint"
 
+    //Anko
+    implementation "org.jetbrains.anko:anko-appcompat-v7-commons:$anko"
+
     //Android Architecture Components
     implementation "android.arch.paging:runtime:$paging"
     implementation "android.arch.lifecycle:common-java8:$archComponents"
@@ -86,6 +90,11 @@ dependencies {
     implementation "io.reactivex.rxjava2:rxjava:$rxJava"
     implementation "io.reactivex.rxjava2:rxandroid:$rxAndroid"
     implementation "io.reactivex.rxjava2:rxkotlin:$rxKotlin"
+    implementation "com.jakewharton.rxbinding2:rxbinding-kotlin:$rxBinding"
+    implementation "com.jakewharton.rxbinding2:rxbinding-support-v4-kotlin:$rxBinding"
+    implementation "com.jakewharton.rxbinding2:rxbinding-appcompat-v7-kotlin:$rxBinding"
+    implementation "com.jakewharton.rxbinding2:rxbinding-design-kotlin:$rxBinding"
+    implementation "com.jakewharton.rxbinding2:rxbinding-recyclerview-v7-kotlin:$rxBinding"
 
     //Dagger
     implementation "com.google.dagger:dagger:$dagger"
@@ -104,4 +113,6 @@ dependencies {
     androidTestImplementation "com.android.support.test:runner:$runner"
     androidTestImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
     androidTestImplementation "com.android.support.test.espresso:espresso-core:$espresso"
+    androidTestImplementation "android.arch.persistence.room:testing:$archComponents"
+    androidTestImplementation "android.arch.core:core-testing:$archComponents"
 }

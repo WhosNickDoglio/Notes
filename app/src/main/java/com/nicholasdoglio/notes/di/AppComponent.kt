@@ -1,9 +1,11 @@
 package com.nicholasdoglio.notes.di
 
 import android.app.Application
+import com.nicholasdoglio.notes.NotesApplication
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjectionModule
+import dagger.android.support.AndroidSupportInjectionModule
 import javax.inject.Singleton
 
 /**
@@ -12,8 +14,10 @@ import javax.inject.Singleton
 @Singleton
 @Component(modules = arrayOf(
         AndroidInjectionModule::class,
+        AndroidSupportInjectionModule::class,
         AppModule::class,
-        MainActivityBindingModule::class
+        MainActivityBindingModule::class,
+        ViewModelModule::class
 ))
 interface AppComponent {
     @Component.Builder
@@ -24,5 +28,5 @@ interface AppComponent {
         fun build(): AppComponent
     }
 
-    fun inject(app: Application)
+    fun inject(app: NotesApplication)
 }

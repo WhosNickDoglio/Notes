@@ -6,11 +6,13 @@ import com.nicholasdoglio.notes.ui.list.NoteListViewModel
 import com.nicholasdoglio.notes.ui.note.NoteViewModel
 import com.nicholasdoglio.notes.ui.viewmodel.NotesViewModelFactory
 import dagger.Binds
+import dagger.Module
 import dagger.multibindings.IntoMap
 
 /**
  * @author Nicholas Doglio
  */
+@Module
 abstract class ViewModelModule {
 
     @Binds

@@ -14,7 +14,7 @@ import android.arch.persistence.room.PrimaryKey
 @Entity
 data class Note(
         @PrimaryKey(autoGenerate = true)
-        val noteId: Long,
+        val id: Long = 0,
         var title: String,
         var contents: String
 )
