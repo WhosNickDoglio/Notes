@@ -2,7 +2,7 @@ package com.nicholasdoglio.notes.di
 
 import android.app.Application
 import android.arch.persistence.room.Room
-import com.nicholasdoglio.notes.data.NoteDatabase
+import com.nicholasdoglio.notes.data.local.NoteDatabase
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton

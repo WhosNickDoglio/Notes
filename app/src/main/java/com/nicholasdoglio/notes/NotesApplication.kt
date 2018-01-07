@@ -14,8 +14,11 @@ import javax.inject.Inject
 class NotesApplication : Application(), HasActivityInjector {
 
     //TODO Focus on MVVM and being reactive
-
     //TODO Add more comments and tests
+    //TODO Updated README
+    //TODO Make it more Kotlin-y
+    //TODO Study Material Design spec and make this not look awful
+    //TODO Tablet support
 
     @Inject
     lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Activity>
@@ -24,7 +27,6 @@ class NotesApplication : Application(), HasActivityInjector {
 
     override fun onCreate() {
         super.onCreate()
-
         DaggerAppComponent.builder()
                 .application(this)
                 .build()

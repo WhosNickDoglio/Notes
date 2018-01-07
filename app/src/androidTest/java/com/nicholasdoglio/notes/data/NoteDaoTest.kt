@@ -4,6 +4,8 @@ import android.arch.core.executor.testing.InstantTaskExecutorRule
 import android.arch.persistence.room.Room
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4
+import com.nicholasdoglio.notes.data.local.NoteDatabase
+import com.nicholasdoglio.notes.data.note.Note
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
