@@ -15,7 +15,6 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class NoteDaoTest {
 
-
     //TODO Copy tests from Robo class
 
     @Rule

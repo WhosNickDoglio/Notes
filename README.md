@@ -1,17 +1,16 @@
 # Notes
 
 [![Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE.md)
-[![API](https://img.shields.io/badge/API-19%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=19)
+[![API](https://img.shields.io/badge/API-21%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=21)
 [![Build Status](https://travis-ci.org/WhosNickDoglio/Notes.svg?branch=master)](https://travis-ci.org/WhosNickDoglio/Notes)
 [![codecov](https://codecov.io/gh/WhosNickDoglio/Notes/branch/master/graph/badge.svg)](https://codecov.io/gh/WhosNickDoglio/Notes)
 
-A small Note taking application to play with Kotlin and other libaries
+A simple Material Design note taking Android application written entirely in Kotlin!
  
 Talk about single activity applications vs one activity per flow
 
 talk about MVVM
 
-List libraries used and briefly explain
 
 # To-Do
 
@@ -23,10 +22,23 @@ All the releases and change logs are kept under [releases](https://github.com/Wh
 
 # Libraries
 
+- [Android Support](https://developer.android.com/topic/libraries/support-library/index.html)
+- [Anko-Commons](https://github.com/Kotlin/anko)
+- [Android Architecture Components](https://developer.android.com/topic/libraries/architecture/index.html) 
+  - [Paging](https://developer.android.com/topic/libraries/architecture/paging.html)
+  - [Room](https://developer.android.com/topic/libraries/architecture/room.html)
+  - [ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel.html) 
+- [RxJava](https://github.com/ReactiveX/RxJava)
+- [RxAndroid](https://github.com/ReactiveX/RxAndroid)
+- [RxBinding](https://github.com/JakeWharton/RxBinding)
+- [Dagger](https://google.github.io/dagger/) 
+
 
 # Testing
+- [JUnit](http://junit.org/junit5/)
+- [Robolectric](http://robolectric.org/)
+- [Espresso](https://developer.android.com/training/testing/espresso/index.html)
 
-  OUTLINE TESTING LIBS
 
 # Feedback
 

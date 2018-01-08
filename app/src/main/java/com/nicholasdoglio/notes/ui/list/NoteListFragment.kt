@@ -25,10 +25,6 @@ import javax.inject.Inject
  */
 class NoteListFragment : Fragment() {
 
-    //TODO empty Recyclerview greeting?
-
-    //TODO swipe to delete?
-
     @Inject
     lateinit var viewModelFactory: NotesViewModelFactory
 

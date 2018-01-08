@@ -12,8 +12,6 @@ import io.reactivex.Single
 
 @Dao
 interface NoteDao {
-    //TODO make sure this is all reactive
-
     /**
      * Takes a given note from the user and enters it into the database
      */
