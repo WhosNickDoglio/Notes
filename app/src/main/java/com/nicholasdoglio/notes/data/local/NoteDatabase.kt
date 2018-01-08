@@ -2,7 +2,7 @@ package com.nicholasdoglio.notes.data.local
 
 import android.arch.persistence.room.Database
 import android.arch.persistence.room.RoomDatabase
-import com.nicholasdoglio.notes.data.note.Note
+import com.nicholasdoglio.notes.data.model.note.Note
 
 /**
  * @author Nicholas Doglio

@@ -1,4 +1,4 @@
-package com.nicholasdoglio.notes.data.note
+package com.nicholasdoglio.notes.data.model.note
 
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey

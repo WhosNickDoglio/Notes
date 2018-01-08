@@ -9,17 +9,16 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.jakewharton.rxbinding2.view.clicks
 import com.nicholasdoglio.notes.R
-import com.nicholasdoglio.notes.data.note.Note
+import com.nicholasdoglio.notes.data.model.note.Note
 import com.nicholasdoglio.notes.ui.common.NavigationController
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.plusAssign
+import io.reactivex.subjects.PublishSubject
 
 /**
  * @author Nicholas Doglio
  */
 class NoteListAdapter(val navigationController: NavigationController) : PagedListAdapter<Note, NoteListAdapter.NoteListViewHolder>(diffcallback) {
 
-    //TODO look into PublishSubject instead of RxBinding here
+    private val itemClickSubject: PublishSubject<Note> = PublishSubject.create()
 
     override fun onBindViewHolder(holder: NoteListViewHolder, position: Int) = holder.bindTo(getItem(position))
 
@@ -28,17 +27,20 @@ class NoteListAdapter(val navigationController: NavigationController) : PagedLis
         return NoteListViewHolder(view)
     }
 
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView?) {
+        super.onDetachedFromRecyclerView(recyclerView)
+        itemClickSubject.onComplete()
+    }
+
     inner class NoteListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val titleView = itemView.findViewById<TextView>(R.id.titleListItem)//I think there's a better way to do this
         private val contentView = itemView.findViewById<TextView>(R.id.contentsListItem)
-        private var compositeDisposable: CompositeDisposable
         var note: Note? = null
 
         init {
-            compositeDisposable = CompositeDisposable()
-
-            compositeDisposable += itemView.clicks()// I need to dispose this somehow
-                    .subscribe { navigationController.openNote(note!!.id) } //Open up specific note
+            itemView.clicks()
+                    .map { navigationController.openNote(note!!.id) }
+                    .subscribe { itemClickSubject }
         }
 
         fun bindTo(note: Note?) {
@@ -46,10 +48,6 @@ class NoteListAdapter(val navigationController: NavigationController) : PagedLis
 
             titleView.text = note?.title
             contentView.text = note?.contents
-        }
-
-        fun clear() {
-            compositeDisposable.clear()
         }
     }
 

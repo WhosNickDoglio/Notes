@@ -2,7 +2,7 @@ package com.nicholasdoglio.notes.ui.note
 
 import android.arch.lifecycle.ViewModel
 import com.nicholasdoglio.notes.data.local.NoteDatabase
-import com.nicholasdoglio.notes.data.note.Note
+import com.nicholasdoglio.notes.data.model.note.Note
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject

@@ -1,4 +1,4 @@
-package com.nicholasdoglio.notes.data.about
+package com.nicholasdoglio.notes.data.model.about
 
 /**
  * @author Nicholas Doglio

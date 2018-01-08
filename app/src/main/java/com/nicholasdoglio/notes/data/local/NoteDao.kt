@@ -2,7 +2,7 @@ package com.nicholasdoglio.notes.data.local
 
 import android.arch.paging.DataSource
 import android.arch.persistence.room.*
-import com.nicholasdoglio.notes.data.note.Note
+import com.nicholasdoglio.notes.data.model.note.Note
 import io.reactivex.Single
 
 /**

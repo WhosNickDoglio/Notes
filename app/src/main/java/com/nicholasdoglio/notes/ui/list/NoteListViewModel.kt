@@ -3,7 +3,7 @@ package com.nicholasdoglio.notes.ui.list
 import android.arch.lifecycle.ViewModel
 import android.arch.paging.LivePagedListBuilder
 import com.nicholasdoglio.notes.data.local.NoteDatabase
-import com.nicholasdoglio.notes.data.note.Note
+import com.nicholasdoglio.notes.data.model.note.Note
 import javax.inject.Inject
 
 /**

@@ -10,7 +10,7 @@ import android.widget.TextView
 import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxbinding2.widget.textChanges
 import com.nicholasdoglio.notes.R
-import com.nicholasdoglio.notes.data.note.Note
+import com.nicholasdoglio.notes.data.model.note.Note
 import com.nicholasdoglio.notes.ui.common.NavigationController
 import com.nicholasdoglio.notes.ui.viewmodel.NotesViewModelFactory
 import dagger.android.support.AndroidSupportInjection
