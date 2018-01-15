@@ -6,11 +6,17 @@
 [![codecov](https://codecov.io/gh/WhosNickDoglio/Notes/branch/master/graph/badge.svg)](https://codecov.io/gh/WhosNickDoglio/Notes)
 
 A simple Material Design note taking Android application written entirely in Kotlin!
- 
-Talk about single activity applications vs one activity per flow
 
-talk about MVVM
+<a href="https://play.google.com/store/apps/details?id=com.nicholasdoglio.notes">
+    <img alt="Get it on Google Play"
+        height="80"
+        src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" />
+</a>
 
+![Open note screenshot](./art/createnote.png)
+![Empty view screenshot](./art/nonotes.png)
+![One note in view screenshot](./art/onenote.png)
+![Two notes in view screenshot](./art/twonotes.png)
 
 # To-Do
 

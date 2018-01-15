@@ -60,6 +60,7 @@ class NoteFragment : Fragment() {
                     .autoDisposable(scopeProvider)
                     .subscribe()
         }
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -113,7 +114,11 @@ class NoteFragment : Fragment() {
 
     private fun setupToolbar() {
         (activity as AppCompatActivity).setSupportActionBar(noteToolbar)
+
+        noteToolbar.title = ""
+
         setHasOptionsMenu(true)
+
     }
 
     private fun setupButtonObservables() {
