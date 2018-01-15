@@ -1,8 +1,9 @@
-package com.nicholasdoglio.notes
+package com.nicholasdoglio.notes.ui
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
+import com.nicholasdoglio.notes.R
 import com.nicholasdoglio.notes.ui.common.NavigationController
 import dagger.android.AndroidInjection
 import dagger.android.DispatchingAndroidInjector

@@ -4,7 +4,7 @@ import org.junit.After
 import org.junit.Before
 
 /**
- * Created by nicholasdoglio on 1/3/18.
+ * @author Nicholas Doglio
  */
 class NoteFragmentTest {
     @Before

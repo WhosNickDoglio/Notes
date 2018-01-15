@@ -15,8 +15,6 @@ import org.robolectric.RuntimeEnvironment
 @RunWith(RobolectricTestRunner::class)
 class NoteDaoTestRobo {
 
-    //TODO test Update method
-
     @Rule
     @JvmField
     val rule = InstantTaskExecutorRule()
@@ -48,53 +46,57 @@ class NoteDaoTestRobo {
 
         noteDatabase.noteDao().saveNote(thirdTestNote)
 
-        val retrievedNote = noteDatabase.noteDao().getNote(3)
-//
-//        assert(retrievedNote.id == thirdTestNote.id)
-//        assert(retrievedNote.title == thirdTestNote.title)
-//        assert(retrievedNote.contents == thirdTestNote.contents)
+        val retrievedNote = noteDatabase.noteDao().getNote(3).blockingGet()
+
+        assert(retrievedNote.id == thirdTestNote.id)
+        assert(retrievedNote.title == thirdTestNote.title)
+        assert(retrievedNote.contents == thirdTestNote.contents)
     }
 
     @Test
     fun deleteNote() {
         noteDatabase.noteDao().deleteNote(firstTestNote)
 
-        assert(noteDatabase.noteDao().getNumberOfItems() == 1)
+        assert(noteDatabase.noteDao().getNumberOfItems().blockingGet() == 1)
     }
 
     @Test
     fun updateNote() {
-//        val retrievedNote = noteDatabase.noteDao().getNote(1)
-//
-//        val update = Note(1, "Updated note", "updated contents")
-//
-//
-//        noteDatabase.noteDao().updateNote(update)
-//
-//        val updatedNote = noteDatabase.noteDao().getNote(1)
-//
-//        assert(retrievedNote.id == updatedNote.id)
-//        assert(retrievedNote.title == updatedNote.title)
-//        assert(retrievedNote.contents == updatedNote.contents)
-    }
+        val retrievedNote = noteDatabase.noteDao().getNote(1).blockingGet()
 
-    @Test
-    fun getNote() {
-//        val retrievedNote = noteDatabase.noteDao().getNote(1)
-//
-//        assert(retrievedNote.id == firstTestNote.id)
-//        assert(retrievedNote.title == firstTestNote.title)
-//        assert(retrievedNote.contents == firstTestNote.contents)
-    }
+        val update = Note(1, "Updated note", "updated contents")
 
 
-    @Test
-    fun getAllNotes() {
-        //Look at AAC Github samples to figure out how to best test a PagedList
+        noteDatabase.noteDao().updateNote(update)
+
+        val updatedNote = noteDatabase.noteDao().getNote(1).blockingGet()
+
+        assert(retrievedNote.id == updatedNote.id)
+        assert(retrievedNote.title == updatedNote.title)
+        assert(retrievedNote.contents == updatedNote.contents)
     }
 
     @Test
     fun getNumberOfItems() {
-        assert(noteDatabase.noteDao().getNumberOfItems() == 2)
+        assert(noteDatabase.noteDao().getNumberOfItems().blockingGet() == 2)
+    }
+
+
+    @Test
+    fun getNote() {
+        val retrievedNote = noteDatabase.noteDao().getNote(1).blockingGet()
+
+        assert(retrievedNote.id == firstTestNote.id)
+        assert(retrievedNote.title == firstTestNote.title)
+        assert(retrievedNote.contents == firstTestNote.contents)
+
+        noteDatabase.noteDao().getNote(1)
+                .test()
+                .assertComplete()
+    }
+
+    @Test
+    fun getAllNotes() {
+        //Look at AAC Github samples to figure out how to best test a PagedList
     }
 }

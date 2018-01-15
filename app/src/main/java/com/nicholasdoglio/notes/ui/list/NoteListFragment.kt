@@ -13,9 +13,11 @@ import com.jakewharton.rxbinding2.view.clicks
 import com.nicholasdoglio.notes.R
 import com.nicholasdoglio.notes.ui.common.NavigationController
 import com.nicholasdoglio.notes.ui.viewmodel.NotesViewModelFactory
+import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
+import com.uber.autodispose.kotlin.autoDisposable
 import dagger.android.support.AndroidSupportInjection
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.plusAssign
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_note_list.*
 import javax.inject.Inject
 
@@ -31,9 +33,9 @@ class NoteListFragment : Fragment() {
     @Inject
     lateinit var navigationController: NavigationController
 
+    private val scopeProvider by lazy { AndroidLifecycleScopeProvider.from(this) }
     private lateinit var notesListAdapter: NoteListAdapter
     private lateinit var notesListViewModel: NoteListViewModel
-    private lateinit var compositeDisposable: CompositeDisposable
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -43,26 +45,28 @@ class NoteListFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
         super.onCreate(savedInstanceState)
-        compositeDisposable = CompositeDisposable()
         notesListAdapter = NoteListAdapter(navigationController)
-        notesListViewModel =
-                ViewModelProviders.of(this,
-                        viewModelFactory).get(NoteListViewModel::class.java)
-        notesListViewModel.notesList.observe(this,
-                Observer(notesListAdapter::setList))
+        notesListViewModel = ViewModelProviders.of(this, viewModelFactory).get(NoteListViewModel::class.java)
+        notesListViewModel.notesList.observe(this, Observer(notesListAdapter::setList))
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        postponeEnterTransition()
-        (activity as AppCompatActivity).setSupportActionBar(noteListToolbar)
-        setHasOptionsMenu(true)
+        postponeEnterTransition() //I don't think I'm using this right
+        setupToolbar()
         setupList()
 
-        compositeDisposable += createNoteFab.clicks()
+        notesListViewModel.checkForNotes()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map { showViews(it) }
+                .autoDisposable(scopeProvider)
+                .subscribe()
+
+        createNoteFab.clicks()
+                .autoDisposable(scopeProvider)
                 .subscribe { navigationController.openNote() }
     }
-
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         super.onCreateOptionsMenu(menu, inflater)
@@ -80,11 +84,10 @@ class NoteListFragment : Fragment() {
 
     private fun setupList() {
         val layoutManager = LinearLayoutManager(this.context)
-        val divider = DividerItemDecoration(this.context, layoutManager.orientation)
 
         notesListRecyclerView.adapter = notesListAdapter
         notesListRecyclerView.layoutManager = layoutManager
-        notesListRecyclerView.addItemDecoration(divider)
+        notesListRecyclerView.addItemDecoration(DividerItemDecoration(this.context, layoutManager.orientation))
         notesListRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
                 if (dy > 0)
@@ -97,9 +100,18 @@ class NoteListFragment : Fragment() {
         // transitions are inconsistent depending on device
     }
 
+    private fun setupToolbar() {
+        (activity as AppCompatActivity).setSupportActionBar(noteListToolbar)
+        setHasOptionsMenu(true)
+    }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        compositeDisposable.clear()
+    private fun showViews(count: Int) {
+        if (count > 0) { //Show empty view
+            emptyList.visibility = View.INVISIBLE
+            notesListRecyclerView.visibility = View.VISIBLE
+        } else { //Show recyclerview
+            emptyList.visibility = View.VISIBLE
+            notesListRecyclerView.visibility = View.INVISIBLE
+        }
     }
 }

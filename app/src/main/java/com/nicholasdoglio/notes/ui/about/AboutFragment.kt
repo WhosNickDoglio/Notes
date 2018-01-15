@@ -16,6 +16,10 @@ import kotlinx.android.synthetic.main.fragment_about.*
 class AboutFragment : DialogFragment() {
     //This is still really ugly but I'll come back to it later
 
+    //Should I make this reactive with a ViewModel? or is it overkill for completely static data?
+
+    //This doesn't work on Lollipop?
+
     private lateinit var aboutAdapter: AboutAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,

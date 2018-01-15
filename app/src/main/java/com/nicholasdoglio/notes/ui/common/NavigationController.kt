@@ -2,8 +2,8 @@ package com.nicholasdoglio.notes.ui.common
 
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentTransaction
-import com.nicholasdoglio.notes.MainActivity
 import com.nicholasdoglio.notes.R
+import com.nicholasdoglio.notes.ui.MainActivity
 import com.nicholasdoglio.notes.ui.about.AboutFragment
 import com.nicholasdoglio.notes.ui.list.NoteListFragment
 import com.nicholasdoglio.notes.ui.note.NoteFragment
@@ -15,6 +15,7 @@ constructor(mainActivity: MainActivity) {
     private val containerId: Int = R.id.fragmentContainer
     private val fragmentManager: FragmentManager = mainActivity.supportFragmentManager
 
+    //How do I test this class?
 
     //I want to change the transitions, find something that makes the toolbar look less weird
     fun openList() {

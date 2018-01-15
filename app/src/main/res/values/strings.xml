@@ -10,5 +10,9 @@
 
     <!--Menus-->
     <string name="about_menu_item">About</string>
+    <string name="empty_list_view">No notes!</string>
+    <string name="empty_list_sub_text">Click the create button to add your first note!</string>
+    <string name="save_this_note">Save</string>
+    <string name="delete_this_note">Delete</string>
 
 </resources>

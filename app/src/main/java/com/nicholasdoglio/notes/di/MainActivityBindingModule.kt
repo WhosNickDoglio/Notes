@@ -1,6 +1,6 @@
 package com.nicholasdoglio.notes.di
 
-import com.nicholasdoglio.notes.MainActivity
+import com.nicholasdoglio.notes.ui.MainActivity
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 

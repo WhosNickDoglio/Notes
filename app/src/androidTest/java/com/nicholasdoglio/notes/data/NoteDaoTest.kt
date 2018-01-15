@@ -15,8 +15,6 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class NoteDaoTest {
 
-    //TODO Copy tests from Robo class
-
     @Rule
     @JvmField
     val rule = InstantTaskExecutorRule()
@@ -46,31 +44,57 @@ class NoteDaoTest {
 
     @Test
     fun saveNote() {
-//        val thirdTestNote = Note(3, "third note title", "third note contents")
-//
-//        noteDatabase.noteDao().saveNote(thirdTestNote)
-//
-//        val retrievedNote = noteDatabase.noteDao().getNote(3).blockingObserve()
-//
-//        assert(retrievedNote!!.noteId == thirdTestNote.noteId)
-//        assert(retrievedNote!!.title == thirdTestNote.title)
-//        assert(retrievedNote!!.contents == thirdTestNote.contents)
-    }
+        val thirdTestNote = Note(3, "third note title", "third note contents")
 
-    @Test
-    fun getNote() {
-//        val retrievedNote = noteDatabase.noteDao().getNote(1).blockingObserve()
-//
-//        assert(retrievedNote!!.noteId == firstTestNote.noteId)
-//        assert(retrievedNote!!.title == firstTestNote.title)
-//        assert(retrievedNote!!.contents == firstTestNote.contents)
+        noteDatabase.noteDao().saveNote(thirdTestNote)
+
+        val retrievedNote = noteDatabase.noteDao().getNote(3).blockingGet()
+
+        assert(retrievedNote.id == thirdTestNote.id)
+        assert(retrievedNote.title == thirdTestNote.title)
+        assert(retrievedNote.contents == thirdTestNote.contents)
     }
 
     @Test
     fun deleteNote() {
         noteDatabase.noteDao().deleteNote(firstTestNote)
 
-        assert(noteDatabase.noteDao().getNumberOfItems() == 1)
+        assert(noteDatabase.noteDao().getNumberOfItems().blockingGet() == 1)
+    }
+
+    @Test
+    fun updateNote() {
+        val retrievedNote = noteDatabase.noteDao().getNote(1).blockingGet()
+
+        val update = Note(1, "Updated note", "updated contents")
+
+
+        noteDatabase.noteDao().updateNote(update)
+
+        val updatedNote = noteDatabase.noteDao().getNote(1).blockingGet()
+
+        assert(retrievedNote.id == updatedNote.id)
+        assert(retrievedNote.title == updatedNote.title)
+        assert(retrievedNote.contents == updatedNote.contents)
+    }
+
+    @Test
+    fun getNumberOfItems() {
+        assert(noteDatabase.noteDao().getNumberOfItems().blockingGet() == 2)
+    }
+
+
+    @Test
+    fun getNote() {
+        val retrievedNote = noteDatabase.noteDao().getNote(1).blockingGet()
+
+        assert(retrievedNote.id == firstTestNote.id)
+        assert(retrievedNote.title == firstTestNote.title)
+        assert(retrievedNote.contents == firstTestNote.contents)
+
+        noteDatabase.noteDao().getNote(1)
+                .test()
+                .assertComplete()
     }
 
     @Test

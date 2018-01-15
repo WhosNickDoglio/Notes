@@ -43,6 +43,7 @@ class AboutAdapter(private val aboutContext: Context) : RecyclerView.Adapter<Abo
     }
 
     private fun populateList() {
+        //TODO I should probably add a item for libraries
         aboutList.add(AboutItem(R.drawable.dev_photo, "Developed by Nicholas Doglio", "https://whosnickdoglio.github.io/"))
         aboutList.add(AboutItem(R.drawable.ic_github, "Source Code", "https://github.com/WhosNickDoglio/Notes"))
         aboutList.add(AboutItem(R.drawable.ic_about, UtilFunctions().versionNumber(aboutContext), "https://github.com/WhosNickDoglio/Notes/releases"))

@@ -51,6 +51,7 @@ ext {
     rxAndroid = "2.0.1"
     rxKotlin = "2.2.0"
     rxBinding = "2.0.0"
+    dispose = "0.5.1"
     junit = "4.12"
     robo = "3.6.1"
     runner = "1.0.1"
@@ -75,7 +76,6 @@ dependencies {
     implementation "android.arch.paging:runtime:$paging"
     implementation "android.arch.lifecycle:common-java8:$archComponents"
     implementation "android.arch.lifecycle:extensions:$archComponents"
-    implementation "android.arch.lifecycle:reactivestreams:$archComponents"
     implementation "android.arch.persistence.room:runtime:$archComponents"
     implementation "android.arch.persistence.room:rxjava2:$archComponents"
     kapt "android.arch.persistence.room:compiler:$archComponents"
@@ -83,10 +83,12 @@ dependencies {
     //Rx
     implementation "io.reactivex.rxjava2:rxjava:$rxJava"
     implementation "io.reactivex.rxjava2:rxandroid:$rxAndroid"
-    implementation "io.reactivex.rxjava2:rxkotlin:$rxKotlin"
     implementation "com.jakewharton.rxbinding2:rxbinding-kotlin:$rxBinding"
-    implementation "com.jakewharton.rxbinding2:rxbinding-appcompat-v7-kotlin:$rxBinding"
-    implementation "com.jakewharton.rxbinding2:rxbinding-recyclerview-v7-kotlin:$rxBinding"
+
+    //AutoDispose
+    implementation "com.uber.autodispose:autodispose-kotlin:$dispose"
+    implementation "com.uber.autodispose:autodispose-android-kotlin:$dispose"
+    implementation "com.uber.autodispose:autodispose-android-archcomponents-kotlin:$dispose"
 
     //Dagger
     implementation "com.google.dagger:dagger:$dagger"
@@ -97,14 +99,9 @@ dependencies {
 
     //Testing
     testImplementation "junit:junit:$junit"
-    testImplementation "android.arch.core:core-testing:$archComponents"
     testImplementation "android.arch.persistence.room:testing:$archComponents"
-    testImplementation "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
+    testImplementation "android.arch.core:core-testing:$archComponents"
     testImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
     testImplementation "org.robolectric:robolectric:$robo"
     androidTestImplementation "com.android.support.test:runner:$runner"
-    androidTestImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
-    androidTestImplementation "com.android.support.test.espresso:espresso-core:$espresso"
-    androidTestImplementation "android.arch.persistence.room:testing:$archComponents"
-    androidTestImplementation "android.arch.core:core-testing:$archComponents"
 }

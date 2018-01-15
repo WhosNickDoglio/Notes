@@ -27,15 +27,14 @@ interface NoteDao {
     /**
      * Updates the selected note title or content
      */
-    @Update
+    @Update(onConflict = OnConflictStrategy.REPLACE)
     fun updateNote(note: Note)
 
     /**
-     * Checks if a note is already in the database
+     * Gets the total number of notes in the table
      */
-
-//    @Query("SELECT * FROM Note WHERE title = :title AND contents =:contents")
-//    fun checkIfNoteAlreadyExists(title: String, contents: String): Single<Boolean>
+    @Query("SELECT count(*) FROM Note")
+    fun getNumberOfItems(): Single<Int>
 
     /**
      * Returns the selected note from the database
@@ -48,10 +47,4 @@ interface NoteDao {
      */
     @Query("SELECT * FROM Note")
     fun getAllNotes(): DataSource.Factory<Int, Note>
-
-    /**
-     * Gets the total number of items in the Note table, really just used for testing
-     */
-    @Query("SELECT COUNT(*) FROM Note")
-    fun getNumberOfItems(): Int
 }

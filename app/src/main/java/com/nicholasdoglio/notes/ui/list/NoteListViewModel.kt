@@ -9,12 +9,11 @@ import javax.inject.Inject
 /**
  * @author Nicholas Doglio
  */
-class NoteListViewModel @Inject constructor(
-        database: NoteDatabase
-) : ViewModel() {
+class NoteListViewModel @Inject constructor(private val noteDatabase: NoteDatabase) : ViewModel() {
 
-    val notesList = LivePagedListBuilder<Int, Note>(
-            database.noteDao()
-                    .getAllNotes(),
-            10).build()
+    val notesList = LivePagedListBuilder<Int, Note>(noteDatabase.noteDao().getAllNotes(), 10).build()
+
+    fun deleteNote(note: Note) = noteDatabase.noteDao().deleteNote(note)
+
+    fun checkForNotes() = noteDatabase.noteDao().getNumberOfItems()
 }

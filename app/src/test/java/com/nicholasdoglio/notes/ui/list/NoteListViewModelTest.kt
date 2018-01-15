@@ -5,7 +5,7 @@ import org.junit.Before
 import org.junit.Test
 
 /**
- * Created by nicholasdoglio on 1/3/18.
+ * @author Nicholas Doglio
  */
 class NoteListViewModelTest {
     @Before

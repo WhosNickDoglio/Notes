@@ -3,21 +3,22 @@ package com.nicholasdoglio.notes.ui.note
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.support.v7.app.AppCompatActivity
+import android.view.*
 import android.widget.TextView
-import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxbinding2.widget.textChanges
 import com.nicholasdoglio.notes.R
 import com.nicholasdoglio.notes.data.model.note.Note
 import com.nicholasdoglio.notes.ui.common.NavigationController
 import com.nicholasdoglio.notes.ui.viewmodel.NotesViewModelFactory
+import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
+import com.uber.autodispose.kotlin.autoDisposable
 import dagger.android.support.AndroidSupportInjection
+import io.reactivex.Completable
+import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.plusAssign
+import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_note.*
 import org.jetbrains.anko.support.v4.toast
@@ -34,10 +35,10 @@ class NoteFragment : Fragment() {
     @Inject
     lateinit var navigationController: NavigationController
 
+    private val scopeProvider by lazy { AndroidLifecycleScopeProvider.from(this) }
     private lateinit var noteViewModel: NoteViewModel
-    private lateinit var compositeDisposable: CompositeDisposable
-
     private var currentNote: Note? = null
+    private var buttonsEnabled: Boolean = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -47,50 +48,55 @@ class NoteFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
         super.onCreate(savedInstanceState)
-        compositeDisposable = CompositeDisposable()
-        noteViewModel = ViewModelProviders.of(this,
-                viewModelFactory).get(NoteViewModel::class.java)
+        noteViewModel = ViewModelProviders.of(this, viewModelFactory).get(NoteViewModel::class.java)
 
-        if (openOldNote()) {
-            compositeDisposable += noteViewModel.start(arguments!!.getLong(argNoteid))
+        if (checkForOldNoteId()) {
+            noteViewModel.start(arguments!!.getLong(argNoteid))
                     .subscribeOn(Schedulers.io())
-                    .map { currentNote = it }
+                    .map {
+                        currentNote = it
+                        noteViewModel.id(it.id)
+                    }
+                    .autoDisposable(scopeProvider)
                     .subscribe()
         }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        if (openOldNote()) {
-            compositeDisposable += Single.just(currentNote)
+        if (checkForOldNoteId()) {
+            Single.just(currentNote)
                     .subscribeOn(AndroidSchedulers.mainThread())
-                    .map { handleNote(it) }
+                    .map { openOldNote(it) }
+                    .autoDisposable(scopeProvider)
                     .subscribe()
         }
 
-        compositeDisposable += noteTitle.textChanges()
-                .subscribe { noteViewModel.updateTitle(it.toString()) }
+        setupToolbar()
+        setupButtonObservables()
 
-        compositeDisposable += noteContent.textChanges()
-                .subscribe { noteViewModel.updateContent(it.toString()) }
+        noteTitle.textChanges()
+                .autoDisposable(scopeProvider)
+                .subscribe { noteViewModel.title(it.toString()) }
 
-        //These bottom two shouldn't work if the Note is empty
-        compositeDisposable += saveNoteButton.clicks()
-                .observeOn(Schedulers.io())
-                .map { noteViewModel.saveNote() } //Check for true or false
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { returnToList("Note saved") }
+        noteContent.textChanges()
+                .autoDisposable(scopeProvider)
+                .subscribe { noteViewModel.contents(it.toString()) }
 
-        compositeDisposable += deleteNoteButton.clicks()
-                .observeOn(Schedulers.io())
-                .flatMapSingle { noteViewModel.getNote(currentNote?.id!!) }
-                .map { noteViewModel.deleteNote(it) }
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { returnToList("Note deleted") }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        compositeDisposable.clear()
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater!!.inflate(R.menu.note_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        if (item != null) {
+            when (item.itemId) {
+                R.id.save_item -> showAction("Saved")
+                R.id.delete_item -> showAction("Deleted")
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun returnToList(finishedToast: String) {
@@ -98,11 +104,49 @@ class NoteFragment : Fragment() {
         toast(finishedToast)
     }
 
-    private fun openOldNote() = arguments!!.getLong(argNoteid) > 0
-
-    private fun handleNote(note: Note) {
+    private fun openOldNote(note: Note) {
         noteTitle.setText(note.title, TextView.BufferType.EDITABLE)
         noteContent.setText(note.contents, TextView.BufferType.EDITABLE)
+    }
+
+    private fun checkForOldNoteId() = arguments!!.getLong(argNoteid) > 0
+
+    private fun setupToolbar() {
+        (activity as AppCompatActivity).setSupportActionBar(noteToolbar)
+        setHasOptionsMenu(true)
+    }
+
+    private fun setupButtonObservables() {
+        //clean this up and add some toasts and maybe an animation?
+
+        //can I move any of this into the ViewModel?
+        val isTitleEmpty = noteTitle.textChanges().map { it.isNotEmpty() }
+        val isContentsEmpty = noteContent.textChanges().map { it.isNotEmpty() }
+
+        Observable.combineLatest(isTitleEmpty, isContentsEmpty,
+                BiFunction<Boolean, Boolean, Boolean> { firstBool, secondBool -> firstBool && secondBool })
+                .distinctUntilChanged()
+                .autoDisposable(scopeProvider)
+                .subscribe { buttonsEnabled = it }
+    }
+
+    private fun showAction(clickAction: String) {
+        if (this.buttonsEnabled) {
+            when (clickAction) {
+                "Saved" -> noteViewModel.saveNote(arguments!!.getLong(argNoteid))
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .autoDisposable(scopeProvider)
+                        .subscribe { returnToList("Note $clickAction") }
+                "Deleted" -> Completable.fromAction { noteViewModel.deleteNote(currentNote!!) }
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .autoDisposable(scopeProvider)
+                        .subscribe { returnToList("Note $clickAction") }
+            }
+        } else {
+            toast("This note is empty! Try writing something.")
+        }
     }
 
     companion object {
