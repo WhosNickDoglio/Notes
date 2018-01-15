@@ -13,7 +13,7 @@ A simple Material Design note taking Android application written entirely in Kot
         src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" />
 </a>
 
-<img src="https://i.imgur.com/qSTxyLH.png" width="250" height="450"> <img src="https://i.imgur.com/lhMCQ8z.png" width="250" height="450"> <img src="https://i.imgur.com/nNo3o3A.png" width="250" height="450"> <img src="https://i.imgur.com/pfZjgBF.png" width="250" height="450">
+<img src="https://i.imgur.com/qSTxyLH.png" width="250" height="450"> <img src="https://i.imgur.com/lhMCQ8z.png" width="250" height="450"> <img src="https://i.imgur.com/pfZjgBF.png" width="250" height="450">
 
 
 # To-Do
