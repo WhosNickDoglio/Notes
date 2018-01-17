@@ -92,7 +92,6 @@ dependencies {
     implementation "android.arch.lifecycle:extensions:$archComponents"
     implementation "android.arch.persistence.room:runtime:$archComponents"
     implementation "android.arch.persistence.room:rxjava2:$archComponents"
-    implementation 'com.android.support:support-v4:27.0.2'
     kapt "android.arch.persistence.room:compiler:$archComponents"
 
     //Rx
