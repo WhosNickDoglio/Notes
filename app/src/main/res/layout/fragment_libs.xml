@@ -3,10 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.nicholasdoglio.notes.ui.about.AboutFragment">
+    tools:context="com.nicholasdoglio.notes.ui.about.libs.LibsFragment">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/aboutToolbar"
+        android:id="@+id/libsToolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
@@ -17,14 +17,18 @@
         app:layout_constraintTop_toTopOf="parent"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/aboutList"
-        android:layout_width="0dp"
+        android:id="@+id/libsList"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:scrollbars="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/aboutToolbar" />
+        app:layout_constraintTop_toBottomOf="@+id/libsToolbar" />
 
 </android.support.constraint.ConstraintLayout>

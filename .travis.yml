@@ -1,16 +1,5 @@
-9language: android
+language: android
 jdk: oraclejdk8
-
-env:
-  global:
-    - ANDROID_TARGET=android-15
-    - ANDROID_ABI=armeabi-v7a
-
-install:
-  - echo yes | sdkmanager "tools" &>/dev/null
-  - echo yes | sdkmanager "platform-tools" &>/dev/null
-  - echo yes | sdkmanager "build-tools;27.0.2" &>/dev/null
-  - echo yes | sdkmanager "platforms;android-27" &>/dev/null
 
 android:
   components:
@@ -21,7 +10,11 @@ android:
     - android-27
     - addon
     - extra-android-m2repository
-    - sys-img-${ANDROID_ABI}-${ANDROID_TARGET}
+
+  licenses:
+    - 'android-sdk-preview-license-52d11cd2'
+    - 'android-sdk-license-.+'
+    - 'google-gdk-license-.+'
 
 script:
   - ./gradlew build jacocoTestReportFull

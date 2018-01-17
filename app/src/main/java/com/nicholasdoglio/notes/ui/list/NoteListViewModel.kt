@@ -13,7 +13,7 @@ class NoteListViewModel @Inject constructor(private val noteDatabase: NoteDataba
 
     val notesList = LivePagedListBuilder<Int, Note>(noteDatabase.noteDao().getAllNotes(), 10).build()
 
-    fun deleteNote(note: Note) = noteDatabase.noteDao().deleteNote(note)
+    fun deleteNote(note: Note) = noteDatabase.noteDao().deleteNote(note) //Implement with Swipe to delete
 
     fun checkForNotes() = noteDatabase.noteDao().getNumberOfItems()
 }

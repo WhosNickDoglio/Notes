@@ -10,24 +10,23 @@ import android.widget.TextView
 import com.jakewharton.rxbinding2.view.clicks
 import com.nicholasdoglio.notes.R
 import com.nicholasdoglio.notes.data.model.about.AboutItem
+import com.nicholasdoglio.notes.ui.common.NavigationController
 import com.nicholasdoglio.notes.util.Intents
 import com.nicholasdoglio.notes.util.UtilFunctions
 import io.reactivex.subjects.PublishSubject
-import java.util.*
 
 
-class AboutAdapter(private val aboutContext: Context) : RecyclerView.Adapter<AboutAdapter.AboutViewHolder>() {
+class AboutAdapter(private val aboutContext: Context, private val navigationController: NavigationController) : RecyclerView.Adapter<AboutAdapter.AboutViewHolder>() {
 
-    private val aboutList: MutableList<AboutItem>
+    private val aboutList: MutableList<AboutItem> = mutableListOf()
     private val itemClickSubject: PublishSubject<AboutItem> = PublishSubject.create()
 
     init {
-        aboutList = ArrayList()
         populateList()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AboutViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.about_item, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_about, parent, false)
         return AboutViewHolder(view)
     }
 
@@ -43,8 +42,8 @@ class AboutAdapter(private val aboutContext: Context) : RecyclerView.Adapter<Abo
     }
 
     private fun populateList() {
-        //TODO I should probably add a item for libraries
         aboutList.add(AboutItem(R.drawable.dev_photo, "Developed by Nicholas Doglio", "https://whosnickdoglio.github.io/"))
+        aboutList.add(AboutItem(R.drawable.ic_about, "Libraries", ""))
         aboutList.add(AboutItem(R.drawable.ic_github, "Source Code", "https://github.com/WhosNickDoglio/Notes"))
         aboutList.add(AboutItem(R.drawable.ic_about, UtilFunctions().versionNumber(aboutContext), "https://github.com/WhosNickDoglio/Notes/releases"))
     }
@@ -67,8 +66,9 @@ class AboutAdapter(private val aboutContext: Context) : RecyclerView.Adapter<Abo
         private fun openLink() {
             when (adapterPosition) {
                 0 -> Intents.openWebPage(aboutContext, aboutList[0].link)
-                1 -> Intents.openWebPage(aboutContext, aboutList[1].link)
+                1 -> navigationController.openLibs()
                 2 -> Intents.openWebPage(aboutContext, aboutList[2].link)
+                3 -> Intents.openWebPage(aboutContext, aboutList[3].link)
             }
         }
     }

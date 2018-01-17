@@ -23,7 +23,7 @@ class NoteListAdapter(val navigationController: NavigationController) : PagedLis
     override fun onBindViewHolder(holder: NoteListViewHolder, position: Int) = holder.bindTo(getItem(position))
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteListViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.note_item, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_note, parent, false)
         return NoteListViewHolder(view)
     }
 
@@ -41,6 +41,7 @@ class NoteListAdapter(val navigationController: NavigationController) : PagedLis
             itemView.clicks()
                     .map { navigationController.openNote(note!!.id) }
                     .subscribe { itemClickSubject }
+
         }
 
         fun bindTo(note: Note?) {

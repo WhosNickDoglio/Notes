@@ -27,6 +27,8 @@ import javax.inject.Inject
  */
 class NoteListFragment : Fragment() {
 
+    //TODO Figure out how to close the keyboard when done with note
+
     @Inject
     lateinit var viewModelFactory: NotesViewModelFactory
 

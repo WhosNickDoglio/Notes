@@ -118,7 +118,6 @@ class NoteFragment : Fragment() {
         noteToolbar.title = ""
 
         setHasOptionsMenu(true)
-
     }
 
     private fun setupButtonObservables() {
