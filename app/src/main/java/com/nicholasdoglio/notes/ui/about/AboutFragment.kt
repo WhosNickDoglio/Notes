@@ -30,8 +30,10 @@ class AboutFragment : Fragment() {
         aboutAdapter = AboutAdapter(this.context!!, navigationController)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_about, container, false)
     }
 
@@ -43,7 +45,7 @@ class AboutFragment : Fragment() {
 
     private fun setupToolbar() {
         (activity as AppCompatActivity).setSupportActionBar(aboutToolbar)
-        aboutToolbar.title = ""
+        aboutToolbar.title = "About"
     }
 
     private fun setupList() {

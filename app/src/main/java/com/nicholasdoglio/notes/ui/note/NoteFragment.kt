@@ -40,8 +40,10 @@ class NoteFragment : Fragment() {
     private var currentNote: Note? = null
     private var buttonsEnabled: Boolean = false
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_note, container, false)
     }
 
@@ -52,13 +54,13 @@ class NoteFragment : Fragment() {
 
         if (checkForOldNoteId()) {
             noteViewModel.start(arguments!!.getLong(argNoteid))
-                    .subscribeOn(Schedulers.io())
-                    .map {
-                        currentNote = it
-                        noteViewModel.id(it.id)
-                    }
-                    .autoDisposable(scopeProvider)
-                    .subscribe()
+                .subscribeOn(Schedulers.io())
+                .map {
+                    currentNote = it
+                    noteViewModel.id(it.id)
+                }
+                .autoDisposable(scopeProvider)
+                .subscribe()
         }
 
     }
@@ -66,22 +68,22 @@ class NoteFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         if (checkForOldNoteId()) {
             Single.just(currentNote)
-                    .subscribeOn(AndroidSchedulers.mainThread())
-                    .map { openOldNote(it) }
-                    .autoDisposable(scopeProvider)
-                    .subscribe()
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .map { openOldNote(it) }
+                .autoDisposable(scopeProvider)
+                .subscribe()
         }
 
         setupToolbar()
         setupButtonObservables()
 
         noteTitle.textChanges()
-                .autoDisposable(scopeProvider)
-                .subscribe { noteViewModel.title(it.toString()) }
+            .autoDisposable(scopeProvider)
+            .subscribe { noteViewModel.title(it.toString()) }
 
         noteContent.textChanges()
-                .autoDisposable(scopeProvider)
-                .subscribe { noteViewModel.contents(it.toString()) }
+            .autoDisposable(scopeProvider)
+            .subscribe { noteViewModel.contents(it.toString()) }
 
     }
 
@@ -128,25 +130,25 @@ class NoteFragment : Fragment() {
         val isContentsEmpty = noteContent.textChanges().map { it.isNotEmpty() }
 
         Observable.combineLatest(isTitleEmpty, isContentsEmpty,
-                BiFunction<Boolean, Boolean, Boolean> { firstBool, secondBool -> firstBool && secondBool })
-                .distinctUntilChanged()
-                .autoDisposable(scopeProvider)
-                .subscribe { buttonsEnabled = it }
+            BiFunction<Boolean, Boolean, Boolean> { firstBool, secondBool -> firstBool && secondBool })
+            .distinctUntilChanged()
+            .autoDisposable(scopeProvider)
+            .subscribe { buttonsEnabled = it }
     }
 
     private fun showAction(clickAction: String) {
         if (this.buttonsEnabled) {
             when (clickAction) {
                 "Saved" -> noteViewModel.saveNote(arguments!!.getLong(argNoteid))
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .autoDisposable(scopeProvider)
-                        .subscribe { returnToList("Note $clickAction") }
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .autoDisposable(scopeProvider)
+                    .subscribe { returnToList("Note $clickAction") }
                 "Deleted" -> Completable.fromAction { noteViewModel.deleteNote(currentNote!!) }
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .autoDisposable(scopeProvider)
-                        .subscribe { returnToList("Note $clickAction") }
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .autoDisposable(scopeProvider)
+                    .subscribe { returnToList("Note $clickAction") }
             }
         } else {
             toast("This note is empty! Try writing something.")

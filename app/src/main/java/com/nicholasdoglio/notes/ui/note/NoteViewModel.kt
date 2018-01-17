@@ -45,8 +45,8 @@ class NoteViewModel @Inject constructor(private val noteDatabase: NoteDatabase) 
 
     fun saveNote(id: Long): Completable {
         return Single.just(checkIfNoteAlreadyExists(id))
-                .map { saveOrUpdate(it) }
-                .toCompletable()
+            .map { saveOrUpdate(it) }
+            .toCompletable()
     }
 
     private fun saveOrUpdate(bool: Boolean) {

@@ -16,11 +16,13 @@ import io.reactivex.subjects.PublishSubject
 /**
  * @author Nicholas Doglio
  */
-class NoteListAdapter(val navigationController: NavigationController) : PagedListAdapter<Note, NoteListAdapter.NoteListViewHolder>(diffcallback) {
+class NoteListAdapter(val navigationController: NavigationController) :
+    PagedListAdapter<Note, NoteListAdapter.NoteListViewHolder>(diffcallback) {
 
     private val itemClickSubject: PublishSubject<Note> = PublishSubject.create()
 
-    override fun onBindViewHolder(holder: NoteListViewHolder, position: Int) = holder.bindTo(getItem(position))
+    override fun onBindViewHolder(holder: NoteListViewHolder, position: Int) =
+        holder.bindTo(getItem(position))
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteListViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_note, parent, false)
@@ -33,14 +35,15 @@ class NoteListAdapter(val navigationController: NavigationController) : PagedLis
     }
 
     inner class NoteListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val titleView = itemView.findViewById<TextView>(R.id.titleListItem)//I think there's a better way to do this
+        private val titleView =
+            itemView.findViewById<TextView>(R.id.titleListItem)//I think there's a better way to do this
         private val contentView = itemView.findViewById<TextView>(R.id.contentsListItem)
         var note: Note? = null
 
         init {
             itemView.clicks()
-                    .map { navigationController.openNote(note!!.id) }
-                    .subscribe { itemClickSubject }
+                .map { navigationController.openNote(note!!.id) }
+                .subscribe { itemClickSubject }
 
         }
 
@@ -54,9 +57,11 @@ class NoteListAdapter(val navigationController: NavigationController) : PagedLis
 
     companion object {
         private val diffcallback = object : DiffCallback<Note>() {
-            override fun areItemsTheSame(oldItem: Note, newItem: Note): Boolean = oldItem.id == newItem.id
+            override fun areItemsTheSame(oldItem: Note, newItem: Note): Boolean =
+                oldItem.id == newItem.id
 
-            override fun areContentsTheSame(oldItem: Note, newItem: Note): Boolean = oldItem == newItem
+            override fun areContentsTheSame(oldItem: Note, newItem: Note): Boolean =
+                oldItem == newItem
         }
     }
 }

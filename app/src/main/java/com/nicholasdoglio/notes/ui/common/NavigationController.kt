@@ -26,51 +26,51 @@ constructor(private val mainActivity: MainActivity) {
         //Transitions work great on Emulator but are awful on actual devices  ¯\_(ツ)_/¯
         val notesList = NoteListFragment()
         fragmentManager.beginTransaction()
-                .replace(containerId, notesList)
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
-                .setReorderingAllowed(true)
-                .commit()
+            .replace(containerId, notesList)
+            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
+            .setReorderingAllowed(true)
+            .commit()
 
     }
 
     fun openNote(id: Long = 0) {
         val note = NoteFragment.create(id)
         fragmentManager.beginTransaction()
-                .replace(containerId, note)
-                .addToBackStack(null)
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                .setReorderingAllowed(true)
-                .commit()
+            .replace(containerId, note)
+            .addToBackStack(null)
+            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+            .setReorderingAllowed(true)
+            .commit()
     }
 
     fun openNoteShortcut(id: Long = 0) { //Maybe there's a better way to do this?
         val note = NoteFragment.create(id)
         openList()
         fragmentManager.beginTransaction()
-                .replace(containerId, note)
-                .addToBackStack(null)
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                .setReorderingAllowed(true)
-                .commit()
+            .replace(containerId, note)
+            .addToBackStack(null)
+            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+            .setReorderingAllowed(true)
+            .commit()
     }
 
     fun openAbout() {
         val about = AboutFragment()
         fragmentManager.beginTransaction()
-                .replace(containerId, about)
-                .addToBackStack(null)
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                .setReorderingAllowed(true)
-                .commit()
+            .replace(containerId, about)
+            .addToBackStack(null)
+            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+            .setReorderingAllowed(true)
+            .commit()
     }
 
     fun openLibs() {
         val lib = LibsFragment()
         fragmentManager.beginTransaction()
-                .replace(containerId, lib)
-                .addToBackStack(null)
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                .setReorderingAllowed(true)
-                .commit()
+            .replace(containerId, lib)
+            .addToBackStack(null)
+            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+            .setReorderingAllowed(true)
+            .commit()
     }
 }

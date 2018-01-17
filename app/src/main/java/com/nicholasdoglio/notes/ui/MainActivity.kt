@@ -21,7 +21,8 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector {
     @Inject
     lateinit var navigationController: NavigationController
 
-    override fun supportFragmentInjector(): DispatchingAndroidInjector<Fragment> = dispatchingAndroidInjector
+    override fun supportFragmentInjector(): DispatchingAndroidInjector<Fragment> =
+        dispatchingAndroidInjector
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)

@@ -12,6 +12,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
+
 @RunWith(AndroidJUnit4::class)
 class NoteDaoTest {
 
@@ -27,10 +28,11 @@ class NoteDaoTest {
     @Before
     fun setUp() {
         noteDatabase = Room.inMemoryDatabaseBuilder(
-                InstrumentationRegistry.getContext(),
-                NoteDatabase::class.java)
-                .allowMainThreadQueries()
-                .build()
+            InstrumentationRegistry.getContext(),
+            NoteDatabase::class.java
+        )
+            .allowMainThreadQueries()
+            .build()
 
         noteDatabase.noteDao().saveNote(firstTestNote)
         noteDatabase.noteDao().saveNote(secondTestNote)
@@ -93,8 +95,8 @@ class NoteDaoTest {
         assert(retrievedNote.contents == firstTestNote.contents)
 
         noteDatabase.noteDao().getNote(1)
-                .test()
-                .assertComplete()
+            .test()
+            .assertComplete()
     }
 
     @Test

@@ -26,10 +26,11 @@ class NoteDaoTestRobo {
     @Before
     fun setUpDatabase() {
         noteDatabase = Room.inMemoryDatabaseBuilder(
-                RuntimeEnvironment.application.applicationContext,
-                NoteDatabase::class.java)
-                .allowMainThreadQueries()
-                .build()
+            RuntimeEnvironment.application.applicationContext,
+            NoteDatabase::class.java
+        )
+            .allowMainThreadQueries()
+            .build()
 
         noteDatabase.noteDao().saveNote(firstTestNote)
         noteDatabase.noteDao().saveNote(secondTestNote)
@@ -91,8 +92,8 @@ class NoteDaoTestRobo {
         assert(retrievedNote.contents == firstTestNote.contents)
 
         noteDatabase.noteDao().getNote(1)
-                .test()
-                .assertComplete()
+            .test()
+            .assertComplete()
     }
 
     @Test

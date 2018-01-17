@@ -39,8 +39,10 @@ class NoteListFragment : Fragment() {
     private lateinit var notesListAdapter: NoteListAdapter
     private lateinit var notesListViewModel: NoteListViewModel
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_note_list, container, false)
     }
 
@@ -48,7 +50,8 @@ class NoteListFragment : Fragment() {
         AndroidSupportInjection.inject(this)
         super.onCreate(savedInstanceState)
         notesListAdapter = NoteListAdapter(navigationController)
-        notesListViewModel = ViewModelProviders.of(this, viewModelFactory).get(NoteListViewModel::class.java)
+        notesListViewModel =
+                ViewModelProviders.of(this, viewModelFactory).get(NoteListViewModel::class.java)
         notesListViewModel.notesList.observe(this, Observer(notesListAdapter::setList))
     }
 
@@ -59,15 +62,15 @@ class NoteListFragment : Fragment() {
         setupList()
 
         notesListViewModel.checkForNotes()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .map { showViews(it) }
-                .autoDisposable(scopeProvider)
-                .subscribe()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .map { showViews(it) }
+            .autoDisposable(scopeProvider)
+            .subscribe()
 
         createNoteFab.clicks()
-                .autoDisposable(scopeProvider)
-                .subscribe { navigationController.openNote() }
+            .autoDisposable(scopeProvider)
+            .subscribe { navigationController.openNote() }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
@@ -89,7 +92,12 @@ class NoteListFragment : Fragment() {
 
         notesListRecyclerView.adapter = notesListAdapter
         notesListRecyclerView.layoutManager = layoutManager
-        notesListRecyclerView.addItemDecoration(DividerItemDecoration(this.context, layoutManager.orientation))
+        notesListRecyclerView.addItemDecoration(
+            DividerItemDecoration(
+                this.context,
+                layoutManager.orientation
+            )
+        )
         notesListRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
                 if (dy > 0)

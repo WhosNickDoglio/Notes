@@ -10,13 +10,15 @@ import javax.inject.Singleton
 class NotesViewModelFactory
 @Inject
 constructor(
-        private val creators: Map<Class<out ViewModel>,
-                @JvmSuppressWildcards Provider<ViewModel>>) : ViewModelProvider.Factory {
+    private val creators: Map<Class<out ViewModel>,
+            @JvmSuppressWildcards Provider<ViewModel>>
+) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        val creator = creators[modelClass] ?:
-                creators.asIterable().firstOrNull { modelClass.isAssignableFrom(it.key) }?.value
-                ?: throw IllegalArgumentException("unknown model class " + modelClass)
+        val creator = creators[modelClass] ?: creators.asIterable().firstOrNull {
+            modelClass.isAssignableFrom(it.key)
+        }?.value
+        ?: throw IllegalArgumentException("unknown model class " + modelClass)
 
         return try {
             creator.get() as T

@@ -16,6 +16,6 @@ class AppModule {
 
     @Singleton
     @Provides
-    fun room(app: Application): NoteDatabase
-            = Room.databaseBuilder(app, NoteDatabase::class.java, "notes_db").build()
+    fun room(app: Application): NoteDatabase =
+        Room.databaseBuilder(app, NoteDatabase::class.java, "notes_db").build()
 }

@@ -16,7 +16,10 @@ import com.nicholasdoglio.notes.util.UtilFunctions
 import io.reactivex.subjects.PublishSubject
 
 
-class AboutAdapter(private val aboutContext: Context, private val navigationController: NavigationController) : RecyclerView.Adapter<AboutAdapter.AboutViewHolder>() {
+class AboutAdapter(
+    private val aboutContext: Context,
+    private val navigationController: NavigationController
+) : RecyclerView.Adapter<AboutAdapter.AboutViewHolder>() {
 
     private val aboutList: MutableList<AboutItem> = mutableListOf()
     private val itemClickSubject: PublishSubject<AboutItem> = PublishSubject.create()
@@ -42,10 +45,28 @@ class AboutAdapter(private val aboutContext: Context, private val navigationCont
     }
 
     private fun populateList() {
-        aboutList.add(AboutItem(R.drawable.dev_photo, "Developed by Nicholas Doglio", "https://whosnickdoglio.github.io/"))
+        aboutList.add(
+            AboutItem(
+                R.drawable.dev_photo,
+                "Developed by Nicholas Doglio",
+                "https://whosnickdoglio.github.io/"
+            )
+        )
         aboutList.add(AboutItem(R.drawable.ic_about, "Libraries", ""))
-        aboutList.add(AboutItem(R.drawable.ic_github, "Source Code", "https://github.com/WhosNickDoglio/Notes"))
-        aboutList.add(AboutItem(R.drawable.ic_about, UtilFunctions().versionNumber(aboutContext), "https://github.com/WhosNickDoglio/Notes/releases"))
+        aboutList.add(
+            AboutItem(
+                R.drawable.ic_github,
+                "Source Code",
+                "https://github.com/WhosNickDoglio/Notes"
+            )
+        )
+        aboutList.add(
+            AboutItem(
+                R.drawable.ic_about,
+                UtilFunctions().versionNumber(aboutContext),
+                "https://github.com/WhosNickDoglio/Notes/releases"
+            )
+        )
     }
 
     inner class AboutViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -54,8 +75,8 @@ class AboutAdapter(private val aboutContext: Context, private val navigationCont
 
         init {
             itemView.clicks()
-                    .map { openLink() }
-                    .subscribe { itemClickSubject }
+                .map { openLink() }
+                .subscribe { itemClickSubject }
         }
 
         fun bindTo(aboutItem: AboutItem) {
