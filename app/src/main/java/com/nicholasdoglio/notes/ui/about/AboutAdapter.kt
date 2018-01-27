@@ -2,18 +2,16 @@ package com.nicholasdoglio.notes.ui.about
 
 import android.content.Context
 import android.support.v7.widget.RecyclerView
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import com.jakewharton.rxbinding2.view.clicks
+import com.jakewharton.rxrelay2.PublishRelay
 import com.nicholasdoglio.notes.R
 import com.nicholasdoglio.notes.data.model.about.AboutItem
 import com.nicholasdoglio.notes.ui.common.NavigationController
 import com.nicholasdoglio.notes.util.Intents
-import com.nicholasdoglio.notes.util.UtilFunctions
-import io.reactivex.subjects.PublishSubject
+import com.nicholasdoglio.notes.util.inflate
+import kotlinx.android.synthetic.main.item_about.view.*
 
 
 class AboutAdapter(
@@ -21,17 +19,12 @@ class AboutAdapter(
     private val navigationController: NavigationController
 ) : RecyclerView.Adapter<AboutAdapter.AboutViewHolder>() {
 
-    private val aboutList: MutableList<AboutItem> = mutableListOf()
-    private val itemClickSubject: PublishSubject<AboutItem> = PublishSubject.create()
+    private val itemClickSubject: PublishRelay<AboutItem> = PublishRelay.create()
 
-    init {
-        populateList()
-    }
+    private lateinit var aboutList: List<AboutItem>
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AboutViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_about, parent, false)
-        return AboutViewHolder(view)
-    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AboutViewHolder =
+        AboutViewHolder(parent.inflate(R.layout.item_about))
 
     override fun onBindViewHolder(holder: AboutViewHolder, position: Int) {
         holder.bindTo(aboutList[position])
@@ -39,40 +32,11 @@ class AboutAdapter(
 
     override fun getItemCount(): Int = aboutList.size
 
-    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView?) {
-        super.onDetachedFromRecyclerView(recyclerView)
-        itemClickSubject.onComplete()
-    }
-
-    private fun populateList() {
-        aboutList.add(
-            AboutItem(
-                R.drawable.dev_photo,
-                "Developed by Nicholas Doglio",
-                "https://whosnickdoglio.github.io/"
-            )
-        )
-        aboutList.add(AboutItem(R.drawable.ic_about, "Libraries", ""))
-        aboutList.add(
-            AboutItem(
-                R.drawable.ic_github,
-                "Source Code",
-                "https://github.com/WhosNickDoglio/Notes"
-            )
-        )
-        aboutList.add(
-            AboutItem(
-                R.drawable.ic_about,
-                UtilFunctions().versionNumber(aboutContext),
-                "https://github.com/WhosNickDoglio/Notes/releases"
-            )
-        )
+    fun setList(list: List<AboutItem>) {
+        aboutList = list
     }
 
     inner class AboutViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val aboutIcon = itemView.findViewById<ImageView>(R.id.aboutItemIcon)
-        private val aboutText = itemView.findViewById<TextView>(R.id.aboutItemName)
-
         init {
             itemView.clicks()
                 .map { openLink() }
@@ -80,8 +44,8 @@ class AboutAdapter(
         }
 
         fun bindTo(aboutItem: AboutItem) {
-            aboutIcon.setImageResource(aboutItem.imageId)
-            aboutText.text = aboutItem.text
+            itemView.aboutItemIcon.setImageResource(aboutItem.imageId)
+            itemView.aboutItemName.text = aboutItem.text
         }
 
         private fun openLink() {

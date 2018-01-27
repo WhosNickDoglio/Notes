@@ -2,8 +2,9 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
-//apply plugin: 'jacoco-android'
+apply plugin: 'jacoco'
 
+//Need to make this work with Travis
 def keystorePropertiesFile = rootProject.file("keystore.properties")
 def keystoreProperties = new Properties()
 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
@@ -54,17 +55,23 @@ android {
     }
 }
 
+androidExtensions {
+    experimental = true
+}
+
 ext {
     anko = "0.10.4"
     support = "27.0.2"
     constraint = "1.1.0-beta4"
     dagger = "2.14.1"
-    paging = "1.0.0-alpha4-1"
-    archComponents = "1.0.0"
-    rxJava = "2.1.7"
+    paging = "1.0.0-alpha5"
+    archComponents = "1.1.0"
+    room = "1.1.0-alpha1"
+    rxJava = "2.1.9"
     rxAndroid = "2.0.1"
     rxKotlin = "2.2.0"
     rxBinding = "2.0.0"
+    rxRelay = "2.0.0"
     dispose = "0.5.1"
     junit = "4.12"
     robo = "3.6.1"
@@ -90,14 +97,15 @@ dependencies {
     implementation "android.arch.paging:runtime:$paging"
     implementation "android.arch.lifecycle:common-java8:$archComponents"
     implementation "android.arch.lifecycle:extensions:$archComponents"
-    implementation "android.arch.persistence.room:runtime:$archComponents"
-    implementation "android.arch.persistence.room:rxjava2:$archComponents"
-    kapt "android.arch.persistence.room:compiler:$archComponents"
+    implementation "android.arch.persistence.room:runtime:$room"
+    implementation "android.arch.persistence.room:rxjava2:$room"
+    kapt "android.arch.persistence.room:compiler:$room"
 
     //Rx
     implementation "io.reactivex.rxjava2:rxjava:$rxJava"
     implementation "io.reactivex.rxjava2:rxandroid:$rxAndroid"
     implementation "com.jakewharton.rxbinding2:rxbinding-kotlin:$rxBinding"
+    implementation "com.jakewharton.rxrelay2:rxrelay:$rxRelay"
 
     //AutoDispose
     implementation "com.uber.autodispose:autodispose-kotlin:$dispose"
@@ -113,15 +121,20 @@ dependencies {
 
     //Testing
     testImplementation "junit:junit:$junit"
-    testImplementation "android.arch.persistence.room:testing:$archComponents"
+    testImplementation "android.arch.persistence.room:testing:$room"
     testImplementation "android.arch.core:core-testing:$archComponents"
     testImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
     testImplementation "org.robolectric:robolectric:$robo"
     androidTestImplementation "com.android.support.test:runner:$runner"
 }
 
+jacoco {
+    toolVersion = "0.8.0"
+    reportsDir = file("$buildDir/reports")
+}
 
-task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'createDebugCoverageReport']) {
+//This is still needs work
+task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest']) {
 
     reports {
         xml.enabled = true
@@ -131,12 +144,11 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'crea
     def fileFilter = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*']
     def debugTree = fileTree(dir: "${buildDir}/intermediates/classes/debug", excludes: fileFilter)
     def kotlinDebugTree = fileTree(dir: "${buildDir}/tmp/kotlin-classes/debug", excludes: fileFilter)
-    def mainSrc = "${project.projectDir}/src/androidTest/java"
+    def mainSrc = "${project.projectDir}/src/test/java"
 
     sourceDirectories = files([mainSrc])
     classDirectories = files([debugTree], [kotlinDebugTree])
     executionData = fileTree(dir: "$buildDir", includes: [
-            "jacoco/testDebugUnitTest.exec",
-            "outputs/code-coverage/connected/*coverage.ec"
+            "jacoco/testDebugUnitTest.exec"
     ])
 }

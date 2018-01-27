@@ -1,6 +1,5 @@
 package com.nicholasdoglio.notes.ui.about.libs
 
-
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
@@ -9,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.nicholasdoglio.notes.R
+import com.nicholasdoglio.notes.util.inflate
 import kotlinx.android.synthetic.main.fragment_libs.*
 
 /**
@@ -16,33 +16,22 @@ import kotlinx.android.synthetic.main.fragment_libs.*
  */
 class LibsFragment : Fragment() {
 
-    private lateinit var libsAdapter: LibsAdapter
+    private val libsAdapter by lazy { LibsAdapter(this.context!!) }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        libsAdapter = LibsAdapter(this.context!!)
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        (activity as AppCompatActivity).setSupportActionBar(libsToolbar)
+        libsToolbar.title = "Licenses"
+
+        libsList.apply {
+            adapter = libsAdapter
+            layoutManager = LinearLayoutManager(this.context)
+        }
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_libs, container, false)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        setupToolbar()
-        setupList()
-    }
-
-    private fun setupToolbar() {
-        (activity as AppCompatActivity).setSupportActionBar(libsToolbar)
-        libsToolbar.title = "Licenses"
-    }
-
-    private fun setupList() {
-        libsList.adapter = libsAdapter
-        libsList.layoutManager = LinearLayoutManager(this.context)
-    }
+    ): View? = container?.inflate(R.layout.fragment_libs)
 }

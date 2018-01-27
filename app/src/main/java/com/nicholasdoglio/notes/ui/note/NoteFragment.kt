@@ -5,18 +5,18 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.view.*
-import android.widget.TextView
 import com.jakewharton.rxbinding2.widget.textChanges
+import com.jakewharton.rxrelay2.BehaviorRelay
 import com.nicholasdoglio.notes.R
 import com.nicholasdoglio.notes.data.model.note.Note
 import com.nicholasdoglio.notes.ui.common.NavigationController
 import com.nicholasdoglio.notes.ui.viewmodel.NotesViewModelFactory
+import com.nicholasdoglio.notes.util.inflate
+import com.nicholasdoglio.notes.util.setEditableText
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
 import com.uber.autodispose.kotlin.autoDisposable
 import dagger.android.support.AndroidSupportInjection
-import io.reactivex.Completable
 import io.reactivex.Observable
-import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
@@ -35,56 +35,86 @@ class NoteFragment : Fragment() {
     @Inject
     lateinit var navigationController: NavigationController
 
-    private val scopeProvider by lazy { AndroidLifecycleScopeProvider.from(this) }
-    private lateinit var noteViewModel: NoteViewModel
-    private var currentNote: Note? = null
+    private lateinit var currentTitle: String
+    private lateinit var currentContents: String
     private var buttonsEnabled: Boolean = false
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_note, container, false)
+    private val currentNote: BehaviorRelay<Note> = BehaviorRelay.create()
+    private val scopeProvider by lazy { AndroidLifecycleScopeProvider.from(this) }
+    private val noteViewModel by lazy {
+        ViewModelProviders.of(this, viewModelFactory).get(NoteViewModel::class.java)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
         super.onCreate(savedInstanceState)
-        noteViewModel = ViewModelProviders.of(this, viewModelFactory).get(NoteViewModel::class.java)
+    }
 
-        if (checkForOldNoteId()) {
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        (activity as AppCompatActivity).setSupportActionBar(noteToolbar)
+        noteToolbar.title = ""
+        setHasOptionsMenu(true)
+
+        if (oldNoteFound()) {
             noteViewModel.start(arguments!!.getLong(argNoteid))
                 .subscribeOn(Schedulers.io())
                 .map {
-                    currentNote = it
+                    currentNote.accept(it)
                     noteViewModel.id(it.id)
                 }
                 .autoDisposable(scopeProvider)
                 .subscribe()
+        } else {
+            noteViewModel.id(0)
         }
 
+        setupButtonObservables()
+
+        if (savedInstanceState != null) {
+            val note = Note(
+                0,
+                savedInstanceState.getString("TITLE"),
+                savedInstanceState.getString("CONTENTS")
+            )
+            currentNote.accept(note)
+        }
+
+        noteTitle.textChanges()
+            .autoDisposable(scopeProvider)
+            .subscribe {
+                noteViewModel.title(it.toString())
+                currentTitle = it.toString()
+            }
+
+        noteContent.textChanges()
+            .autoDisposable(scopeProvider)
+            .subscribe {
+                noteViewModel.contents(it.toString())
+                currentContents = it.toString()
+            }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        if (checkForOldNoteId()) {
-            Single.just(currentNote)
+    override fun onResume() {
+        super.onResume()
+        if (oldNoteFound()) {
+            currentNote
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .map { openOldNote(it) }
                 .autoDisposable(scopeProvider)
                 .subscribe()
         }
+    }
 
-        setupToolbar()
-        setupButtonObservables()
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? = container?.inflate(R.layout.fragment_note)
 
-        noteTitle.textChanges()
-            .autoDisposable(scopeProvider)
-            .subscribe { noteViewModel.title(it.toString()) }
-
-        noteContent.textChanges()
-            .autoDisposable(scopeProvider)
-            .subscribe { noteViewModel.contents(it.toString()) }
-
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString("TITLE", currentTitle)
+        outState.putString("CONTENTS", currentContents)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
@@ -107,19 +137,11 @@ class NoteFragment : Fragment() {
         toast(finishedToast)
     }
 
+    private fun oldNoteFound() = arguments!!.getLong(argNoteid) > 0
+
     private fun openOldNote(note: Note) {
-        noteTitle.setText(note.title, TextView.BufferType.EDITABLE)
-        noteContent.setText(note.contents, TextView.BufferType.EDITABLE)
-    }
-
-    private fun checkForOldNoteId() = arguments!!.getLong(argNoteid) > 0
-
-    private fun setupToolbar() {
-        (activity as AppCompatActivity).setSupportActionBar(noteToolbar)
-
-        noteToolbar.title = ""
-
-        setHasOptionsMenu(true)
+        noteTitle.setEditableText(note.title)
+        noteContent.setEditableText(note.contents)
     }
 
     private fun setupButtonObservables() {
@@ -144,7 +166,8 @@ class NoteFragment : Fragment() {
                     .observeOn(AndroidSchedulers.mainThread())
                     .autoDisposable(scopeProvider)
                     .subscribe { returnToList("Note $clickAction") }
-                "Deleted" -> Completable.fromAction { noteViewModel.deleteNote(currentNote!!) }
+                "Deleted" -> noteViewModel.deleteNote(currentNote.value)
+                    //This will crash if the screen has content written but the note hasn't already been saved to the DB
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .autoDisposable(scopeProvider)
@@ -156,7 +179,7 @@ class NoteFragment : Fragment() {
     }
 
     companion object {
-        private val argNoteid = "NOTE_ID"
+        private const val argNoteid = "NOTE_ID"
 
         fun create(id: Long): NoteFragment {
             val fragment = NoteFragment()

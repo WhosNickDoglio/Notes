@@ -13,6 +13,7 @@ import com.jakewharton.rxbinding2.view.clicks
 import com.nicholasdoglio.notes.R
 import com.nicholasdoglio.notes.ui.common.NavigationController
 import com.nicholasdoglio.notes.ui.viewmodel.NotesViewModelFactory
+import com.nicholasdoglio.notes.util.inflate
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
 import com.uber.autodispose.kotlin.autoDisposable
 import dagger.android.support.AndroidSupportInjection
@@ -27,8 +28,6 @@ import javax.inject.Inject
  */
 class NoteListFragment : Fragment() {
 
-    //TODO Figure out how to close the keyboard when done with note
-
     @Inject
     lateinit var viewModelFactory: NotesViewModelFactory
 
@@ -36,42 +35,58 @@ class NoteListFragment : Fragment() {
     lateinit var navigationController: NavigationController
 
     private val scopeProvider by lazy { AndroidLifecycleScopeProvider.from(this) }
-    private lateinit var notesListAdapter: NoteListAdapter
-    private lateinit var notesListViewModel: NoteListViewModel
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_note_list, container, false)
+    private val notesListAdapter by lazy { NoteListAdapter(navigationController) }
+    private val notesListViewModel by lazy {
+        ViewModelProviders.of(this, viewModelFactory).get(NoteListViewModel::class.java)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
         super.onCreate(savedInstanceState)
-        notesListAdapter = NoteListAdapter(navigationController)
-        notesListViewModel =
-                ViewModelProviders.of(this, viewModelFactory).get(NoteListViewModel::class.java)
-        notesListViewModel.notesList.observe(this, Observer(notesListAdapter::setList))
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        postponeEnterTransition() //I don't think I'm using this right
-        setupToolbar()
-        setupList()
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        notesListViewModel.notesList.observe(this, Observer(notesListAdapter::setList))
 
+        (activity as AppCompatActivity).setSupportActionBar(noteListToolbar)
+        setHasOptionsMenu(true)
+
+        val linearLayoutManager = LinearLayoutManager(this.context)
+        notesListRecyclerView.apply {
+            adapter = notesListAdapter
+            layoutManager = linearLayoutManager
+            addItemDecoration(DividerItemDecoration(this.context, linearLayoutManager.orientation))
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+                    if (dy > 0)
+                        createNoteFab.hide()
+                    else if (dy < 0)
+                        createNoteFab.show()
+                }
+            })
+        }
+
+        createNoteFab.clicks()
+            .autoDisposable(scopeProvider)
+            .subscribe { navigationController.openNote() }
+    }
+
+    override fun onResume() {
+        super.onResume()
         notesListViewModel.checkForNotes()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .map { showViews(it) }
             .autoDisposable(scopeProvider)
             .subscribe()
-
-        createNoteFab.clicks()
-            .autoDisposable(scopeProvider)
-            .subscribe { navigationController.openNote() }
     }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? = container?.inflate(R.layout.fragment_note_list)
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         super.onCreateOptionsMenu(menu, inflater)
@@ -87,39 +102,11 @@ class NoteListFragment : Fragment() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun setupList() {
-        val layoutManager = LinearLayoutManager(this.context)
-
-        notesListRecyclerView.adapter = notesListAdapter
-        notesListRecyclerView.layoutManager = layoutManager
-        notesListRecyclerView.addItemDecoration(
-            DividerItemDecoration(
-                this.context,
-                layoutManager.orientation
-            )
-        )
-        notesListRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
-                if (dy > 0)
-                    createNoteFab.hide()
-                else if (dy < 0)
-                    createNoteFab.show()
-            }
-        })
-        startPostponedEnterTransition() //I have no idea if this does anything
-        // transitions are inconsistent depending on device
-    }
-
-    private fun setupToolbar() {
-        (activity as AppCompatActivity).setSupportActionBar(noteListToolbar)
-        setHasOptionsMenu(true)
-    }
-
-    private fun showViews(count: Int) {
-        if (count > 0) { //Show empty view
+    private fun showViews(numItemsInDb: Int) {
+        if (numItemsInDb > 0) { //Show Note List
             emptyList.visibility = View.INVISIBLE
             notesListRecyclerView.visibility = View.VISIBLE
-        } else { //Show recyclerview
+        } else { //Show empty view
             emptyList.visibility = View.VISIBLE
             notesListRecyclerView.visibility = View.INVISIBLE
         }

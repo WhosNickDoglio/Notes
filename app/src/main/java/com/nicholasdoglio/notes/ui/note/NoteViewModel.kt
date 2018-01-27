@@ -1,11 +1,11 @@
 package com.nicholasdoglio.notes.ui.note
 
 import android.arch.lifecycle.ViewModel
+import com.jakewharton.rxrelay2.BehaviorRelay
 import com.nicholasdoglio.notes.data.local.NoteDatabase
 import com.nicholasdoglio.notes.data.model.note.Note
 import io.reactivex.Completable
 import io.reactivex.Single
-import io.reactivex.subjects.BehaviorSubject
 import javax.inject.Inject
 
 /**
@@ -13,53 +13,37 @@ import javax.inject.Inject
  */
 class NoteViewModel @Inject constructor(private val noteDatabase: NoteDatabase) : ViewModel() {
 
-    private val titleChanged: BehaviorSubject<String> = BehaviorSubject.create()
-    private val contentsChanged: BehaviorSubject<String> = BehaviorSubject.create()
-    private var currentTitle: String = ""
-    private var currentContent: String = ""
-    private var currentId: Long = 0
+    private val titleSubject: BehaviorRelay<String> = BehaviorRelay.create()
+    private val contentSubject: BehaviorRelay<String> = BehaviorRelay.create()
+    private val idSubject: BehaviorRelay<Long> = BehaviorRelay.create()
 
-    fun title(title: String) {
-        titleChanged.onNext(title)
-        currentTitle = title
+    fun title(title: String) = titleSubject.accept(title)
 
-    }
+    fun contents(content: String) = contentSubject.accept(content)
 
-    fun contents(content: String) {
-        contentsChanged.onNext(content)
-        currentContent = content
-    }
-
-    fun id(id: Long) {
-        currentId = id
-    }
+    fun id(id: Long) = idSubject.accept(id)
 
     fun start(id: Long): Single<Note> = noteDatabase.noteDao().getNote(id)
 
-    fun deleteNote(note: Note) = noteDatabase.noteDao().deleteNote(note)
-
-    private fun createNote(): Note = Note(currentId, currentTitle, currentContent)
-
-    private fun checkIfNoteAlreadyExists(id: Long): Boolean = id > 0
-
-
-    fun saveNote(id: Long): Completable {
-        return Single.just(checkIfNoteAlreadyExists(id))
-            .map { saveOrUpdate(it) }
-            .toCompletable()
+    fun deleteNote(note: Note): Completable = Completable.fromAction {
+        noteDatabase.noteDao().deleteNote(note)
     }
 
-    private fun saveOrUpdate(bool: Boolean) {
-        if (bool) {
-            noteDatabase.noteDao().updateNote(createNote())
-        } else {
-            noteDatabase.noteDao().saveNote(createNote())
+    fun saveNote(id: Long): Completable = Single.just(id > 0)
+        .map { saveOrUpdate(it) }
+        .toCompletable()
+
+
+    private fun createNote(): Note = Note(
+        idSubject.value,
+        titleSubject.value,
+        contentSubject.value
+    )
+
+    private fun saveOrUpdate(doesNoteAlreadyExist: Boolean) {
+        when (doesNoteAlreadyExist) {
+            true -> noteDatabase.noteDao().updateNote(createNote())
+            false -> noteDatabase.noteDao().saveNote(createNote())
         }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        titleChanged.onComplete()
-        contentsChanged.onComplete()
     }
 }

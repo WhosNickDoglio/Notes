@@ -8,12 +8,15 @@
 A simple Material Design note taking Android application written entirely in Kotlin!
 
 <a href="https://play.google.com/store/apps/details?id=com.nicholasdoglio.notes">
-    <img alt="Get it on Google Play"
-        height="80"
-        src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" />
+    <img alt="Get it on Google Play" height="80" src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" />
 </a>
 
+
 <img src="https://i.imgur.com/qSTxyLH.png" width="250" height="450"> <img src="https://i.imgur.com/lhMCQ8z.png" width="250" height="450"> <img src="https://i.imgur.com/pfZjgBF.png" width="250" height="450">
+
+TODO talk about MVVM
+
+TODO talk about one activity with fragments 
 
 
 # To-Do
@@ -24,7 +27,7 @@ All planned work is detailed in the [projects](https://github.com/WhosNickDoglio
 
 All the releases and change logs are kept under [releases](https://github.com/WhosNickDoglio/Notes/releases).
 
-# Libraries
+# Libraries 
 
 - [Android Support](https://developer.android.com/topic/libraries/support-library/index.html)
 - [Anko-Commons](https://github.com/Kotlin/anko)
@@ -35,6 +38,7 @@ All the releases and change logs are kept under [releases](https://github.com/Wh
 - [RxJava](https://github.com/ReactiveX/RxJava)
 - [RxAndroid](https://github.com/ReactiveX/RxAndroid)
 - [RxBinding](https://github.com/JakeWharton/RxBinding)
+- [AutoDispose](https://github.com/uber/AutoDispose)
 - [Dagger](https://google.github.io/dagger/) 
 
 
@@ -55,6 +59,7 @@ Feel free to contact me or open up a issue:
 [Email](mailto:NicholasDoglio@Gmail.com)
 
 # License
+
         Copyright (C) 2017  Nicholas Doglio
 
        Licensed under the Apache License, Version 2.0 (the "License");

@@ -10,6 +10,6 @@ import dagger.android.ContributesAndroidInjector
 @Module
 abstract class MainActivityBindingModule {
 
-    @ContributesAndroidInjector(modules = arrayOf(FragmentBindingModule::class))
+    @ContributesAndroidInjector(modules = [(FragmentBindingModule::class)])
     abstract fun contributeMainActivity(): MainActivity
 }

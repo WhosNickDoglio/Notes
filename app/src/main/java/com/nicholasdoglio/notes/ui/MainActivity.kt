@@ -28,11 +28,6 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        if ("createNote".equals(intent.action)) {
-            navigationController.openNoteShortcut()
-        } else {
-            navigationController.openList()
-        }
+        navigationController.openFragment(savedInstanceState, intent.action)
     }
 }

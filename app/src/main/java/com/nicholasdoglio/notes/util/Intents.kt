@@ -9,9 +9,9 @@ import android.net.Uri
  */
 object Intents {
     fun openWebPage(context: Context, url: String) {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-        if (intent.resolveActivity(context.packageManager) != null) {
-            context.startActivity(intent)
+        val webIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        if (webIntent.resolveActivity(context.packageManager) != null) {
+            context.startActivity(webIntent)
         }
     }
 }
