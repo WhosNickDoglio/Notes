@@ -12,7 +12,7 @@ A simple Material Design note taking Android application written entirely in Kot
 </a>
 
 
-<img src="https://i.imgur.com/qSTxyLH.png" width="250" height="450"> <img src="https://i.imgur.com/lhMCQ8z.png" width="250" height="450"> <img src="https://i.imgur.com/pfZjgBF.png" width="250" height="450">
+<img src="https://i.imgur.com/eLiXBD0.png" width="250" height="450"> <img src="https://i.imgur.com/lhMCQ8z.png" width="250" height="450"> <img src="https://i.imgur.com/pfZjgBF.png" width="250" height="450">
 
 TODO talk about MVVM
 
