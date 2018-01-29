@@ -4,9 +4,6 @@
     <!--Note Fragment-->
     <string name="title_hint">Title</string>
     <string name="note_hint">Note</string>
-    <string name="saveButtonDescription">Check mark to save this note</string>
-    <string name="delete_note">Trash can to delete this note</string>
-
 
     <!--Menus-->
     <string name="about_menu_item">About</string>

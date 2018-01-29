@@ -15,11 +15,12 @@ android:
     - platform-tools
     - tools
 
-    - build-tools-24.0.3
+    - build-tools-26.0.2
 
     - android-15
     - android-21
     - android-25
+    - android-26
 
     - extra-google-google_play_services
     - extra-google-m2repository
@@ -47,6 +48,10 @@ after_success:
 env:
   matrix:
   - TERM=dumb
+
+before_cache:
+ -rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
+ -rm -fr $HOME/.gradle/caches/*/plugin-resolution/
 
 cache:
   directories:
