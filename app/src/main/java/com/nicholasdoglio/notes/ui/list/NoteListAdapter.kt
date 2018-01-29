@@ -16,28 +16,24 @@ import kotlinx.android.synthetic.main.item_note.view.*
 /**
  * @author Nicholas Doglio
  */
-class NoteListAdapter(val navigationController: NavigationController) :
+class NoteListAdapter(private val navigationController: NavigationController) :
     PagedListAdapter<Note, NoteListAdapter.NoteListViewHolder>(noteListDiff) {
 
     private val itemClickSubject: PublishRelay<Note> = PublishRelay.create()
 
-    override fun onBindViewHolder(holder: NoteListViewHolder, position: Int) =
+    override fun onBindViewHolder(holder: NoteListViewHolder, position: Int) {
         holder.bindTo(this.getItem(position)!!)
+        holder.itemView.clicks()
+            .map { navigationController.openNote(this.getItem(position)!!.id) }
+            .subscribe { itemClickSubject }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteListViewHolder =
         NoteListViewHolder(parent.inflate(R.layout.item_note))
 
-    inner class NoteListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private lateinit var note: Note
-
-        init {
-            itemView.clicks()
-                .map { navigationController.openNote(note.id) }
-                .subscribe { itemClickSubject }
-        }
+    class NoteListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun bindTo(note: Note) {
-            this.note = note
             itemView.titleListItem.text = note.title
             itemView.contentsListItem.text = note.contents
         }

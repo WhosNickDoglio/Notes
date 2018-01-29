@@ -1,4 +1,4 @@
-package com.nicholasdoglio.notes.ui.viewmodel
+package com.nicholasdoglio.notes.viewmodel
 
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider

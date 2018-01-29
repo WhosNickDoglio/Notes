@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.nicholasdoglio.notes.R
 import com.nicholasdoglio.notes.util.inflate
+import com.nicholasdoglio.notes.util.setupToolbar
 import kotlinx.android.synthetic.main.fragment_libs.*
 
 /**
@@ -21,8 +22,8 @@ class LibsFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        (activity as AppCompatActivity).setSupportActionBar(libsToolbar)
-        libsToolbar.title = "Licenses"
+        setupToolbar(activity as AppCompatActivity, libsToolbar, "Licenses")
+
 
         libsList.apply {
             adapter = libsAdapter

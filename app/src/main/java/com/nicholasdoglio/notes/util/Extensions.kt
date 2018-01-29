@@ -4,6 +4,7 @@ import android.support.annotation.IdRes
 import android.support.annotation.LayoutRes
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.Toolbar
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,7 +26,7 @@ fun AppCompatActivity.showFragment(
     transition: Int,
     @IdRes containerViewId: Int
 ) {
-    val ft = supportFragmentManager
+    supportFragmentManager
         .beginTransaction()
         .replace(containerViewId, fragment, tag)
         .addToBackStack(name)
@@ -33,6 +34,18 @@ fun AppCompatActivity.showFragment(
         .setReorderingAllowed(true)
         .commit()
 }
+
+fun Fragment.setupToolbar(
+    activity: AppCompatActivity,
+    toolbar: Toolbar,
+    title: String = "",
+    optionsMenu: Boolean = false
+) {
+    activity.setSupportActionBar(toolbar)
+    toolbar.title = title
+    setHasOptionsMenu(optionsMenu)
+}
+
 
 fun TextView.setEditableText(text: String) {
     setText(text)

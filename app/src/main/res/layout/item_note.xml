@@ -39,5 +39,4 @@
         app:layout_constraintStart_toStartOf="parent"
         tools:text="Content" />
 
-
 </android.support.constraint.ConstraintLayout>

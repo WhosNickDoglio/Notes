@@ -9,7 +9,9 @@ import javax.inject.Inject
 /**
  * @author Nicholas Doglio
  */
-class NoteListViewModel @Inject constructor(private val noteDatabase: NoteDatabase) : ViewModel() {
+class NoteListViewModel @Inject constructor(
+    private val noteDatabase: NoteDatabase
+) : ViewModel() {
 
     val notesList =
         LivePagedListBuilder<Int, Note>(noteDatabase.noteDao().getAllNotes(), 10).build()

@@ -3,7 +3,6 @@ package com.nicholasdoglio.notes.ui.list
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
@@ -12,21 +11,21 @@ import android.view.*
 import com.jakewharton.rxbinding2.view.clicks
 import com.nicholasdoglio.notes.R
 import com.nicholasdoglio.notes.ui.common.NavigationController
-import com.nicholasdoglio.notes.ui.viewmodel.NotesViewModelFactory
 import com.nicholasdoglio.notes.util.inflate
+import com.nicholasdoglio.notes.util.setupToolbar
+import com.nicholasdoglio.notes.viewmodel.NotesViewModelFactory
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
 import com.uber.autodispose.kotlin.autoDisposable
-import dagger.android.support.AndroidSupportInjection
+import dagger.android.support.DaggerFragment
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_note_list.*
 import javax.inject.Inject
 
-
 /**
  * @author Nicholas Doglio
  */
-class NoteListFragment : Fragment() {
+class NoteListFragment : DaggerFragment() {
 
     @Inject
     lateinit var viewModelFactory: NotesViewModelFactory
@@ -40,17 +39,12 @@ class NoteListFragment : Fragment() {
         ViewModelProviders.of(this, viewModelFactory).get(NoteListViewModel::class.java)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        AndroidSupportInjection.inject(this)
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
         notesListViewModel.notesList.observe(this, Observer(notesListAdapter::setList))
 
-        (activity as AppCompatActivity).setSupportActionBar(noteListToolbar)
-        setHasOptionsMenu(true)
+        setupToolbar(activity as AppCompatActivity, noteListToolbar, "Notes", true)
 
         val linearLayoutManager = LinearLayoutManager(this.context)
         notesListRecyclerView.apply {
@@ -68,7 +62,6 @@ class NoteListFragment : Fragment() {
         }
 
         createNoteFab.clicks()
-            .autoDisposable(scopeProvider)
             .subscribe { navigationController.openNote() }
     }
 

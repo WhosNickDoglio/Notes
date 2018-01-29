@@ -16,12 +16,15 @@ class NoteViewModel @Inject constructor(private val noteDatabase: NoteDatabase) 
     private val titleSubject: BehaviorRelay<String> = BehaviorRelay.create()
     private val contentSubject: BehaviorRelay<String> = BehaviorRelay.create()
     private val idSubject: BehaviorRelay<Long> = BehaviorRelay.create()
+    private val noteSubject: BehaviorRelay<Note> = BehaviorRelay.create()
 
     fun title(title: String) = titleSubject.accept(title)
 
     fun contents(content: String) = contentSubject.accept(content)
 
     fun id(id: Long) = idSubject.accept(id)
+
+    fun note(note: Note) = noteSubject.accept(note)
 
     fun start(id: Long): Single<Note> = noteDatabase.noteDao().getNote(id)
 

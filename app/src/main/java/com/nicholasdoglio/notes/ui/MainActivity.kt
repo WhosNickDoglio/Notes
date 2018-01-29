@@ -2,18 +2,20 @@ package com.nicholasdoglio.notes.ui
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
+import com.crashlytics.android.Crashlytics
 import com.nicholasdoglio.notes.R
 import com.nicholasdoglio.notes.ui.common.NavigationController
-import dagger.android.AndroidInjection
 import dagger.android.DispatchingAndroidInjector
+import dagger.android.support.DaggerAppCompatActivity
 import dagger.android.support.HasSupportFragmentInjector
+import io.fabric.sdk.android.Fabric
 import javax.inject.Inject
+
 
 /**
  * @author Nicholas Doglio
  */
-class MainActivity : AppCompatActivity(), HasSupportFragmentInjector {
+class MainActivity : DaggerAppCompatActivity(), HasSupportFragmentInjector {
 
     @Inject
     lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Fragment>
@@ -25,8 +27,8 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector {
         dispatchingAndroidInjector
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
+        Fabric.with(this, Crashlytics())
         setContentView(R.layout.activity_main)
         navigationController.openFragment(savedInstanceState, intent.action)
     }
