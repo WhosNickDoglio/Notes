@@ -8,7 +8,7 @@ import com.nicholasdoglio.notes.ui.about.AboutFragment
 import com.nicholasdoglio.notes.ui.about.libs.LibsFragment
 import com.nicholasdoglio.notes.ui.list.NoteListFragment
 import com.nicholasdoglio.notes.ui.note.NoteFragment
-import com.nicholasdoglio.notes.util.UtilFunctions.hideSoftKeyboard
+import com.nicholasdoglio.notes.util.hideKeyboard
 import com.nicholasdoglio.notes.util.showFragment
 import javax.inject.Inject
 
@@ -27,7 +27,7 @@ constructor(private val mainActivity: MainActivity) { //How do I test this class
     }
 
     fun openList() {
-        hideSoftKeyboard(mainActivity)
+        mainActivity.hideKeyboard()
         mainActivity.supportFragmentManager
             .beginTransaction()
             .replace(containerId, NoteListFragment(), "NOTE_LIST")

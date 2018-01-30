@@ -5,3 +5,4 @@ package com.nicholasdoglio.notes.util
  */
 
 //TODO move all constants here
+object Consts

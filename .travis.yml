@@ -6,16 +6,29 @@ jdk: oraclejdk8
 env:
   global:
     - ADB_INSTALL_TIMEOUT=10
+    - ANDROID_BUILD_TOOLS=26.0.2
 
 before_install:
 - yes | sdkmanager "platforms;android-27"
+
+before_cache:
+ -rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
+ -rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+
+cache:
+  directories:
+    - $HOME/.m2
+    - $HOME/.gradle
+    - $HOME/.android
+    - ${TRAVIS_BUILD_DIR}/gradle/caches/
+    - ${TRAVIS_BUILD_DIR}/gradle/wrapper/dists/
 
 android:
   components:
     - platform-tools
     - tools
 
-    - build-tools-26.0.2
+    - build-tools-${ANDROID_BUILD_TOOLS}
 
     - android-15
     - android-21
@@ -48,15 +61,3 @@ after_success:
 env:
   matrix:
   - TERM=dumb
-
-before_cache:
- -rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
- -rm -fr $HOME/.gradle/caches/*/plugin-resolution/
-
-cache:
-  directories:
-    - $HOME/.m2
-    - $HOME/.gradle
-    - $HOME/.android
-    - ${TRAVIS_BUILD_DIR}/gradle/caches/
-    - ${TRAVIS_BUILD_DIR}/gradle/wrapper/dists/

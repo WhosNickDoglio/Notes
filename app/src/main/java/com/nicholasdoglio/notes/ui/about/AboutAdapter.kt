@@ -10,9 +10,9 @@ import com.nicholasdoglio.notes.BuildConfig
 import com.nicholasdoglio.notes.R
 import com.nicholasdoglio.notes.data.model.about.AboutItem
 import com.nicholasdoglio.notes.ui.common.NavigationController
-import com.nicholasdoglio.notes.util.Intents
 import com.nicholasdoglio.notes.util.inflate
 import kotlinx.android.synthetic.main.item_about.view.*
+import org.jetbrains.anko.browse
 
 
 class AboutAdapter(
@@ -68,10 +68,10 @@ class AboutAdapter(
 
     private fun openLink(position: Int) {
         when (position) {
-            0 -> Intents.openWebPage(aboutContext, aboutList[0].link)
+            0 -> aboutContext.browse(aboutList[0].link)
             1 -> navigationController.openLibs()
-            2 -> Intents.openWebPage(aboutContext, aboutList[2].link)
-            3 -> Intents.openWebPage(aboutContext, aboutList[3].link)
+            2 -> aboutContext.browse(aboutList[2].link)
+            3 -> aboutContext.browse(aboutList[3].link)
         }
     }
 

@@ -14,7 +14,7 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Title"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="TITLE" />
+        tools:text="Library name" />
 
     <TextView
         android:id="@+id/libLicense"
@@ -29,6 +29,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/libTitle"
-        tools:text="THIS IS A REALLY LONG LICENSE" />
+        tools:text="License contents, license contents, license contents" />
 
 </android.support.constraint.ConstraintLayout>

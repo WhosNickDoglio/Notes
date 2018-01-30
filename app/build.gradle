@@ -10,6 +10,9 @@ def keystorePropertiesFile = rootProject.file("keystore.properties")
 def keystoreProperties = new Properties()
 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
+//CLEAN ALL THIS UP
+
+
 android {
     compileSdkVersion 27
     buildToolsVersion '27.0.3'
@@ -73,7 +76,7 @@ ext {
     rxJava = "2.1.9"
     rxAndroid = "2.0.1"
     rxKotlin = "2.2.0"
-    rxBinding = "2.0.0"
+    rxBinding = "2.1.0"
     rxRelay = "2.0.0"
     dispose = "0.5.1"
     timber = "4.6.0"
