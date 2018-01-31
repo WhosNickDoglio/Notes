@@ -62,7 +62,9 @@ class NoteListFragment : DaggerFragment() {
         }
 
         createNoteFab.clicks()
+            .autoDisposable(scopeProvider)
             .subscribe { navigationController.openNote() }
+
     }
 
     override fun onResume() {
@@ -86,11 +88,9 @@ class NoteListFragment : DaggerFragment() {
         inflater!!.inflate(R.menu.list_menu, menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        if (item != null) {
-            when (item.itemId) {
-                R.id.about_item -> navigationController.openAbout()
-            }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.about_item -> navigationController.openAbout()
         }
         return super.onOptionsItemSelected(item)
     }

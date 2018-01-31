@@ -7,7 +7,7 @@ buildscript {
     }
     dependencies {
         classpath 'io.fabric.tools:gradle:1.+'
-        classpath 'com.android.tools.build:gradle:3.0.1'
+        classpath 'com.android.tools.build:gradle:3.1.0-beta1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
@@ -21,4 +21,39 @@ allprojects {
 
 task clean(type: Delete) {
     delete rootProject.buildDir
+}
+
+
+ext {
+
+    //Android
+    minSdk = 21
+    compileSdk = 27
+    targetSdk = 27
+    buildTools = '27.0.3'
+
+    //Libraries
+    anko = '0.10.4'
+    support = '27.0.2'
+    constraint = '1.1.0-beta4'
+    paging = '1.0.0-alpha5'
+    archComponents = '1.1.0'
+    room = '1.1.0-alpha1'
+    dagger = '2.14.1'
+    rxJava = '2.1.9'
+    rxAndroid = '2.0.1'
+    rxKotlin = '2.2.0'
+    rxBinding = '2.1.0'
+    rxRelay = '2.0.0'
+    dispose = '0.5.1'
+
+    //Debugging
+    timber = '4.6.0'
+    canary = '1.5.4'
+
+    //Testing
+    junit = '4.12'
+    robo = '3.6.1'
+    runner = '1.0.1'
+    espresso = '3.0.1'
 }

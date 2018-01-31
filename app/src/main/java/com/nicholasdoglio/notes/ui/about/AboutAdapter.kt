@@ -5,12 +5,12 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
 import com.jakewharton.rxbinding2.view.clicks
-import com.jakewharton.rxrelay2.PublishRelay
 import com.nicholasdoglio.notes.BuildConfig
 import com.nicholasdoglio.notes.R
 import com.nicholasdoglio.notes.data.model.about.AboutItem
 import com.nicholasdoglio.notes.ui.common.NavigationController
 import com.nicholasdoglio.notes.util.inflate
+import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.item_about.view.*
 import org.jetbrains.anko.browse
 
@@ -20,9 +20,8 @@ class AboutAdapter(
     private val navigationController: NavigationController
 ) : RecyclerView.Adapter<AboutAdapter.AboutViewHolder>() {
 
-    private val itemClickSubject: PublishRelay<AboutItem> = PublishRelay.create()
-
     private val aboutList: MutableList<AboutItem> = mutableListOf()
+    private lateinit var disposable: Disposable
 
     init {
         populateList()
@@ -33,11 +32,15 @@ class AboutAdapter(
 
     override fun onBindViewHolder(holder: AboutViewHolder, position: Int) {
         holder.bindTo(aboutList[position])
-        holder.itemView.clicks()
+        disposable = holder.itemView.clicks()
             .map { openLink(position) }
-            .subscribe { itemClickSubject }
+            .subscribe()
     }
 
+    override fun onViewDetachedFromWindow(holder: AboutViewHolder?) {
+        super.onViewDetachedFromWindow(holder)
+        disposable.dispose()
+    }
 
     override fun getItemCount(): Int = aboutList.size
 

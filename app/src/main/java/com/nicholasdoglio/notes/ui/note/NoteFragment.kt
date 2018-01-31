@@ -151,7 +151,7 @@ class NoteFragment : DaggerFragment() {
             .subscribe { buttonsEnabled = it }
     }
 
-    private fun showAction(clickAction: String) {
+    private fun showAction(clickAction: String) { //These are very slow in Marshmallow
         if (this.buttonsEnabled) {
             when (clickAction) {
                 "Saved" -> noteViewModel.saveNote(arguments!!.getLong(argNoteid))

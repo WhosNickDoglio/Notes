@@ -4,22 +4,21 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'jacoco'
 apply plugin: 'io.fabric'
+apply from: rootProject.file("quality.gradle")
 
 //Need to make this work with Travis
-def keystorePropertiesFile = rootProject.file("keystore.properties")
-def keystoreProperties = new Properties()
-keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+//def keystorePropertiesFile = rootProject.file("keystore.properties")
+//def keystoreProperties = new Properties()
+//keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
 //CLEAN ALL THIS UP
-
-
 android {
-    compileSdkVersion 27
-    buildToolsVersion '27.0.3'
+    compileSdkVersion rootProject.ext.compileSdk
+    buildToolsVersion rootProject.ext.buildTools
     defaultConfig {
         applicationId "com.nicholasdoglio.notes"
-        minSdkVersion 21
-        targetSdkVersion 27
+        minSdkVersion rootProject.ext.minSdk
+        targetSdkVersion rootProject.ext.targetSdk
         versionCode 4
         versionName "1.0.3"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -28,26 +27,27 @@ android {
                 arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
             }
         }
-        signingConfigs {
-            config {
-                storeFile file(keystoreProperties['storeFile'])
-                storePassword keystoreProperties['storePassword']
-                keyAlias keystoreProperties['keyAlias']
-                keyPassword keystoreProperties['keyPassword']
-            }
-        }
+//        signingConfigs {
+//            config {
+//                storeFile file(keystoreProperties['storeFile'])
+//                storePassword keystoreProperties['storePassword']
+//                keyAlias keystoreProperties['keyAlias']
+//                keyPassword keystoreProperties['keyPassword']
+//            }
+//        }
     }
     buildTypes {
         release {
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.config
-            manifestPlaceholders = [FABRIC_KEY: keystoreProperties['fabricKey']]
+//            signingConfig signingConfigs.config
+//            manifestPlaceholders = [FABRIC_KEY: keystoreProperties['fabricKey']]
         }
         debug {
+            ext.enableCrashlytics = false
             applicationIdSuffix ".debug"
             testCoverageEnabled true
-            manifestPlaceholders = [FABRIC_KEY: keystoreProperties['fabricKey']]
+//            manifestPlaceholders = [FABRIC_KEY: keystoreProperties['fabricKey']]
         }
     }
     testOptions {
@@ -65,105 +65,61 @@ repositories {
     maven { url 'https://maven.fabric.io/public' }
 }
 
-ext {
-    anko = "0.10.4"
-    support = "27.0.2"
-    constraint = "1.1.0-beta4"
-    dagger = "2.14.1"
-    paging = "1.0.0-alpha5"
-    archComponents = "1.1.0"
-    room = "1.1.0-alpha1"
-    rxJava = "2.1.9"
-    rxAndroid = "2.0.1"
-    rxKotlin = "2.2.0"
-    rxBinding = "2.1.0"
-    rxRelay = "2.0.0"
-    dispose = "0.5.1"
-    timber = "4.6.0"
-    canary = "1.5.4"
-    junit = "4.12"
-    robo = "3.6.1"
-    runner = "1.0.1"
-    espresso = "3.0.1"
-}
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
 
     //Android
-    implementation "com.android.support:appcompat-v7:$support"
-    implementation "com.android.support:recyclerview-v7:$support"
-    implementation "com.android.support:design:$support"
-    implementation "com.android.support:support-v4:$support"
-    implementation "com.android.support.constraint:constraint-layout:$constraint"
+    implementation "com.android.support:appcompat-v7:$rootProject.support"
+    implementation "com.android.support:recyclerview-v7:$rootProject.support"
+    implementation "com.android.support:design:$rootProject.support"
+    implementation "com.android.support:support-v4:$rootProject.support"
+    implementation "com.android.support.constraint:constraint-layout:$rootProject.constraint"
 
     //Anko
-    implementation "org.jetbrains.anko:anko-appcompat-v7-commons:$anko"
+    implementation "org.jetbrains.anko:anko-appcompat-v7-commons:$rootProject.anko"
 
     //Android Architecture Components
-    implementation "android.arch.paging:runtime:$paging"
-    implementation "android.arch.lifecycle:common-java8:$archComponents"
-    implementation "android.arch.lifecycle:extensions:$archComponents"
-    implementation "android.arch.persistence.room:runtime:$room"
-    implementation "android.arch.persistence.room:rxjava2:$room"
-    kapt "android.arch.persistence.room:compiler:$room"
+    implementation "android.arch.lifecycle:common-java8:$rootProject.archComponents"
+    implementation "android.arch.lifecycle:extensions:$rootProject.archComponents"
+    implementation "android.arch.paging:runtime:$rootProject.paging"
+    implementation "android.arch.persistence.room:runtime:$rootProject.room"
+    implementation "android.arch.persistence.room:rxjava2:$rootProject.room"
+    kapt "android.arch.persistence.room:compiler:$rootProject.room"
 
     //Rx
-    implementation "io.reactivex.rxjava2:rxjava:$rxJava"
-    implementation "io.reactivex.rxjava2:rxandroid:$rxAndroid"
-    implementation "com.jakewharton.rxbinding2:rxbinding-kotlin:$rxBinding"
-    implementation "com.jakewharton.rxrelay2:rxrelay:$rxRelay"
+    implementation "io.reactivex.rxjava2:rxjava:$rootProject.rxJava"
+    implementation "io.reactivex.rxjava2:rxandroid:$rootProject.rxAndroid"
+    implementation "com.jakewharton.rxbinding2:rxbinding-kotlin:$rootProject.rxBinding"
+    implementation "com.jakewharton.rxrelay2:rxrelay:$rootProject.rxRelay"
 
     //AutoDispose
-    implementation "com.uber.autodispose:autodispose-kotlin:$dispose"
-    implementation "com.uber.autodispose:autodispose-android-kotlin:$dispose"
-    implementation "com.uber.autodispose:autodispose-android-archcomponents-kotlin:$dispose"
+    implementation "com.uber.autodispose:autodispose-kotlin:$rootProject.dispose"
+    implementation "com.uber.autodispose:autodispose-android-kotlin:$rootProject.dispose"
+    implementation "com.uber.autodispose:autodispose-android-archcomponents-kotlin:$rootProject.dispose"
 
     //Dagger
-    implementation "com.google.dagger:dagger:$dagger"
-    implementation "com.google.dagger:dagger-android:$dagger"
-    implementation "com.google.dagger:dagger-android-support:$dagger"
-    kapt "com.google.dagger:dagger-compiler:$dagger"
-    kapt "com.google.dagger:dagger-android-processor:$dagger"
+    implementation "com.google.dagger:dagger:$rootProject.dagger"
+    implementation "com.google.dagger:dagger-android:$rootProject.dagger"
+    implementation "com.google.dagger:dagger-android-support:$rootProject.dagger"
+    kapt "com.google.dagger:dagger-compiler:$rootProject.dagger"
+    kapt "com.google.dagger:dagger-android-processor:$rootProject.dagger"
 
     //Debugging
-    implementation "com.jakewharton.timber:timber:$timber"
-    debugImplementation "com.squareup.leakcanary:leakcanary-android:$canary"
-    releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$canary"
-    compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
+    implementation "com.jakewharton.timber:timber:$rootProject.timber"
+    releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.canary"
+    testImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.canary"
+    debugImplementation "com.squareup.leakcanary:leakcanary-android:$rootProject.canary"
+    implementation('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
         transitive = true
     }
 
     //Testing
-    testImplementation "junit:junit:$junit"
-    testImplementation "android.arch.persistence.room:testing:$room"
-    testImplementation "android.arch.core:core-testing:$archComponents"
+    testImplementation "junit:junit:$rootProject.junit"
+    testImplementation "android.arch.persistence.room:testing:$rootProject.room"
+    testImplementation "android.arch.core:core-testing:$rootProject.archComponents"
     testImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
-    testImplementation "org.robolectric:robolectric:$robo"
-    androidTestImplementation "com.android.support.test:runner:$runner"
-}
-
-jacoco {
-    toolVersion = "0.8.0"
-    reportsDir = file("$buildDir/reports")
-}
-
-task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest']) {
-
-    reports {
-        xml.enabled = true
-        html.enabled = true
-    }
-
-    def fileFilter = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*']
-    def debugTree = fileTree(dir: "${buildDir}/intermediates/classes/debug", excludes: fileFilter)
-    def kotlinDebugTree = fileTree(dir: "${buildDir}/tmp/kotlin-classes/debug", excludes: fileFilter)
-    def mainSrc = "${project.projectDir}/src/test/java"
-
-    sourceDirectories = files([mainSrc])
-    classDirectories = files([debugTree], [kotlinDebugTree])
-    executionData = fileTree(dir: "$buildDir", includes: [
-            "jacoco/testDebugUnitTest.exec"
-    ])
+    testImplementation "org.robolectric:robolectric:$rootProject.robo"
+    androidTestImplementation "com.android.support.test:runner:$rootProject.runner"
 }
