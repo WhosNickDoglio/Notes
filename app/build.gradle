@@ -3,7 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'jacoco'
-apply plugin: 'io.fabric'
+//apply plugin: 'io.fabric'
 apply from: rootProject.file("quality.gradle")
 
 //Need to make this work with Travis
@@ -61,9 +61,9 @@ android {
     }
 }
 
-repositories {
-    maven { url 'https://maven.fabric.io/public' }
-}
+//repositories {
+//    maven { url 'https://maven.fabric.io/public' }
+//}
 
 
 dependencies {
