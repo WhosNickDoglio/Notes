@@ -11,6 +11,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import kotlin.test.assertEquals
 
 
 @RunWith(AndroidJUnit4::class)
@@ -30,9 +31,7 @@ class NoteDaoTest {
         noteDatabase = Room.inMemoryDatabaseBuilder(
             InstrumentationRegistry.getContext(),
             NoteDatabase::class.java
-        )
-            .allowMainThreadQueries()
-            .build()
+        ).allowMainThreadQueries().build()
 
         noteDatabase.noteDao().saveNote(firstTestNote)
         noteDatabase.noteDao().saveNote(secondTestNote)
@@ -52,9 +51,7 @@ class NoteDaoTest {
 
         val retrievedNote = noteDatabase.noteDao().getNote(3).blockingGet()
 
-        assert(retrievedNote.id == thirdTestNote.id)
-        assert(retrievedNote.title == thirdTestNote.title)
-        assert(retrievedNote.contents == thirdTestNote.contents)
+        assertEquals(retrievedNote, thirdTestNote)
     }
 
     @Test
@@ -68,16 +65,20 @@ class NoteDaoTest {
     fun updateNote() {
         val retrievedNote = noteDatabase.noteDao().getNote(1).blockingGet()
 
-        val update = Note(1, "Updated note", "updated contents")
-
-
-        noteDatabase.noteDao().updateNote(update)
+        noteDatabase.noteDao().updateNote(Note(1, "Updated note", "updated contents"))
 
         val updatedNote = noteDatabase.noteDao().getNote(1).blockingGet()
 
-        assert(retrievedNote.id == updatedNote.id)
-        assert(retrievedNote.title == updatedNote.title)
-        assert(retrievedNote.contents == updatedNote.contents)
+
+        assertEquals(updatedNote.id, 1)
+        assertEquals(updatedNote.title, "Updated note")
+        assertEquals(updatedNote.contents, "updated contents")
+
+
+        assertEquals(updatedNote.id, retrievedNote.id)
+        assert(retrievedNote.title != updatedNote.title)
+        assert(retrievedNote.contents != updatedNote.contents)
+
     }
 
     @Test
@@ -89,10 +90,7 @@ class NoteDaoTest {
     @Test
     fun getNote() {
         val retrievedNote = noteDatabase.noteDao().getNote(1).blockingGet()
-
-        assert(retrievedNote.id == firstTestNote.id)
-        assert(retrievedNote.title == firstTestNote.title)
-        assert(retrievedNote.contents == firstTestNote.contents)
+        assertEquals(firstTestNote, retrievedNote)
 
         noteDatabase.noteDao().getNote(1)
             .test()

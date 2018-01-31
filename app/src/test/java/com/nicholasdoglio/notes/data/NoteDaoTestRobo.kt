@@ -11,6 +11,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
+import kotlin.test.assertEquals
 
 @RunWith(RobolectricTestRunner::class)
 class NoteDaoTestRobo {
@@ -28,9 +29,7 @@ class NoteDaoTestRobo {
         noteDatabase = Room.inMemoryDatabaseBuilder(
             RuntimeEnvironment.application.applicationContext,
             NoteDatabase::class.java
-        )
-            .allowMainThreadQueries()
-            .build()
+        ).allowMainThreadQueries().build()
 
         noteDatabase.noteDao().saveNote(firstTestNote)
         noteDatabase.noteDao().saveNote(secondTestNote)
@@ -49,9 +48,7 @@ class NoteDaoTestRobo {
 
         val retrievedNote = noteDatabase.noteDao().getNote(3).blockingGet()
 
-        assert(retrievedNote.id == thirdTestNote.id)
-        assert(retrievedNote.title == thirdTestNote.title)
-        assert(retrievedNote.contents == thirdTestNote.contents)
+        assertEquals(retrievedNote, thirdTestNote)
     }
 
     @Test
@@ -65,16 +62,20 @@ class NoteDaoTestRobo {
     fun updateNote() {
         val retrievedNote = noteDatabase.noteDao().getNote(1).blockingGet()
 
-        val update = Note(1, "Updated note", "updated contents")
-
-
-        noteDatabase.noteDao().updateNote(update)
+        noteDatabase.noteDao().updateNote(Note(1, "Updated note", "updated contents"))
 
         val updatedNote = noteDatabase.noteDao().getNote(1).blockingGet()
 
-        assert(retrievedNote.id == updatedNote.id)
-        assert(retrievedNote.title == updatedNote.title)
-        assert(retrievedNote.contents == updatedNote.contents)
+
+        assertEquals(updatedNote.id, 1)
+        assertEquals(updatedNote.title, "Updated note")
+        assertEquals(updatedNote.contents, "updated contents")
+
+
+        assertEquals(updatedNote.id, retrievedNote.id)
+        assert(retrievedNote.title != updatedNote.title)
+        assert(retrievedNote.contents != updatedNote.contents)
+
     }
 
     @Test
@@ -86,10 +87,7 @@ class NoteDaoTestRobo {
     @Test
     fun getNote() {
         val retrievedNote = noteDatabase.noteDao().getNote(1).blockingGet()
-
-        assert(retrievedNote.id == firstTestNote.id)
-        assert(retrievedNote.title == firstTestNote.title)
-        assert(retrievedNote.contents == firstTestNote.contents)
+        assertEquals(firstTestNote, retrievedNote)
 
         noteDatabase.noteDao().getNote(1)
             .test()

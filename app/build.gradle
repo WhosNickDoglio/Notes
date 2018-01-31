@@ -108,9 +108,9 @@ dependencies {
 
     //Debugging
     implementation "com.jakewharton.timber:timber:$rootProject.timber"
-    releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.canary"
-    testImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.canary"
-    debugImplementation "com.squareup.leakcanary:leakcanary-android:$rootProject.canary"
+//    releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.canary"
+//    testImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.canary"
+//    debugImplementation "com.squareup.leakcanary:leakcanary-android:$rootProject.canary"
     implementation('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
         transitive = true
     }
