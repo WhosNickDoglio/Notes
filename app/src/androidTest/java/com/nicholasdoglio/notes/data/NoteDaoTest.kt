@@ -13,7 +13,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import kotlin.test.assertEquals
 
-
 @RunWith(AndroidJUnit4::class)
 class NoteDaoTest {
 
@@ -78,7 +77,6 @@ class NoteDaoTest {
         assertEquals(updatedNote.id, retrievedNote.id)
         assert(retrievedNote.title != updatedNote.title)
         assert(retrievedNote.contents != updatedNote.contents)
-
     }
 
     @Test
