@@ -5,4 +5,6 @@ package com.nicholasdoglio.notes.util
  */
 
 //TODO move all constants here
-object Consts
+object Const {
+    const val noteFragmentArgumentId = "NOTE_ID"
+}

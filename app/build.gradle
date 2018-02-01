@@ -3,13 +3,13 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'jacoco'
-//apply plugin: 'io.fabric'
+apply plugin: 'io.fabric'
 apply from: rootProject.file("quality.gradle")
 
 //Need to make this work with Travis
-//def keystorePropertiesFile = rootProject.file("keystore.properties")
-//def keystoreProperties = new Properties()
-//keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+def keystorePropertiesFile = rootProject.file("keystore.properties")
+def keystoreProperties = new Properties()
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
 //CLEAN ALL THIS UP
 android {
@@ -27,27 +27,27 @@ android {
                 arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
             }
         }
-//        signingConfigs {
-//            config {
-//                storeFile file(keystoreProperties['storeFile'])
-//                storePassword keystoreProperties['storePassword']
-//                keyAlias keystoreProperties['keyAlias']
-//                keyPassword keystoreProperties['keyPassword']
-//            }
-//        }
+        signingConfigs {
+            config {
+                storeFile file(keystoreProperties['storeFile'])
+                storePassword keystoreProperties['storePassword']
+                keyAlias keystoreProperties['keyAlias']
+                keyPassword keystoreProperties['keyPassword']
+            }
+        }
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-//            signingConfig signingConfigs.config
-//            manifestPlaceholders = [FABRIC_KEY: keystoreProperties['fabricKey']]
+            signingConfig signingConfigs.config
+            manifestPlaceholders = [FABRIC_KEY: keystoreProperties['fabricKey']]
         }
         debug {
             ext.enableCrashlytics = false
             applicationIdSuffix ".debug"
             testCoverageEnabled true
-//            manifestPlaceholders = [FABRIC_KEY: keystoreProperties['fabricKey']]
+            manifestPlaceholders = [FABRIC_KEY: keystoreProperties['fabricKey']]
         }
     }
     testOptions {
@@ -61,9 +61,9 @@ android {
     }
 }
 
-//repositories {
-//    maven { url 'https://maven.fabric.io/public' }
-//}
+repositories {
+    maven { url 'https://maven.fabric.io/public' }
+}
 
 
 dependencies {
@@ -108,10 +108,9 @@ dependencies {
 
     //Debugging
     implementation "com.jakewharton.timber:timber:$rootProject.timber"
-//    releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.canary"
-//    testImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.canary"
-//    debugImplementation "com.squareup.leakcanary:leakcanary-android:$rootProject.canary"
-    implementation('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
+    releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.canary"
+    debugImplementation "com.squareup.leakcanary:leakcanary-android:$rootProject.canary"
+    implementation("com.crashlytics.sdk.android:crashlytics:$rootProject.crashlytics") {
         transitive = true
     }
 
@@ -121,4 +120,15 @@ dependencies {
     testImplementation "android.arch.core:core-testing:$rootProject.archComponents"
     testImplementation "org.robolectric:robolectric:$rootProject.robo"
     androidTestImplementation "com.android.support.test:runner:$rootProject.runner"
+}
+
+// Ensure the no-op dependency is always used in JVM tests.
+configurations.all { config ->
+    if (config.name.contains('UnitTest')) {
+        config.resolutionStrategy.eachDependency { details ->
+            if (details.requested.group == 'com.squareup.leakcanary' && details.requested.name == 'leakcanary-android') {
+                details.useTarget(group: details.requested.group, name: 'leakcanary-android-no-op', version: details.requested.version)
+            }
+        }
+    }
 }

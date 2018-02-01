@@ -26,17 +26,28 @@
         app:layout_constraintStart_toStartOf="@+id/leftGuide"
         app:layout_constraintTop_toBottomOf="@+id/noteToolbar" />
 
-    <EditText
-        android:id="@+id/noteContent"
+
+    <ScrollView
+        android:id="@+id/noteContentScroll"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@android:color/transparent"
-        android:hint="@string/note_hint"
-        android:inputType="textMultiLine"
-        android:singleLine="false"
-        app:layout_constraintEnd_toStartOf="@+id/rightGuide"
-        app:layout_constraintStart_toStartOf="@+id/leftGuide"
-        app:layout_constraintTop_toBottomOf="@+id/noteTitle" />
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/noteTitle">
+
+        <EditText
+            android:id="@+id/noteContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:backgroundTint="@android:color/transparent"
+            android:hint="@string/note_hint"
+            android:inputType="textMultiLine"
+            android:singleLine="false" />
+
+    </ScrollView>
 
     <android.support.constraint.Guideline
         android:id="@+id/leftGuide"

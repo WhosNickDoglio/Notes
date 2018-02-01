@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.Application
 import android.os.StrictMode
 import com.nicholasdoglio.notes.di.DaggerAppComponent
+import com.squareup.leakcanary.LeakCanary
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
@@ -24,7 +25,7 @@ class NotesApplication : Application(), HasActivityInjector {
     override fun onCreate() {
         super.onCreate()
         initDagger()
-//        initLeakCanary()
+        initLeakCanary()
         initDebugTools()
     }
 
@@ -34,7 +35,7 @@ class NotesApplication : Application(), HasActivityInjector {
             Timber.plant(Timber.DebugTree())
             //init all debug tools
         } else {
-            //            Timber.plant() Release tree
+//            Timber.plant() Release tree
         }
     }
 
@@ -65,8 +66,8 @@ class NotesApplication : Application(), HasActivityInjector {
         )
     }
 
-//    private fun initLeakCanary() {
-//        if (LeakCanary.isInAnalyzerProcess(this)) return
-//        LeakCanary.install(this)
-//    }
+    private fun initLeakCanary() {
+        if (LeakCanary.isInAnalyzerProcess(this)) return
+        LeakCanary.install(this)
+    }
 }

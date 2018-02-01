@@ -9,6 +9,7 @@ import com.jakewharton.rxrelay2.BehaviorRelay
 import com.nicholasdoglio.notes.R
 import com.nicholasdoglio.notes.data.model.note.Note
 import com.nicholasdoglio.notes.ui.common.NavigationController
+import com.nicholasdoglio.notes.util.Const
 import com.nicholasdoglio.notes.util.inflate
 import com.nicholasdoglio.notes.util.setEditableText
 import com.nicholasdoglio.notes.util.setupToolbar
@@ -50,7 +51,7 @@ class NoteFragment : DaggerFragment() {
         setupToolbar(activity as AppCompatActivity, noteToolbar, optionsMenu = true)
 
         if (oldNoteFound()) {
-            noteViewModel.start(arguments!!.getLong(argNoteid))
+            noteViewModel.start(arguments!!.getLong(Const.noteFragmentArgumentId))
                 .subscribeOn(Schedulers.io())
                 .map {
                     currentNote.accept(it)
@@ -130,7 +131,7 @@ class NoteFragment : DaggerFragment() {
         toast(finishedToast)
     }
 
-    private fun oldNoteFound() = arguments!!.getLong(argNoteid) > 0
+    private fun oldNoteFound() = arguments!!.getLong(Const.noteFragmentArgumentId) > 0
 
     private fun openOldNote(note: Note) {
         noteTitle.setEditableText(note.title)
@@ -154,7 +155,7 @@ class NoteFragment : DaggerFragment() {
     private fun showAction(clickAction: String) { //These are very slow in Marshmallow
         if (this.buttonsEnabled) {
             when (clickAction) {
-                "Saved" -> noteViewModel.saveNote(arguments!!.getLong(argNoteid))
+                "Saved" -> noteViewModel.saveNote(arguments!!.getLong(Const.noteFragmentArgumentId))
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .autoDisposable(scopeProvider)
@@ -167,7 +168,7 @@ class NoteFragment : DaggerFragment() {
     }
 
     private fun deleteNote(clickAction: String) {
-        if (arguments!!.getLong(argNoteid).toInt() == 0) {
+        if (arguments!!.getLong(Const.noteFragmentArgumentId).toInt() == 0) {
             returnToList("Note $clickAction")
         } else {
             noteViewModel.deleteNote(currentNote.value)
@@ -179,12 +180,10 @@ class NoteFragment : DaggerFragment() {
     }
 
     companion object {
-        private const val argNoteid = "NOTE_ID"
-
         fun create(id: Long): NoteFragment {
             val fragment = NoteFragment()
             val arg = Bundle()
-            arg.putLong(argNoteid, id)
+            arg.putLong(Const.noteFragmentArgumentId, id)
             fragment.arguments = arg
             return fragment
         }
