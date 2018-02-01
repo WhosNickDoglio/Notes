@@ -5,13 +5,13 @@ import android.arch.persistence.room.Room
 import com.nicholasdoglio.notes.data.local.NoteDatabase
 import com.nicholasdoglio.notes.data.model.note.Note
 import org.junit.After
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
-import kotlin.test.assertEquals
 
 @RunWith(RobolectricTestRunner::class)
 class NoteDaoTestRobo {
