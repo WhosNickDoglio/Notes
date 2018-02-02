@@ -25,7 +25,6 @@ task clean(type: Delete) {
 
 
 ext {
-
     //Android
     minSdk = 21
     compileSdk = 27

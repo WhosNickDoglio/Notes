@@ -139,6 +139,8 @@ class NoteFragment : DaggerFragment() {
     }
 
     private fun setupButtonObservables() {
+        //TODO need to be able to discard a note with an empty title or contents
+
         //clean this up and add some toasts and maybe an animation?
 
         //can I move any of this into the ViewModel?

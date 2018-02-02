@@ -9,4 +9,5 @@
 .externalNativeBuild
 /projectFilesBackup
 /.idea
+notes.jks
 keystore.properties
