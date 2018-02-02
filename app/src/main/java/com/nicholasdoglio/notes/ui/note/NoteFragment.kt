@@ -68,8 +68,8 @@ class NoteFragment : DaggerFragment() {
         if (savedInstanceState != null) {
             val note = Note(
                 0,
-                savedInstanceState.getString("TITLE"),
-                savedInstanceState.getString("CONTENTS")
+                savedInstanceState.getString(Const.noteFragmentTitleKey),
+                savedInstanceState.getString(Const.noteFragmentContentsKey)
             )
             currentNote.accept(note)
         }
@@ -107,8 +107,8 @@ class NoteFragment : DaggerFragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putString("TITLE", currentTitle)
-        outState.putString("CONTENTS", currentContents)
+        outState.putString(Const.noteFragmentTitleKey, currentTitle)
+        outState.putString(Const.noteFragmentContentsKey, currentContents)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
@@ -163,7 +163,7 @@ class NoteFragment : DaggerFragment() {
                 "Deleted" -> deleteNote(clickAction)
             }
         } else {
-            toast("This note is empty! Try writing something.")
+            toast(getString(R.string.empty_note_toast))
         }
     }
 

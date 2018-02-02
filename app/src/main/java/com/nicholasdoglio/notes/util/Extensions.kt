@@ -52,6 +52,7 @@ fun Fragment.setupToolbar(
     optionsMenu: Boolean = false
 ) {
     activity.setSupportActionBar(toolbar)
+    activity.supportActionBar?.setDisplayShowTitleEnabled(false)
     toolbar.title = title
     setHasOptionsMenu(optionsMenu)
 }
