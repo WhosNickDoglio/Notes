@@ -11,12 +11,8 @@ env:
 
 before_install:
 - yes | sdkmanager "platforms;android-27"
-- openssl aes-256-cbc -K $encrypted_0a873abc13a1_key -iv $encrypted_0a873abc13a1_iv -in notes.jks.enc -out notes.jks -d
-- openssl aes-256-cbc -K $encrypted_0a873abc13a1_key -iv $encrypted_0a873abc13a1_iv -in keystore.properties.enc -out keystore.properties -d
-
-
-
-
+- openssl aes-256-cbc -K $encrypted_0a873abc13a1_key -iv $encrypted_0a873abc13a1_iv -in secrets.tar.enc -out secrets.tar -d
+- tar xvf secrets.tar
 
 before_cache:
  -rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
