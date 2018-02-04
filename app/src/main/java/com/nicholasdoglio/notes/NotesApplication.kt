@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.Application
 import android.os.StrictMode
 import com.nicholasdoglio.notes.di.DaggerAppComponent
+import com.nicholasdoglio.notes.util.ReleaseTree
 import com.squareup.leakcanary.LeakCanary
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
@@ -30,12 +31,11 @@ class NotesApplication : Application(), HasActivityInjector {
     }
 
     private fun initDebugTools() {
-        if (BuildConfig.DEBUG) {
+        if (BuildConfig.DEBUG) { //init all debug tools
             initStrictMode()
             Timber.plant(Timber.DebugTree())
-            //init all debug tools
         } else {
-//            Timber.plant() Release tree
+            Timber.plant(ReleaseTree())
         }
     }
 

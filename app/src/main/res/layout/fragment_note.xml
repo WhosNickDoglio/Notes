@@ -22,6 +22,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="@string/title_hint"
+        android:inputType="textCapSentences"
         app:layout_constraintEnd_toStartOf="@+id/rightGuide"
         app:layout_constraintStart_toStartOf="@+id/leftGuide"
         app:layout_constraintTop_toBottomOf="@+id/noteToolbar" />
@@ -44,7 +45,7 @@
             android:layout_marginStart="16dp"
             android:backgroundTint="@android:color/transparent"
             android:hint="@string/note_hint"
-            android:inputType="textMultiLine"
+            android:inputType="textMultiLine|textCapSentences"
             android:singleLine="false" />
 
     </ScrollView>

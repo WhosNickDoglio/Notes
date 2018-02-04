@@ -4,7 +4,6 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.*
@@ -20,6 +19,7 @@ import dagger.android.support.DaggerFragment
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_note_list.*
+import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -46,11 +46,9 @@ class NoteListFragment : DaggerFragment() {
 
         setupToolbar(activity as AppCompatActivity, noteListToolbar, "Notes", true)
 
-        val linearLayoutManager = LinearLayoutManager(this.context)
         notesListRecyclerView.apply {
             adapter = notesListAdapter
-            layoutManager = linearLayoutManager
-            addItemDecoration(DividerItemDecoration(this.context, linearLayoutManager.orientation))
+            layoutManager = LinearLayoutManager(this.context)
             addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
                     if (dy > 0)
@@ -62,6 +60,7 @@ class NoteListFragment : DaggerFragment() {
         }
 
         createNoteFab.clicks()
+            .doOnNext { Timber.d("createNoteFab clicked") }
             .autoDisposable(scopeProvider)
             .subscribe { navigationController.openNote() }
 

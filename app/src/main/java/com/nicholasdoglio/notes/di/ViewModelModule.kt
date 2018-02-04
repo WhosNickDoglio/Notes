@@ -2,6 +2,8 @@ package com.nicholasdoglio.notes.di
 
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
+import com.nicholasdoglio.notes.ui.about.AboutViewModel
+import com.nicholasdoglio.notes.ui.about.libs.LibsViewModel
 import com.nicholasdoglio.notes.ui.list.NoteListViewModel
 import com.nicholasdoglio.notes.ui.note.NoteViewModel
 import com.nicholasdoglio.notes.viewmodel.NotesViewModelFactory
@@ -24,6 +26,16 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(NoteListViewModel::class)
     abstract fun bindNoteListViewModel(noreListViewModel: NoteListViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(AboutViewModel::class)
+    abstract fun bindAboutViewModel(noreListViewModel: AboutViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(LibsViewModel::class)
+    abstract fun bindLibsViewModel(noreListViewModel: LibsViewModel): ViewModel
 
     @Binds
     abstract fun bindViewModelFactory(factory: NotesViewModelFactory): ViewModelProvider.Factory

@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
 import com.jakewharton.rxbinding2.view.clicks
-import com.nicholasdoglio.notes.BuildConfig
 import com.nicholasdoglio.notes.R
 import com.nicholasdoglio.notes.data.model.about.AboutItem
 import com.nicholasdoglio.notes.ui.common.NavigationController
@@ -13,6 +12,7 @@ import com.nicholasdoglio.notes.util.inflate
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.item_about.view.*
 import org.jetbrains.anko.browse
+import timber.log.Timber
 
 
 class AboutAdapter(
@@ -20,12 +20,9 @@ class AboutAdapter(
     private val navigationController: NavigationController
 ) : RecyclerView.Adapter<AboutAdapter.AboutViewHolder>() {
 
-    private val aboutList: MutableList<AboutItem> = mutableListOf()
+    private lateinit var aboutList: List<AboutItem>
     private lateinit var disposable: Disposable
 
-    init {
-        populateList()
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AboutViewHolder =
         AboutViewHolder(parent.inflate(R.layout.item_about))
@@ -39,35 +36,11 @@ class AboutAdapter(
 
     override fun onViewDetachedFromWindow(holder: AboutViewHolder?) {
         super.onViewDetachedFromWindow(holder)
+        Timber.d("LOG THAT THIS HAS BEEN DISPOSED")
         disposable.dispose()
     }
 
     override fun getItemCount(): Int = aboutList.size
-
-    private fun populateList() {
-        aboutList.add(
-            AboutItem(
-                R.drawable.dev_photo,
-                "Developed by Nicholas Doglio",
-                "https://whosnickdoglio.github.io/"
-            )
-        )
-        aboutList.add(AboutItem(R.drawable.ic_about, "Libraries", ""))
-        aboutList.add(
-            AboutItem(
-                R.drawable.ic_github,
-                "Source Code",
-                "https://github.com/WhosNickDoglio/Notes"
-            )
-        )
-        aboutList.add(
-            AboutItem(
-                R.drawable.ic_about,
-                "Version: ${BuildConfig.VERSION_NAME}",
-                "https://github.com/WhosNickDoglio/Notes/releases"
-            )
-        )
-    }
 
     private fun openLink(position: Int) {
         when (position) {
@@ -76,6 +49,10 @@ class AboutAdapter(
             2 -> aboutContext.browse(aboutList[2].link)
             3 -> aboutContext.browse(aboutList[3].link)
         }
+    }
+
+    fun setList(list: List<AboutItem>) {
+        aboutList = list
     }
 
     class AboutViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

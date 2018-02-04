@@ -32,7 +32,7 @@ interface NoteDao {
     @Query("SELECT * From Note WHERE id = :id")
     fun getNote(id: Long): Single<Note>
 
-    /** Pulls all the notes from the database in a asynchronous manner */
+    /** Pulls all the notes from the database in a asynchronous manner using Paging Library */
     @Query("SELECT * FROM Note")
     fun getAllNotes(): DataSource.Factory<Int, Note>
 }

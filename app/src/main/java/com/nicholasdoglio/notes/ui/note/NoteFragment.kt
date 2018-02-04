@@ -23,6 +23,7 @@ import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_note.*
 import org.jetbrains.anko.support.v4.toast
+import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -75,6 +76,7 @@ class NoteFragment : DaggerFragment() {
         }
 
         noteTitle.textChanges()
+            .doOnComplete { Timber.d("LOG THE TITLE") }
             .autoDisposable(scopeProvider)
             .subscribe {
                 noteViewModel.title(it.toString())
@@ -82,6 +84,7 @@ class NoteFragment : DaggerFragment() {
             }
 
         noteContent.textChanges()
+            .doOnComplete { Timber.d("LOG THE CONTENT") }
             .autoDisposable(scopeProvider)
             .subscribe {
                 noteViewModel.contents(it.toString())

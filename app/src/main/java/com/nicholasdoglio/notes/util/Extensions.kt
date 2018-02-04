@@ -57,11 +57,13 @@ fun Fragment.setupToolbar(
     setHasOptionsMenu(optionsMenu)
 }
 
+/**  */
 fun TextView.setEditableText(text: String) {
     setText(text)
     TextView.BufferType.EDITABLE
 }
 
+/** */
 fun AppCompatActivity.hideKeyboard() {
     val input = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
     input.hideSoftInputFromWindow(this.currentFocus?.windowToken, 0)

@@ -2,6 +2,7 @@ package com.nicholasdoglio.notes.di
 
 import android.app.Application
 import android.arch.persistence.room.Room
+import com.nicholasdoglio.notes.data.local.AboutDataStore
 import com.nicholasdoglio.notes.data.local.NoteDatabase
 import dagger.Module
 import dagger.Provides
@@ -18,4 +19,8 @@ class AppModule {
     @Provides
     fun room(app: Application): NoteDatabase =
         Room.databaseBuilder(app, NoteDatabase::class.java, "notes_db").build()
+
+    @Singleton
+    @Provides
+    fun dataStore(): AboutDataStore = AboutDataStore()
 }

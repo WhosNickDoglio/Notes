@@ -11,7 +11,8 @@ import com.nicholasdoglio.notes.data.model.note.Note
 import com.nicholasdoglio.notes.ui.common.NavigationController
 import com.nicholasdoglio.notes.util.inflate
 import io.reactivex.disposables.Disposable
-import kotlinx.android.synthetic.main.item_note.view.*
+import kotlinx.android.synthetic.main.item_note_compact.view.*
+import timber.log.Timber
 
 /**
  * @author Nicholas Doglio
@@ -30,11 +31,12 @@ class NoteListAdapter(private val navigationController: NavigationController) :
 
     override fun onViewDetachedFromWindow(holder: NoteListViewHolder?) {
         super.onViewDetachedFromWindow(holder)
+        Timber.d("LOG THAT THIS HAS BEEN DISPOSED")
         disposable.dispose()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteListViewHolder =
-        NoteListViewHolder(parent.inflate(R.layout.item_note))
+        NoteListViewHolder(parent.inflate(R.layout.item_note_card))
 
     class NoteListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 

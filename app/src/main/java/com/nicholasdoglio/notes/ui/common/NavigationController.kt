@@ -18,6 +18,10 @@ class NavigationController
 constructor(private val mainActivity: MainActivity) { //How do I test this class?
     private val containerId: Int = R.id.fragmentContainer
 
+    /**
+     * Handles initial launch of the application.
+     * Depending on the savedInstanceState or an intent launches the correct Fragment.
+     * */
     fun openFragment(savedInstanceState: Bundle?, intent: String = "") {
         if (savedInstanceState == null) {
             openList()
