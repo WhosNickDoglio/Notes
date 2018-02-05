@@ -31,6 +31,11 @@ class MainActivity : DaggerAppCompatActivity(), HasSupportFragmentInjector {
         super.onCreate(savedInstanceState)
         if (!BuildConfig.DEBUG) Fabric.with(this, Crashlytics())
         setContentView(R.layout.activity_main)
-        navigationController.openFragment(savedInstanceState, intent.action)
+
+        if (intent.action != null) {
+            navigationController.openFragment(savedInstanceState, intent = intent.action)
+        } else {
+            navigationController.openFragment(savedInstanceState, tileIntent = intent.extras)
+        }
     }
 }

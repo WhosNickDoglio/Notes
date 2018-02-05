@@ -51,29 +51,38 @@ class NoteListFragment : DaggerFragment() {
             layoutManager = LinearLayoutManager(this.context)
             addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
-                    if (dy > 0)
-                        createNoteFab.hide()
-                    else if (dy < 0)
-                        createNoteFab.show()
+                    when {
+                        dy > 0 -> createNoteFab.hide()
+                        else -> createNoteFab.show()
+                    }
                 }
             })
         }
 
-        createNoteFab.clicks()
-            .doOnNext { Timber.d("createNoteFab clicked") }
-            .autoDisposable(scopeProvider)
-            .subscribe { navigationController.openNote() }
-
-    }
-
-    override fun onResume() {
-        super.onResume()
         notesListViewModel.checkForNotes()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .map { showViews(it) }
+            .map {
+                when {
+                    it > 0 -> {//Shows a list of notes
+                        emptyList.visibility = View.INVISIBLE
+                        notesListRecyclerView.visibility = View.VISIBLE
+                    }
+                    else -> { //Shows an empty view greeting
+                        emptyList.visibility = View.VISIBLE
+                        notesListRecyclerView.visibility = View.INVISIBLE
+                    }
+                }
+            }
+            .doOnDispose { Timber.d("checkForNotes is disposed") }
             .autoDisposable(scopeProvider)
             .subscribe()
+
+        createNoteFab.clicks()
+            .doOnNext { Timber.d("createNoteFab clicked") }
+            .doOnDispose { Timber.d("createNoteFab is disposed") }
+            .autoDisposable(scopeProvider)
+            .subscribe { navigationController.openNote() }
     }
 
     override fun onCreateView(
@@ -84,7 +93,7 @@ class NoteListFragment : DaggerFragment() {
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         super.onCreateOptionsMenu(menu, inflater)
-        inflater!!.inflate(R.menu.list_menu, menu)
+        inflater?.inflate(R.menu.list_menu, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -92,15 +101,5 @@ class NoteListFragment : DaggerFragment() {
             R.id.about_item -> navigationController.openAbout()
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    private fun showViews(numItemsInDb: Int) {
-        if (numItemsInDb > 0) { //Show Note List
-            emptyList.visibility = View.INVISIBLE
-            notesListRecyclerView.visibility = View.VISIBLE
-        } else { //Show empty view
-            emptyList.visibility = View.VISIBLE
-            notesListRecyclerView.visibility = View.INVISIBLE
-        }
     }
 }

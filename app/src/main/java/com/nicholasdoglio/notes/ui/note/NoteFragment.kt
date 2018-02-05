@@ -76,19 +76,19 @@ class NoteFragment : DaggerFragment() {
         }
 
         noteTitle.textChanges()
-            .doOnComplete { Timber.d("LOG THE TITLE") }
             .autoDisposable(scopeProvider)
             .subscribe {
                 noteViewModel.title(it.toString())
                 currentTitle = it.toString()
+                Timber.d("Title: %s", it.toString())
             }
 
         noteContent.textChanges()
-            .doOnComplete { Timber.d("LOG THE CONTENT") }
             .autoDisposable(scopeProvider)
             .subscribe {
                 noteViewModel.contents(it.toString())
                 currentContents = it.toString()
+                Timber.d("Contents: %s", it.toString())
             }
     }
 
@@ -177,6 +177,7 @@ class NoteFragment : DaggerFragment() {
             returnToList("Note $clickAction")
         } else {
             noteViewModel.deleteNote(currentNote.value)
+                .doOnComplete { Timber.d("Note Deleted - ID: %s", currentNote.value.id) }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .autoDisposable(scopeProvider)

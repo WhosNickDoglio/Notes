@@ -1,17 +1,17 @@
 package com.nicholasdoglio.notes.data.local
 
-import android.arch.lifecycle.MutableLiveData
 import com.nicholasdoglio.notes.BuildConfig
 import com.nicholasdoglio.notes.R
 import com.nicholasdoglio.notes.data.model.about.AboutItem
 import com.nicholasdoglio.notes.data.model.about.LibsItem
+import io.reactivex.Single
 
 /**
  * @author Nicholas Doglio
  */
 class AboutDataStore {
-    private val aboutList: MutableLiveData<List<AboutItem>> = MutableLiveData()
-    private val libraries: MutableLiveData<List<LibsItem>> = MutableLiveData()
+    private val aboutItems: MutableList<AboutItem> = mutableListOf()
+    private val libs: MutableList<LibsItem> = mutableListOf()
 
     init {
         populateAbout()
@@ -19,68 +19,58 @@ class AboutDataStore {
     }
 
     private fun populateAbout() {
-        val listOfAboutItems: MutableList<AboutItem> = mutableListOf()
-
-        listOfAboutItems.add(
+        aboutItems.add(
             AboutItem(
                 R.drawable.dev_photo,
                 "Developed by Nicholas Doglio",
                 "https://whosnickdoglio.github.io/"
             )
         )
-        listOfAboutItems.add(AboutItem(R.drawable.ic_about, "Libraries", ""))
-        listOfAboutItems.add(
+        aboutItems.add(AboutItem(R.drawable.ic_about, "Libraries", ""))
+        aboutItems.add(
             AboutItem(
                 R.drawable.ic_github,
                 "Source Code",
                 "https://github.com/WhosNickDoglio/Notes"
             )
         )
-        listOfAboutItems.add(
+        aboutItems.add(
             AboutItem(
                 R.drawable.ic_about,
                 "Version: ${BuildConfig.VERSION_NAME}",
                 "https://github.com/WhosNickDoglio/Notes/releases"
             )
         )
-
-        aboutList.value = listOfAboutItems
     }
 
     private fun populateLibs() {
-        val listOfLibs: MutableList<LibsItem> = mutableListOf()
-
-        listOfLibs.add(
+        libs.add(
             LibsItem(
                 R.string.android_support,
                 R.string.support_components_license
             )
         )
-        listOfLibs.add(
+        libs.add(
             LibsItem(
                 R.string.android_architecture_components,
                 R.string.support_components_license
             )
         )
 
-        listOfLibs.add(LibsItem(R.string.rxjava, R.string.rxjava_android_license))
-        listOfLibs.add(
+        libs.add(LibsItem(R.string.rxjava, R.string.rxjava_android_license))
+        libs.add(
             LibsItem(
                 R.string.rxandroid,
                 R.string.rxjava_android_license
             )
         )
 
-        listOfLibs.add(LibsItem(R.string.rxbinding, R.string.rxbinding_license))
-        listOfLibs.add(LibsItem(R.string.autodispose, R.string.autodispose_license))
-        listOfLibs.add(LibsItem(R.string.dagger, R.string.dagger_license))
-
-        libraries.value = listOfLibs
+        libs.add(LibsItem(R.string.rxbinding, R.string.rxbinding_license))
+        libs.add(LibsItem(R.string.autodispose, R.string.autodispose_license))
+        libs.add(LibsItem(R.string.dagger, R.string.dagger_license))
     }
 
-    fun aboutItems() = aboutList
+    fun aboutItems(): Single<MutableList<AboutItem>> = Single.just(aboutItems)
 
-    fun libItems() = libraries
-
-
+    fun libItems(): Single<MutableList<LibsItem>> = Single.just(libs)
 }

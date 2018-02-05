@@ -6,6 +6,7 @@ import com.nicholasdoglio.notes.data.local.NoteDatabase
 import com.nicholasdoglio.notes.data.model.note.Note
 import io.reactivex.Completable
 import io.reactivex.Single
+import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -33,6 +34,14 @@ class NoteViewModel @Inject constructor(private val noteDatabase: NoteDatabase) 
     }
 
     fun saveNote(id: Long): Completable = Single.just(id > 0)
+        .doOnSuccess {
+            Timber.d(
+                "Note Saved - ID: %s Title: %s, Content: %s ",
+                id,
+                titleSubject.value,
+                contentSubject.value
+            )
+        }
         .map { saveOrUpdate(it) }
         .toCompletable()
 

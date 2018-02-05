@@ -22,9 +22,14 @@ constructor(private val mainActivity: MainActivity) { //How do I test this class
      * Handles initial launch of the application.
      * Depending on the savedInstanceState or an intent launches the correct Fragment.
      * */
-    fun openFragment(savedInstanceState: Bundle?, intent: String = "") {
+    fun openFragment(savedInstanceState: Bundle?, intent: String = "", tileIntent: Bundle? = null) {
         if (savedInstanceState == null) {
             openList()
+        }
+        if (tileIntent != null) {
+            if (Const.shortcutNoteIntentId == tileIntent.getString(Const.shortcutNoteIntentId)) {
+                openNote()
+            }
         }
         if (Const.shortcutNoteIntentId == intent && savedInstanceState == null) {
             openNote()

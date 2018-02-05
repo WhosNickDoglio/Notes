@@ -7,6 +7,4 @@ import javax.inject.Inject
 class AboutViewModel @Inject constructor(private val aboutDataStore: AboutDataStore) : ViewModel() {
 
     fun aboutItems() = aboutDataStore.aboutItems()
-
-
 }

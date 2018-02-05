@@ -6,11 +6,11 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
 import com.jakewharton.rxbinding2.view.clicks
+import com.jakewharton.rxbinding2.view.detaches
 import com.nicholasdoglio.notes.R
 import com.nicholasdoglio.notes.data.model.note.Note
 import com.nicholasdoglio.notes.ui.common.NavigationController
 import com.nicholasdoglio.notes.util.inflate
-import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.item_note_compact.view.*
 import timber.log.Timber
 
@@ -20,19 +20,13 @@ import timber.log.Timber
 class NoteListAdapter(private val navigationController: NavigationController) :
     PagedListAdapter<Note, NoteListAdapter.NoteListViewHolder>(noteListDiff) {
 
-    private lateinit var disposable: Disposable
-
     override fun onBindViewHolder(holder: NoteListViewHolder, position: Int) {
         holder.bindTo(this.getItem(position)!!)
-        disposable = holder.itemView.clicks()
+        holder.itemView.clicks()
+            .takeUntil(holder.itemView.detaches())
+            .doOnTerminate { Timber.d("noteListAdapterDisposable is terminated") }
             .map { navigationController.openNote(this.getItem(position)!!.id) }
             .subscribe()
-    }
-
-    override fun onViewDetachedFromWindow(holder: NoteListViewHolder?) {
-        super.onViewDetachedFromWindow(holder)
-        Timber.d("LOG THAT THIS HAS BEEN DISPOSED")
-        disposable.dispose()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteListViewHolder =

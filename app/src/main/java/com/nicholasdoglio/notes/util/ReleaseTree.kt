@@ -1,9 +1,30 @@
 package com.nicholasdoglio.notes.util
 
+import android.util.Log
+import com.crashlytics.android.Crashlytics
 import timber.log.Timber
 
 class ReleaseTree : Timber.Tree() {
+
+    //TODO look into moving this to exclusively on the release build
+
+    override fun isLoggable(tag: String?, priority: Int): Boolean {
+        return when (priority) {
+            Log.VERBOSE -> false
+            Log.DEBUG -> false
+            Log.INFO -> false
+            else -> true
+        }
+    }
+
     override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
-        //TODO set up error logging for release and also move this exclusively to release builds
+        if (isLoggable(tag, priority)) {
+            when (priority) {
+                Log.ERROR -> {
+                    Crashlytics.log(message)
+                    Crashlytics.logException(t)
+                }
+            }
+        }
     }
 }

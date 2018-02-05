@@ -7,5 +7,4 @@ import javax.inject.Inject
 class LibsViewModel @Inject constructor(private val aboutDataStore: AboutDataStore) : ViewModel() {
 
     fun libs() = aboutDataStore.libItems()
-
 }

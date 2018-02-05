@@ -38,14 +38,13 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.config
             manifestPlaceholders = [FABRIC_KEY: keystoreProperties['fabricKey']]
         }
         debug {
             ext.enableCrashlytics = false
-            applicationIdSuffix ".debug"
             testCoverageEnabled true
             manifestPlaceholders = [FABRIC_KEY: keystoreProperties['fabricKey']]
         }
