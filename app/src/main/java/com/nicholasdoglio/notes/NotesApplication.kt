@@ -1,34 +1,27 @@
 package com.nicholasdoglio.notes
 
-import android.app.Activity
-import android.app.Application
 import android.os.StrictMode
 import com.nicholasdoglio.notes.di.DaggerAppComponent
 import com.nicholasdoglio.notes.util.ReleaseTree
 import com.squareup.leakcanary.LeakCanary
 import dagger.android.AndroidInjector
-import dagger.android.DispatchingAndroidInjector
-import dagger.android.HasActivityInjector
+import dagger.android.support.DaggerApplication
 import timber.log.Timber
-import javax.inject.Inject
 
 
 /**
  * @author Nicholas Doglio
  */
-class NotesApplication : Application(), HasActivityInjector {
-
-    @Inject
-    lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Activity>
-
-    override fun activityInjector(): AndroidInjector<Activity> = dispatchingAndroidInjector
+class NotesApplication : DaggerApplication() {
 
     override fun onCreate() {
         super.onCreate()
-        initDagger()
         initLeakCanary()
         initDebugTools()
     }
+
+    override fun applicationInjector(): AndroidInjector<out DaggerApplication> =
+        DaggerAppComponent.builder().application(this).build()
 
     private fun initDebugTools() {
         if (BuildConfig.DEBUG) { //init all debug tools
@@ -37,13 +30,6 @@ class NotesApplication : Application(), HasActivityInjector {
         } else {
             Timber.plant(ReleaseTree())
         }
-    }
-
-    private fun initDagger() {
-        DaggerAppComponent.builder()
-            .application(this)
-            .build()
-            .inject(this)
     }
 
     private fun initStrictMode() {

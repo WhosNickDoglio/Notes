@@ -14,6 +14,15 @@ A simple Material Design note taking Android application written entirely in Kot
 
 <img src="https://i.imgur.com/eLiXBD0.png" width="250" height="450"> <img src="https://i.imgur.com/lhMCQ8z.png" width="250" height="450"> <img src="https://i.imgur.com/pfZjgBF.png" width="250" height="450">
 
+
+
+# Features 
+
+- Quickly create a note from a Quick Tile Setting (7.0+) or a App Shortcut (7.1+)
+
+
+
+
 TODO talk about MVVM
 
 TODO talk about one activity with fragments 

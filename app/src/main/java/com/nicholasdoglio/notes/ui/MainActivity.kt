@@ -33,7 +33,7 @@ class MainActivity : DaggerAppCompatActivity(), HasSupportFragmentInjector {
         setContentView(R.layout.activity_main)
 
         if (intent.action != null) {
-            navigationController.openFragment(savedInstanceState, intent = intent.action)
+            navigationController.openFragment(savedInstanceState, shortcutIntent = intent.action)
         } else {
             navigationController.openFragment(savedInstanceState, tileIntent = intent.extras)
         }
