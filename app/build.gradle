@@ -38,7 +38,7 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.config
             manifestPlaceholders = [FABRIC_KEY: keystoreProperties['fabricKey']]
