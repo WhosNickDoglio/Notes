@@ -19,8 +19,8 @@ android {
         applicationId "com.nicholasdoglio.notes"
         minSdkVersion rootProject.ext.minSdk
         targetSdkVersion rootProject.ext.targetSdk
-        versionCode 4
-        versionName "1.0.3"
+        versionCode 5
+        versionName "1.1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         javaCompileOptions {
             annotationProcessorOptions {
@@ -76,6 +76,9 @@ dependencies {
     implementation "com.android.support:design:$rootProject.support"
     implementation "com.android.support:support-v4:$rootProject.support"
     implementation "com.android.support.constraint:constraint-layout:$rootProject.constraint"
+
+    //ktx
+    implementation "androidx.core:core-ktx:$rootProject.ktx"
 
     //Anko
     implementation "org.jetbrains.anko:anko-appcompat-v7-commons:$rootProject.anko"

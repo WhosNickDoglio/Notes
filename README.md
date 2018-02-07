@@ -16,17 +16,13 @@ A simple Material Design note taking Android application written entirely in Kot
 
 
 
+
+
+
 # Features 
 
+- Create/Edit/Delete notes 
 - Quickly create a note from a Quick Tile Setting (7.0+) or a App Shortcut (7.1+)
-
-
-
-
-TODO talk about MVVM
-
-TODO talk about one activity with fragments 
-
 
 # To-Do
 
@@ -55,6 +51,13 @@ All the releases and change logs are kept under [releases](https://github.com/Wh
 - [JUnit](http://junit.org/junit5/)
 - [Robolectric](http://robolectric.org/)
 - [Espresso](https://developer.android.com/training/testing/espresso/index.html)
+
+
+# Presentation Architecture 
+
+TODO talk about MVVM
+
+TODO talk about one activity with fragments 
 
 
 # Feedback

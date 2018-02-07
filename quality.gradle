@@ -9,12 +9,16 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest']) {
         xml.enabled = true
         html.enabled = true
     }
-    //Look at other classes I need to be filtering out? Dagger auto-generated classes?
     def fileFilter = ['**/R.class',
                       '**/R$*.class',
                       '**/BuildConfig.*',
                       '**/Manifest*.*',
+                      '**/*$ViewInjector*.*',
                       '**/*Test*.*',
+                      '**/*Dagger*.*',
+                      '**/*MembersInjector*.*',
+                      '**/*_Provide*Factory*.*',
+                      '**/*_Factory*.*',
                       'android/**/*.*']
     def debugTree = fileTree(dir: "${buildDir}/intermediates/classes/debug", excludes: fileFilter)
     def kotlinDebugTree = fileTree(dir: "${buildDir}/tmp/kotlin-classes/debug", excludes: fileFilter)

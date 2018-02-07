@@ -33,6 +33,7 @@ ext {
 
     //Libraries
     anko = '0.10.4'
+    ktx = '0.1'
     support = '27.0.2'
     constraint = '1.1.0-beta4'
     paging = '1.0.0-alpha5'

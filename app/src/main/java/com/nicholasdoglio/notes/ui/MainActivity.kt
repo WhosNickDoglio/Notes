@@ -29,6 +29,7 @@ class MainActivity : DaggerAppCompatActivity(), HasSupportFragmentInjector {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setTheme(R.style.AppTheme)
         if (!BuildConfig.DEBUG) Fabric.with(this, Crashlytics())
         setContentView(R.layout.activity_main)
 
