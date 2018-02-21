@@ -27,6 +27,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/libsToolbar" />
+        app:layout_constraintTop_toBottomOf="@+id/libsToolbar"
+        tools:listitem="@layout/item_libs" />
 
 </android.support.constraint.ConstraintLayout>

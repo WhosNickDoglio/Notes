@@ -6,12 +6,12 @@ import com.crashlytics.android.Crashlytics
 import com.nicholasdoglio.notes.BuildConfig
 import com.nicholasdoglio.notes.R
 import com.nicholasdoglio.notes.ui.common.NavigationController
+import com.nicholasdoglio.notes.util.Const
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.DaggerAppCompatActivity
 import dagger.android.support.HasSupportFragmentInjector
 import io.fabric.sdk.android.Fabric
 import javax.inject.Inject
-
 
 /**
  * @author Nicholas Doglio
@@ -30,13 +30,17 @@ class MainActivity : DaggerAppCompatActivity(), HasSupportFragmentInjector {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setTheme(R.style.AppTheme)
-        if (!BuildConfig.DEBUG) Fabric.with(this, Crashlytics())
         setContentView(R.layout.activity_main)
+        when (BuildConfig.DEBUG) {
+            false -> Fabric.with(this, Crashlytics())
+        }
 
-        if (intent.action != null) {
-            navigationController.openFragment(savedInstanceState, shortcutIntent = intent.action)
-        } else {
-            navigationController.openFragment(savedInstanceState, tileIntent = intent.extras)
+        if (savedInstanceState == null) {
+            navigationController.openList()
+        }
+
+        if (Const.shortcutNoteIntentId == intent.action || intent.extras != null) {
+            navigationController.openNote()
         }
     }
 }

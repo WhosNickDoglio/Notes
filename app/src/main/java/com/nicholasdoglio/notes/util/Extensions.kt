@@ -3,6 +3,7 @@ package com.nicholasdoglio.notes.util
 import android.app.Activity
 import android.support.annotation.IdRes
 import android.support.annotation.LayoutRes
+import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
@@ -68,3 +69,18 @@ fun AppCompatActivity.hideKeyboard() {
     val input = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
     input.hideSoftInputFromWindow(this.currentFocus?.windowToken, 0)
 }
+
+fun View.showIf(bool: Boolean) {
+    when (bool) {
+        true -> this.visibility = View.VISIBLE
+        else -> this.visibility = View.INVISIBLE
+    }
+}
+
+fun FloatingActionButton.hideOnScroll(dy: Int) {
+    when {
+        dy > 0 -> this.hide()
+        else -> this.show()
+    }
+}
+

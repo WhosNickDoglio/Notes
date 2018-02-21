@@ -49,7 +49,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/noteListToolbar" />
+        app:layout_constraintTop_toBottomOf="@+id/noteListToolbar"
+        tools:listitem="@layout/item_note_card" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/createNoteFab"

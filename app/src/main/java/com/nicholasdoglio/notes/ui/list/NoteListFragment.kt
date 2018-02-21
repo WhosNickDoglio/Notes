@@ -10,8 +10,10 @@ import android.view.*
 import com.jakewharton.rxbinding2.view.clicks
 import com.nicholasdoglio.notes.R
 import com.nicholasdoglio.notes.ui.common.NavigationController
+import com.nicholasdoglio.notes.util.hideOnScroll
 import com.nicholasdoglio.notes.util.inflate
 import com.nicholasdoglio.notes.util.setupToolbar
+import com.nicholasdoglio.notes.util.showIf
 import com.nicholasdoglio.notes.viewmodel.NotesViewModelFactory
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
 import com.uber.autodispose.kotlin.autoDisposable
@@ -19,8 +21,8 @@ import dagger.android.support.DaggerFragment
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_note_list.*
-import timber.log.Timber
 import javax.inject.Inject
+
 
 /**
  * @author Nicholas Doglio
@@ -34,15 +36,13 @@ class NoteListFragment : DaggerFragment() {
     lateinit var navigationController: NavigationController
 
     private val scopeProvider by lazy { AndroidLifecycleScopeProvider.from(this) }
-    private val notesListAdapter by lazy { NoteListAdapter(navigationController) }
+    private val notesListAdapter by lazy { NoteListAdapter() }
     private val notesListViewModel by lazy {
         ViewModelProviders.of(this, viewModelFactory).get(NoteListViewModel::class.java)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
-        notesListViewModel.notesList.observe(this, Observer(notesListAdapter::setList))
 
         setupToolbar(activity as AppCompatActivity, noteListToolbar, "Notes", true)
 
@@ -51,38 +51,36 @@ class NoteListFragment : DaggerFragment() {
             layoutManager = LinearLayoutManager(this.context)
             addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
-                    when {
-                        dy > 0 -> createNoteFab.hide()
-                        else -> createNoteFab.show()
-                    }
+                    createNoteFab.hideOnScroll(dy)
                 }
             })
         }
+
+        notesListViewModel.notesList.observe(this, Observer(notesListAdapter::setList))
 
         notesListViewModel.checkForNotes()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .map {
-                when {
-                    it > 0 -> {//Shows a list of notes
-                        emptyList.visibility = View.INVISIBLE
-                        notesListRecyclerView.visibility = View.VISIBLE
-                    }
-                    else -> { //Shows an empty view greeting
-                        emptyList.visibility = View.VISIBLE
-                        notesListRecyclerView.visibility = View.INVISIBLE
-                    }
-                }
+                emptyList.showIf(it == 0)
+                notesListRecyclerView.showIf(it > 0)
             }
-            .doOnDispose { Timber.d("checkForNotes is disposed") }
+            .autoDisposable(scopeProvider)
+            .subscribe()
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        notesListAdapter.noteListItemClickListener()
+            .map { navigationController.openNote(it.id) }
             .autoDisposable(scopeProvider)
             .subscribe()
 
         createNoteFab.clicks()
-            .doOnNext { Timber.d("createNoteFab clicked") }
-            .doOnDispose { Timber.d("createNoteFab is disposed") }
+            .map { navigationController.openNote() }
             .autoDisposable(scopeProvider)
-            .subscribe { navigationController.openNote() }
+            .subscribe()
     }
 
     override fun onCreateView(
@@ -96,10 +94,11 @@ class NoteListFragment : DaggerFragment() {
         inflater?.inflate(R.menu.list_menu, menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.about_item -> navigationController.openAbout()
+    override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
+        R.id.about_item -> {
+            navigationController.openAbout()
+            true
         }
-        return super.onOptionsItemSelected(item)
+        else -> super.onOptionsItemSelected(item)
     }
 }

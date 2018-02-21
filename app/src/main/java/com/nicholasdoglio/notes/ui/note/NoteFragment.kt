@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.*
 import com.jakewharton.rxbinding2.widget.textChanges
-import com.jakewharton.rxrelay2.BehaviorRelay
 import com.nicholasdoglio.notes.R
 import com.nicholasdoglio.notes.data.model.note.Note
 import com.nicholasdoglio.notes.ui.common.NavigationController
@@ -17,13 +16,10 @@ import com.nicholasdoglio.notes.viewmodel.NotesViewModelFactory
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
 import com.uber.autodispose.kotlin.autoDisposable
 import dagger.android.support.DaggerFragment
-import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_note.*
 import org.jetbrains.anko.support.v4.toast
-import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -37,10 +33,7 @@ class NoteFragment : DaggerFragment() {
     @Inject
     lateinit var navigationController: NavigationController
 
-    private lateinit var currentTitle: String
-    private lateinit var currentContents: String
     private var buttonsEnabled: Boolean = false
-    private val currentNote: BehaviorRelay<Note> = BehaviorRelay.create()
     private val scopeProvider by lazy { AndroidLifecycleScopeProvider.from(this) }
     private val noteViewModel by lazy {
         ViewModelProviders.of(this, viewModelFactory).get(NoteViewModel::class.java)
@@ -51,51 +44,55 @@ class NoteFragment : DaggerFragment() {
 
         setupToolbar(activity as AppCompatActivity, noteToolbar, optionsMenu = true)
 
-        if (oldNoteFound()) {
-            noteViewModel.start(arguments!!.getLong(Const.noteFragmentArgumentId))
+        when (oldNoteFound()) {
+            true -> noteViewModel.start(arguments!!.getLong(Const.noteFragmentArgumentId))
                 .subscribeOn(Schedulers.io())
                 .map {
-                    currentNote.accept(it)
+                    noteViewModel.note(it)
                     noteViewModel.id(it.id)
                 }
                 .autoDisposable(scopeProvider)
                 .subscribe()
-        } else {
-            noteViewModel.id(0)
+            false -> noteViewModel.id(0)
         }
 
-        setupButtonObservables()
+        //TODO need to be able to discard a note with an empty title or contents
 
-        if (savedInstanceState != null) {
-            val note = Note(
-                0,
-                savedInstanceState.getString(Const.noteFragmentTitleKey),
-                savedInstanceState.getString(Const.noteFragmentContentsKey)
+        //clean this up and add some toasts and maybe an animation?
+
+        noteViewModel.isTitleEmpty(noteTitle.textChanges().map { it.isNotEmpty() })
+        noteViewModel.isContentsEmpty(noteContent.textChanges().map { it.isNotEmpty() })
+        noteViewModel.isNoteEmpty()
+            .map { buttonsEnabled = it }
+            .autoDisposable(scopeProvider)
+            .subscribe()
+
+
+        savedInstanceState?.let {
+            noteViewModel.note(
+                Note(
+                    noteViewModel.currentId(),
+                    savedInstanceState.getString(Const.noteFragmentTitleKey),
+                    savedInstanceState.getString(Const.noteFragmentContentsKey)
+                )
             )
-            currentNote.accept(note)
         }
 
         noteTitle.textChanges()
+            .map { noteViewModel.title(it.toString()) }
             .autoDisposable(scopeProvider)
-            .subscribe {
-                noteViewModel.title(it.toString())
-                currentTitle = it.toString()
-                Timber.d("Title: %s", it.toString())
-            }
+            .subscribe()
 
         noteContent.textChanges()
+            .map { noteViewModel.contents(it.toString()) }
             .autoDisposable(scopeProvider)
-            .subscribe {
-                noteViewModel.contents(it.toString())
-                currentContents = it.toString()
-                Timber.d("Contents: %s", it.toString())
-            }
+            .subscribe()
     }
 
     override fun onResume() {
         super.onResume()
-        if (oldNoteFound()) {
-            currentNote
+        oldNoteFound().let {
+            noteViewModel.currentNote()
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .map { openOldNote(it) }
                 .autoDisposable(scopeProvider)
@@ -110,8 +107,8 @@ class NoteFragment : DaggerFragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putString(Const.noteFragmentTitleKey, currentTitle)
-        outState.putString(Const.noteFragmentContentsKey, currentContents)
+        outState.putString(Const.noteFragmentTitleKey, noteViewModel.currentTitle())
+        outState.putString(Const.noteFragmentContentsKey, noteViewModel.currentContent())
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
@@ -122,8 +119,8 @@ class NoteFragment : DaggerFragment() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         if (item != null) {
             when (item.itemId) {
-                R.id.save_item -> showAction("Saved")
-                R.id.delete_item -> showAction("Deleted")
+                R.id.save_item -> showAction("saved")
+                R.id.delete_item -> showAction("deleted")
             }
         }
         return super.onOptionsItemSelected(item)
@@ -141,43 +138,30 @@ class NoteFragment : DaggerFragment() {
         noteContent.setEditableText(note.contents)
     }
 
-    private fun setupButtonObservables() {
-        //TODO need to be able to discard a note with an empty title or contents
-
-        //clean this up and add some toasts and maybe an animation?
-
-        //can I move any of this into the ViewModel?
-        val isTitleEmpty = noteTitle.textChanges().map { it.isNotEmpty() }
-        val isContentsEmpty = noteContent.textChanges().map { it.isNotEmpty() }
-
-        Observable.combineLatest(isTitleEmpty, isContentsEmpty,
-            BiFunction<Boolean, Boolean, Boolean> { firstBool, secondBool -> firstBool && secondBool })
-            .distinctUntilChanged()
-            .autoDisposable(scopeProvider)
-            .subscribe { buttonsEnabled = it }
-    }
-
-    private fun showAction(clickAction: String) { //These are very slow in Marshmallow
-        if (this.buttonsEnabled) {
+    private fun showAction(clickAction: String) { //These are very slow on Marshmallow
+        if (buttonsEnabled) {
             when (clickAction) {
-                "Saved" -> noteViewModel.saveNote(arguments!!.getLong(Const.noteFragmentArgumentId))
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .autoDisposable(scopeProvider)
-                    .subscribe { returnToList("Note $clickAction") }
-                "Deleted" -> deleteNote(clickAction)
+                "saved" -> saveNote(clickAction)
+                "deleted" -> deleteNote(clickAction)
             }
         } else {
             toast(getString(R.string.empty_note_toast))
         }
     }
 
+    private fun saveNote(clickAction: String) {
+        noteViewModel.saveNote(arguments!!.getLong(Const.noteFragmentArgumentId))
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .autoDisposable(scopeProvider)
+            .subscribe { returnToList("Note $clickAction") }
+    }
+
     private fun deleteNote(clickAction: String) {
         if (arguments!!.getLong(Const.noteFragmentArgumentId).toInt() == 0) {
             returnToList("Note $clickAction")
         } else {
-            noteViewModel.deleteNote(currentNote.value)
-                .doOnComplete { Timber.d("Note Deleted - ID: %s", currentNote.value.id) }
+            noteViewModel.deleteNote(noteViewModel.currentNote().value)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .autoDisposable(scopeProvider)

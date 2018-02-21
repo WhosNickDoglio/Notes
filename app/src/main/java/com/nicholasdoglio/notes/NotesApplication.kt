@@ -14,14 +14,16 @@ import timber.log.Timber
  */
 class NotesApplication : DaggerApplication() {
 
+    //TODO set up sample data for all XML
+
+    override fun applicationInjector(): AndroidInjector<out DaggerApplication> =
+        DaggerAppComponent.builder().application(this).build()
+
     override fun onCreate() {
         super.onCreate()
         initLeakCanary()
         initDebugTools()
     }
-
-    override fun applicationInjector(): AndroidInjector<out DaggerApplication> =
-        DaggerAppComponent.builder().application(this).build()
 
     private fun initDebugTools() {
         if (BuildConfig.DEBUG) { //init all debug tools

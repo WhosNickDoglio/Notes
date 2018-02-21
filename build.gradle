@@ -7,7 +7,8 @@ buildscript {
     }
     dependencies {
         classpath 'io.fabric.tools:gradle:1.+'
-        classpath 'com.android.tools.build:gradle:3.2.0-alpha01'
+        classpath 'org.jacoco:org.jacoco.core:0.8.0'
+        classpath 'com.android.tools.build:gradle:3.2.0-alpha03'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
@@ -35,26 +36,29 @@ ext {
     anko = '0.10.4'
     ktx = '0.1'
     support = '27.0.2'
-    constraint = '1.1.0-beta4'
+    constraint = '1.1.0-beta5'
     paging = '1.0.0-alpha5'
     archComponents = '1.1.0'
-    room = '1.1.0-alpha1'
+    room = '1.1.0-alpha2'
     dagger = '2.14.1'
     rxJava = '2.1.9'
-    rxAndroid = '2.0.1'
+    rxAndroid = '2.0.2'
     rxKotlin = '2.2.0'
-    rxBinding = '2.1.0'
+    rxBinding = '2.1.1'
     rxRelay = '2.0.0'
-    dispose = '0.5.1'
+    dispose = '0.6.0'
 
     //Debugging
-    timber = '4.6.0'
+    timber = '4.6.1'
     canary = '1.5.4'
     crashlytics = "2.6.8@aar"
 
     //Testing
     junit = '4.12'
-    robo = '3.6.1'
-    runner = '1.0.1'
+    mockito = "2.15.0"
+    mokitoKotlin ='1.5.0'
+    robo = '3.7.1'
+    okhttp = '3.9.1'
     espresso = '3.0.1'
+    espressoTest = '1.0.1'
 }

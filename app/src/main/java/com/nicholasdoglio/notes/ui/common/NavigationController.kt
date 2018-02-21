@@ -1,6 +1,5 @@
 package com.nicholasdoglio.notes.ui.common
 
-import android.os.Bundle
 import android.support.v4.app.FragmentTransaction
 import com.nicholasdoglio.notes.R
 import com.nicholasdoglio.notes.ui.MainActivity
@@ -17,28 +16,6 @@ class NavigationController
 @Inject
 constructor(private val mainActivity: MainActivity) { //How do I test this class?
     private val containerId: Int = R.id.fragmentContainer
-
-    /**
-     * Handles initial launch of the application.
-     * Depending on the savedInstanceState or an intent launches the correct Fragment.
-     * */
-    fun openFragment(
-        savedInstanceState: Bundle?,
-        shortcutIntent: String = "",
-        tileIntent: Bundle? = null
-    ) {
-        if (savedInstanceState == null) {
-            openList()
-        }
-        if (tileIntent != null) {
-            if (Const.shortcutNoteIntentId == tileIntent.getString(Const.shortcutNoteIntentId)) {
-                openNote()
-            }
-        }
-        if (Const.shortcutNoteIntentId == shortcutIntent && savedInstanceState == null) {
-            openNote()
-        }
-    }
 
     fun openList() {
         mainActivity.hideKeyboard()

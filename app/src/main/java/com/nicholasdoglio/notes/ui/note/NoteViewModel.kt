@@ -5,8 +5,9 @@ import com.jakewharton.rxrelay2.BehaviorRelay
 import com.nicholasdoglio.notes.data.local.NoteDatabase
 import com.nicholasdoglio.notes.data.model.note.Note
 import io.reactivex.Completable
+import io.reactivex.Observable
 import io.reactivex.Single
-import timber.log.Timber
+import io.reactivex.functions.BiFunction
 import javax.inject.Inject
 
 /**
@@ -18,6 +19,9 @@ class NoteViewModel @Inject constructor(private val noteDatabase: NoteDatabase) 
     private val contentSubject: BehaviorRelay<String> = BehaviorRelay.create()
     private val idSubject: BehaviorRelay<Long> = BehaviorRelay.create()
     private val noteSubject: BehaviorRelay<Note> = BehaviorRelay.create()
+    private lateinit var titleEmpty: Observable<Boolean>
+    private lateinit var contentsEmpty: Observable<Boolean>
+
 
     fun title(title: String) = titleSubject.accept(title)
 
@@ -27,21 +31,36 @@ class NoteViewModel @Inject constructor(private val noteDatabase: NoteDatabase) 
 
     fun note(note: Note) = noteSubject.accept(note)
 
+    fun currentTitle(): String = titleSubject.value
+
+    fun currentContent(): String = contentSubject.value
+
+    fun currentId(): Long = idSubject.value
+
+    fun currentNote() = noteSubject
+
     fun start(id: Long): Single<Note> = noteDatabase.noteDao().getNote(id)
+
+    fun isTitleEmpty(bool: Observable<Boolean>) {
+        titleEmpty = bool
+    }
+
+    fun isContentsEmpty(bool: Observable<Boolean>) {
+        contentsEmpty = bool
+    }
+
+    fun isNoteEmpty(): Observable<Boolean> = Observable.combineLatest(
+        titleEmpty,
+        contentsEmpty,
+        BiFunction<Boolean, Boolean, Boolean> { firstBool, secondBool -> firstBool && secondBool })
+        .distinctUntilChanged()
+
 
     fun deleteNote(note: Note): Completable = Completable.fromAction {
         noteDatabase.noteDao().deleteNote(note)
     }
 
     fun saveNote(id: Long): Completable = Single.just(id > 0)
-        .doOnSuccess {
-            Timber.d(
-                "Note Saved - ID: %s Title: %s, Content: %s ",
-                id,
-                titleSubject.value,
-                contentSubject.value
-            )
-        }
         .map { saveOrUpdate(it) }
         .toCompletable()
 

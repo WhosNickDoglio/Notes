@@ -1,6 +1,6 @@
 # Notes
 
-[![Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE.md)
+[![Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 [![API](https://img.shields.io/badge/API-21%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=21)
 [![Build Status](https://travis-ci.org/WhosNickDoglio/Notes.svg?branch=master)](https://travis-ci.org/WhosNickDoglio/Notes)
 [![codecov](https://codecov.io/gh/WhosNickDoglio/Notes/branch/master/graph/badge.svg)](https://codecov.io/gh/WhosNickDoglio/Notes)
@@ -13,9 +13,6 @@ A simple Material Design note taking Android application written entirely in Kot
 
 
 <img src="https://i.imgur.com/eLiXBD0.png" width="250" height="450"> <img src="https://i.imgur.com/lhMCQ8z.png" width="250" height="450"> <img src="https://i.imgur.com/pfZjgBF.png" width="250" height="450">
-
-
-
 
 
 
@@ -55,9 +52,10 @@ All the releases and change logs are kept under [releases](https://github.com/Wh
 
 # Presentation Architecture 
 
-TODO talk about MVVM
+The Presentation layer was written using the Model-View-ViewModel (MVVM) pattern. Each `Fragment` is given it's own `ViewModel` which emits data for the Fragment to observe.
 
-TODO talk about one activity with fragments 
+
+This application also uses a single activity with multiple fragments architecture. 
 
 
 # Feedback

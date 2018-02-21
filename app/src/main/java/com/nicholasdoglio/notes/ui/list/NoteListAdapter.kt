@@ -6,35 +6,39 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
 import com.jakewharton.rxbinding2.view.clicks
-import com.jakewharton.rxbinding2.view.detaches
+import com.jakewharton.rxrelay2.PublishRelay
 import com.nicholasdoglio.notes.R
 import com.nicholasdoglio.notes.data.model.note.Note
-import com.nicholasdoglio.notes.ui.common.NavigationController
 import com.nicholasdoglio.notes.util.inflate
 import kotlinx.android.synthetic.main.item_note_compact.view.*
-import timber.log.Timber
+
 
 /**
  * @author Nicholas Doglio
  */
-class NoteListAdapter(private val navigationController: NavigationController) :
-    PagedListAdapter<Note, NoteListAdapter.NoteListViewHolder>(noteListDiff) {
+class NoteListAdapter : PagedListAdapter<Note, NoteListAdapter.NoteListViewHolder>(noteListDiff) {
 
-    override fun onBindViewHolder(holder: NoteListViewHolder, position: Int) {
+    private val noteListItemPublishRelay: PublishRelay<Note> = PublishRelay.create()
+
+    override fun onBindViewHolder(holder: NoteListViewHolder, position: Int) =
         holder.bindTo(this.getItem(position)!!)
-        holder.itemView.clicks()
-            .takeUntil(holder.itemView.detaches())
-            .doOnTerminate { Timber.d("noteListAdapterDisposable is terminated") }
-            .map { navigationController.openNote(this.getItem(position)!!.id) }
-            .subscribe()
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteListViewHolder =
         NoteListViewHolder(parent.inflate(R.layout.item_note_card))
 
-    class NoteListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    fun noteListItemClickListener(): PublishRelay<Note> = noteListItemPublishRelay
+
+    inner class NoteListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private lateinit var currentNote: Note
+
+        init {
+            itemView.clicks()
+                .map { noteListItemPublishRelay.accept(currentNote) }
+                .subscribe()
+        }
 
         fun bindTo(note: Note) {
+            currentNote = note
             itemView.titleListItem.text = note.title
             itemView.contentsListItem.text = note.contents
         }
