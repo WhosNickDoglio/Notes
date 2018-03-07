@@ -34,15 +34,29 @@ fun AppCompatActivity.showFragment(
     tag: String,
     name: String,
     transition: Int,
-    @IdRes containerViewId: Int
+    @IdRes containerViewId: Int,
+    backstack: Boolean = true
 ) {
-    supportFragmentManager
-        .beginTransaction()
-        .replace(containerViewId, fragment, tag)
-        .addToBackStack(name)
-        .setTransition(transition)
-        .setReorderingAllowed(true)
-        .commit()
+    when (backstack) {
+        true -> {
+            supportFragmentManager
+                .beginTransaction()
+                .replace(containerViewId, fragment, tag)
+                .addToBackStack(name)
+                .setTransition(transition)
+                .setReorderingAllowed(true)
+                .commit()
+        }
+        false -> {
+            supportFragmentManager
+                .beginTransaction()
+                .replace(containerViewId, fragment, tag)
+                .setTransition(transition)
+                .setReorderingAllowed(true)
+                .commit()
+
+        }
+    }
 }
 
 /** Sets up toolbars in all the fragments */
@@ -70,10 +84,10 @@ fun AppCompatActivity.hideKeyboard() {
     input.hideSoftInputFromWindow(this.currentFocus?.windowToken, 0)
 }
 
-fun View.showIf(bool: Boolean) {
-    when (bool) {
+fun View.showIf(visibility: Boolean) {
+    when (visibility) {
         true -> this.visibility = View.VISIBLE
-        else -> this.visibility = View.INVISIBLE
+        false -> this.visibility = View.INVISIBLE
     }
 }
 

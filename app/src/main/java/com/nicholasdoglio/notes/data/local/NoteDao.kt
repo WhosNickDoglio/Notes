@@ -26,7 +26,7 @@ interface NoteDao {
 
     /** Gets the total number of notes in the table */
     @Query("SELECT count(*) FROM Note")
-    fun getNumberOfItems(): Single<Int>
+    fun getNumberOfNotes(): Single<Int>
 
     /** Returns the selected note from the database */
     @Query("SELECT * From Note WHERE id = :id")

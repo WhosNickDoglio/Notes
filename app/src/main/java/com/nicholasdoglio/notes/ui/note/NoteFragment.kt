@@ -59,14 +59,12 @@ class NoteFragment : DaggerFragment() {
         //TODO need to be able to discard a note with an empty title or contents
 
         //clean this up and add some toasts and maybe an animation?
-
         noteViewModel.isTitleEmpty(noteTitle.textChanges().map { it.isNotEmpty() })
         noteViewModel.isContentsEmpty(noteContent.textChanges().map { it.isNotEmpty() })
         noteViewModel.isNoteEmpty()
             .map { buttonsEnabled = it }
             .autoDisposable(scopeProvider)
             .subscribe()
-
 
         savedInstanceState?.let {
             noteViewModel.note(
@@ -88,6 +86,7 @@ class NoteFragment : DaggerFragment() {
             .autoDisposable(scopeProvider)
             .subscribe()
     }
+
 
     override fun onResume() {
         super.onResume()
@@ -126,9 +125,13 @@ class NoteFragment : DaggerFragment() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun returnToList(finishedToast: String) {
+    fun showDiscardAlert() {
+
+    }
+
+    private fun returnToList(finished: String) {
         navigationController.openList()
-        toast(finishedToast)
+        toast(finished)
     }
 
     private fun oldNoteFound() = arguments!!.getLong(Const.noteFragmentArgumentId) > 0

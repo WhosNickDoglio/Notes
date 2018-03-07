@@ -2,8 +2,8 @@ package com.nicholasdoglio.notes.ui.note
 
 import android.arch.lifecycle.ViewModel
 import com.jakewharton.rxrelay2.BehaviorRelay
-import com.nicholasdoglio.notes.data.local.NoteDatabase
 import com.nicholasdoglio.notes.data.model.note.Note
+import com.nicholasdoglio.notes.data.repo.NoteRepository
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -13,7 +13,7 @@ import javax.inject.Inject
 /**
  * @author Nicholas Doglio
  */
-class NoteViewModel @Inject constructor(private val noteDatabase: NoteDatabase) : ViewModel() {
+class NoteViewModel @Inject constructor(private val noteRepository: NoteRepository) : ViewModel() {
 
     private val titleSubject: BehaviorRelay<String> = BehaviorRelay.create()
     private val contentSubject: BehaviorRelay<String> = BehaviorRelay.create()
@@ -39,14 +39,14 @@ class NoteViewModel @Inject constructor(private val noteDatabase: NoteDatabase) 
 
     fun currentNote() = noteSubject
 
-    fun start(id: Long): Single<Note> = noteDatabase.noteDao().getNote(id)
+    fun start(id: Long): Single<Note> = noteRepository.getNote(id)
 
-    fun isTitleEmpty(bool: Observable<Boolean>) {
-        titleEmpty = bool
+    fun isTitleEmpty(titleEmpty: Observable<Boolean>) {
+        this.titleEmpty = titleEmpty
     }
 
-    fun isContentsEmpty(bool: Observable<Boolean>) {
-        contentsEmpty = bool
+    fun isContentsEmpty(contentsEmpty: Observable<Boolean>) {
+        this.contentsEmpty = contentsEmpty
     }
 
     fun isNoteEmpty(): Observable<Boolean> = Observable.combineLatest(
@@ -57,7 +57,7 @@ class NoteViewModel @Inject constructor(private val noteDatabase: NoteDatabase) 
 
 
     fun deleteNote(note: Note): Completable = Completable.fromAction {
-        noteDatabase.noteDao().deleteNote(note)
+        noteRepository.deleteNote(note)
     }
 
     fun saveNote(id: Long): Completable = Single.just(id > 0)
@@ -73,8 +73,8 @@ class NoteViewModel @Inject constructor(private val noteDatabase: NoteDatabase) 
 
     private fun saveOrUpdate(doesNoteAlreadyExist: Boolean) {
         when (doesNoteAlreadyExist) {
-            true -> noteDatabase.noteDao().updateNote(createNote())
-            false -> noteDatabase.noteDao().saveNote(createNote())
+            true -> noteRepository.updateNote(createNote())
+            false -> noteRepository.saveNote(createNote())
         }
     }
 }

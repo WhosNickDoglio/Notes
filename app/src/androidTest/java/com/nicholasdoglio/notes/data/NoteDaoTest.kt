@@ -51,7 +51,7 @@ class NoteDaoTest {
     fun deleteNote() {
         noteDatabase.noteDao().deleteNote(firstTestNote)
 
-        assert(noteDatabase.noteDao().getNumberOfItems().blockingGet() == 1)
+        assert(noteDatabase.noteDao().getNumberOfNotes().blockingGet() == 1)
     }
 
     @Test
@@ -75,7 +75,7 @@ class NoteDaoTest {
 
     @Test
     fun getNumberOfItems() {
-        assert(noteDatabase.noteDao().getNumberOfItems().blockingGet() == 2)
+        assert(noteDatabase.noteDao().getNumberOfNotes().blockingGet() == 2)
     }
 
 

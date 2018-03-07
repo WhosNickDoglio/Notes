@@ -1,7 +1,7 @@
 package com.nicholasdoglio.notes.ui.list
 
 import android.arch.paging.PagedListAdapter
-import android.support.v7.recyclerview.extensions.DiffCallback
+import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
@@ -18,7 +18,7 @@ import kotlinx.android.synthetic.main.item_note_compact.view.*
  */
 class NoteListAdapter : PagedListAdapter<Note, NoteListAdapter.NoteListViewHolder>(noteListDiff) {
 
-    private val noteListItemPublishRelay: PublishRelay<Note> = PublishRelay.create()
+    private val noteListClick: PublishRelay<Note> = PublishRelay.create()
 
     override fun onBindViewHolder(holder: NoteListViewHolder, position: Int) =
         holder.bindTo(this.getItem(position)!!)
@@ -26,14 +26,16 @@ class NoteListAdapter : PagedListAdapter<Note, NoteListAdapter.NoteListViewHolde
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteListViewHolder =
         NoteListViewHolder(parent.inflate(R.layout.item_note_card))
 
-    fun noteListItemClickListener(): PublishRelay<Note> = noteListItemPublishRelay
+
+    fun noteListItemClickListener(): PublishRelay<Note> = noteListClick
+
 
     inner class NoteListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private lateinit var currentNote: Note
 
         init {
             itemView.clicks()
-                .map { noteListItemPublishRelay.accept(currentNote) }
+                .map { noteListClick.accept(currentNote) }
                 .subscribe()
         }
 
@@ -45,7 +47,7 @@ class NoteListAdapter : PagedListAdapter<Note, NoteListAdapter.NoteListViewHolde
     }
 
     companion object {
-        private val noteListDiff = object : DiffCallback<Note>() {
+        private val noteListDiff = object : DiffUtil.ItemCallback<Note>() {
             override fun areItemsTheSame(oldItem: Note, newItem: Note): Boolean =
                 oldItem.id == newItem.id
 

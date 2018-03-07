@@ -14,20 +14,22 @@ import javax.inject.Inject
 
 class NavigationController
 @Inject
-constructor(private val mainActivity: MainActivity) { //How do I test this class?
+constructor(private val mainActivity: MainActivity) : Navigation { //How do I test this class?
     private val containerId: Int = R.id.fragmentContainer
 
-    fun openList() {
+    override fun openList() {
         mainActivity.hideKeyboard()
-        mainActivity.supportFragmentManager
-            .beginTransaction()
-            .replace(containerId, NoteListFragment(), Const.noteListFragmentId)
-            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
-            .setReorderingAllowed(true)
-            .commit()
+        mainActivity.showFragment(
+            NoteListFragment(),
+            Const.noteListFragmentId,
+            Const.noteListFragmentId,
+            FragmentTransaction.TRANSIT_FRAGMENT_CLOSE,
+            containerId,
+            false
+        )
     }
 
-    fun openNote(id: Long = 0) {
+    override fun openNote(id: Long) {
         mainActivity.showFragment(
             NoteFragment.create(id),
             Const.noteFragmentId,
@@ -37,7 +39,7 @@ constructor(private val mainActivity: MainActivity) { //How do I test this class
         )
     }
 
-    fun openAbout() {
+    override fun openAbout() {
         mainActivity.showFragment(
             AboutFragment(),
             Const.aboutFragmentId,
@@ -47,7 +49,7 @@ constructor(private val mainActivity: MainActivity) { //How do I test this class
         )
     }
 
-    fun openLibs() {
+    override fun openLibs() {
         mainActivity.showFragment(
             LibsFragment(),
             Const.libsFragmentId,

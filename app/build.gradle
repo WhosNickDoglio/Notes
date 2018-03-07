@@ -6,15 +6,12 @@ apply plugin: 'jacoco'
 apply plugin: 'io.fabric'
 apply from: rootProject.file("quality.gradle")
 
-//Need to make this work with Travis
 def keystorePropertiesFile = rootProject.file("keystore.properties")
 def keystoreProperties = new Properties()
 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
-//CLEAN ALL THIS UP
 android {
     compileSdkVersion rootProject.ext.compileSdk
-    buildToolsVersion rootProject.ext.buildTools
     defaultConfig {
         applicationId "com.nicholasdoglio.notes"
         minSdkVersion rootProject.ext.minSdk
@@ -79,9 +76,10 @@ dependencies {
 
     //ktx
     implementation "androidx.core:core-ktx:$rootProject.ktx"
-    
+
     //Anko
     implementation "org.jetbrains.anko:anko-appcompat-v7-commons:$rootProject.anko"
+    implementation "org.jetbrains.anko:anko-design:$rootProject.anko"
 
     //Android Architecture Components
     implementation "android.arch.lifecycle:common-java8:$rootProject.archComponents"

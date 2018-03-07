@@ -39,8 +39,14 @@ class MainActivity : DaggerAppCompatActivity(), HasSupportFragmentInjector {
             navigationController.openList()
         }
 
-        if (Const.shortcutNoteIntentId == intent.action || intent.extras != null) {
+        if (Const.shortcutNoteIntentId == intent.action) {
             navigationController.openNote()
+        }
+
+        intent.extras?.let {
+            if (intent.extras.containsKey(Const.shortcutNoteIntentId)) {
+                navigationController.openNote()
+            }
         }
     }
 }

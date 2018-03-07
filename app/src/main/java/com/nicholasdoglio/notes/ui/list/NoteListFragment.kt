@@ -35,6 +35,7 @@ class NoteListFragment : DaggerFragment() {
     @Inject
     lateinit var navigationController: NavigationController
 
+    private val noteListObserver by lazy { Observer(notesListAdapter::submitList) }
     private val scopeProvider by lazy { AndroidLifecycleScopeProvider.from(this) }
     private val notesListAdapter by lazy { NoteListAdapter() }
     private val notesListViewModel by lazy {
@@ -43,6 +44,8 @@ class NoteListFragment : DaggerFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
+        notesListViewModel.notesList.observe(this, noteListObserver)
 
         setupToolbar(activity as AppCompatActivity, noteListToolbar, "Notes", true)
 
@@ -55,8 +58,6 @@ class NoteListFragment : DaggerFragment() {
                 }
             })
         }
-
-        notesListViewModel.notesList.observe(this, Observer(notesListAdapter::setList))
 
         notesListViewModel.checkForNotes()
             .subscribeOn(Schedulers.io())
@@ -100,5 +101,10 @@ class NoteListFragment : DaggerFragment() {
             true
         }
         else -> super.onOptionsItemSelected(item)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        notesListViewModel.notesList.removeObserver(noteListObserver)
     }
 }
