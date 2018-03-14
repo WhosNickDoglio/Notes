@@ -87,7 +87,6 @@ class NoteFragment : DaggerFragment() {
             .subscribe()
     }
 
-
     override fun onResume() {
         super.onResume()
         oldNoteFound().let {

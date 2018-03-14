@@ -26,9 +26,7 @@ class NoteListAdapter : PagedListAdapter<Note, NoteListAdapter.NoteListViewHolde
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteListViewHolder =
         NoteListViewHolder(parent.inflate(R.layout.item_note_card))
 
-
     fun noteListItemClickListener(): PublishRelay<Note> = noteListClick
-
 
     inner class NoteListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private lateinit var currentNote: Note

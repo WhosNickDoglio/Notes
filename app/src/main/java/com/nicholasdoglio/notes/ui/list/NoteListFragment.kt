@@ -53,7 +53,7 @@ class NoteListFragment : DaggerFragment() {
             adapter = notesListAdapter
             layoutManager = LinearLayoutManager(this.context)
             addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     createNoteFab.hideOnScroll(dy)
                 }
             })

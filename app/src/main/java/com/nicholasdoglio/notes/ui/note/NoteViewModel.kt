@@ -64,7 +64,6 @@ class NoteViewModel @Inject constructor(private val noteRepository: NoteReposito
         .map { saveOrUpdate(it) }
         .toCompletable()
 
-
     private fun createNote(): Note = Note(
         idSubject.value,
         titleSubject.value,
