@@ -6,12 +6,14 @@ import com.crashlytics.android.Crashlytics
 import com.nicholasdoglio.notes.BuildConfig
 import com.nicholasdoglio.notes.R
 import com.nicholasdoglio.notes.ui.common.NavigationController
+import com.nicholasdoglio.notes.ui.common.OnBackPressedListener
 import com.nicholasdoglio.notes.util.Const
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.DaggerAppCompatActivity
 import dagger.android.support.HasSupportFragmentInjector
 import io.fabric.sdk.android.Fabric
 import javax.inject.Inject
+
 
 /**
  * @author Nicholas Doglio
@@ -26,6 +28,12 @@ class MainActivity : DaggerAppCompatActivity(), HasSupportFragmentInjector {
 
     override fun supportFragmentInjector(): DispatchingAndroidInjector<Fragment> =
         dispatchingAndroidInjector
+
+    private var onBackPressedListener: OnBackPressedListener? = null
+
+    fun setOnBackPressedListener(onBackPressedListener: OnBackPressedListener) {
+        this.onBackPressedListener = onBackPressedListener
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,5 +56,17 @@ class MainActivity : DaggerAppCompatActivity(), HasSupportFragmentInjector {
                 navigationController.openNote()
             }
         }
+    }
+
+    override fun onBackPressed() {
+        when (onBackPressedListener == null) {
+            true -> super.onBackPressed()
+            false -> onBackPressedListener?.doBack()
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        onBackPressedListener = null
     }
 }

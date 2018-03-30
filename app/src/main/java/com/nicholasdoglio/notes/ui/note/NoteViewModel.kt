@@ -22,7 +22,6 @@ class NoteViewModel @Inject constructor(private val noteRepository: NoteReposito
     private lateinit var titleEmpty: Observable<Boolean>
     private lateinit var contentsEmpty: Observable<Boolean>
 
-
     fun title(title: String) = titleSubject.accept(title)
 
     fun contents(content: String) = contentSubject.accept(content)
@@ -30,12 +29,6 @@ class NoteViewModel @Inject constructor(private val noteRepository: NoteReposito
     fun id(id: Long) = idSubject.accept(id)
 
     fun note(note: Note) = noteSubject.accept(note)
-
-    fun currentTitle(): String = titleSubject.value
-
-    fun currentContent(): String = contentSubject.value
-
-    fun currentId(): Long = idSubject.value
 
     fun currentNote() = noteSubject
 
@@ -54,7 +47,6 @@ class NoteViewModel @Inject constructor(private val noteRepository: NoteReposito
         contentsEmpty,
         BiFunction<Boolean, Boolean, Boolean> { firstBool, secondBool -> firstBool && secondBool })
         .distinctUntilChanged()
-
 
     fun deleteNote(note: Note): Completable = Completable.fromAction {
         noteRepository.deleteNote(note)

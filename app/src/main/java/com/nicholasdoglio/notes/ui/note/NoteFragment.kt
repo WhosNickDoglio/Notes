@@ -2,12 +2,15 @@ package com.nicholasdoglio.notes.ui.note
 
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.view.*
 import com.jakewharton.rxbinding2.widget.textChanges
 import com.nicholasdoglio.notes.R
 import com.nicholasdoglio.notes.data.model.note.Note
+import com.nicholasdoglio.notes.ui.MainActivity
 import com.nicholasdoglio.notes.ui.common.NavigationController
+import com.nicholasdoglio.notes.ui.common.OnBackPressedListener
 import com.nicholasdoglio.notes.util.Const
 import com.nicholasdoglio.notes.util.inflate
 import com.nicholasdoglio.notes.util.setEditableText
@@ -25,7 +28,7 @@ import javax.inject.Inject
 /**
  * @author Nicholas Doglio
  */
-class NoteFragment : DaggerFragment() {
+class NoteFragment : DaggerFragment(), OnBackPressedListener {
 
     @Inject
     lateinit var viewModelFactory: NotesViewModelFactory
@@ -41,6 +44,10 @@ class NoteFragment : DaggerFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        val mainActivity = activity as MainActivity
+
+        mainActivity.setOnBackPressedListener(this)
+
 
         setupToolbar(activity as AppCompatActivity, noteToolbar, optionsMenu = true)
 
@@ -65,16 +72,6 @@ class NoteFragment : DaggerFragment() {
             .map { buttonsEnabled = it }
             .autoDisposable(scopeProvider)
             .subscribe()
-
-        savedInstanceState?.let {
-            noteViewModel.note(
-                Note(
-                    noteViewModel.currentId(),
-                    savedInstanceState.getString(Const.noteFragmentTitleKey),
-                    savedInstanceState.getString(Const.noteFragmentContentsKey)
-                )
-            )
-        }
 
         noteTitle.textChanges()
             .map { noteViewModel.title(it.toString()) }
@@ -103,11 +100,6 @@ class NoteFragment : DaggerFragment() {
         savedInstanceState: Bundle?
     ): View? = container?.inflate(R.layout.fragment_note)
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putString(Const.noteFragmentTitleKey, noteViewModel.currentTitle())
-        outState.putString(Const.noteFragmentContentsKey, noteViewModel.currentContent())
-    }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         super.onCreateOptionsMenu(menu, inflater)
@@ -124,9 +116,24 @@ class NoteFragment : DaggerFragment() {
         return super.onOptionsItemSelected(item)
     }
 
-    fun showDiscardAlert() {
-
+    override fun doBack() {
+        showDiscardAlert()
     }
+
+    fun showDiscardAlert() {
+        //this works but needs to be cleaned up!
+        AlertDialog.Builder(this.context!!)
+            .setMessage("TESTING")
+            .setPositiveButton("SAVE") { p0, p1 ->
+                saveNote("Note saved")
+                navigationController.openList()
+            }
+            .setNegativeButton(
+                "DISCARD"
+            ) { p0, p1 -> returnToList("discarded") }.create()
+            .show()
+    }
+
 
     private fun returnToList(finished: String) {
         navigationController.openList()

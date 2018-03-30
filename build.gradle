@@ -1,5 +1,5 @@
 buildscript {
-    ext.kotlin_version = '1.2.21'
+    ext.kotlin_version = '1.2.31'
     repositories {
         google()
         jcenter()
@@ -8,7 +8,7 @@ buildscript {
     dependencies {
         classpath 'io.fabric.tools:gradle:1.+'
         classpath 'org.jacoco:org.jacoco.core:0.8.0'
-        classpath 'com.android.tools.build:gradle:3.2.0-alpha06'
+        classpath 'com.android.tools.build:gradle:3.2.0-alpha08'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
@@ -28,35 +28,35 @@ task clean(type: Delete) {
 ext {
     //Android
     minSdk = 21
-    compileSdk = 'android-P'
-    targetSdk = 'P'
+    compileSdk = 27
+    targetSdk = 27
 
     //Libraries
     anko = '0.10.4'
     ktx = '0.2'
-    support = '28.0.0-alpha1'
-    constraint = '1.1.0-beta5'
-    paging = '1.0.0-alpha6'
-    archComponents = '1.1.0'
-    room = '1.1.0-alpha3'
+    support = '27.1.0'
+    constraint = '1.1.0-beta6'
+    paging = '1.0.0-alpha7'
+    archComponents = '1.1.1'
+    room = '1.1.0-beta1'
     dagger = '2.15'
-    rxJava = '2.1.9'
+    rxJava = '2.1.12'
     rxAndroid = '2.0.2'
     rxKotlin = '2.2.0'
     rxBinding = '2.1.1'
     rxRelay = '2.0.0'
-    dispose = '0.6.1'
+    dispose = '0.7.0'
 
     //Debugging
-    timber = '4.6.1'
+    timber = '4.7.0'
     canary = '1.5.4'
     crashlytics = "2.6.8@aar"
 
     //Testing
     junit = '4.12'
-    mockito = "2.15.0"
+    mockito = "2.17.0"
     mokitoKotlin = '1.5.0'
-    robo = '3.7.1'
+    robo = '3.8'
     okhttp = '3.10.0'
     espresso = '3.0.1'
     espressoTest = '1.0.1'
