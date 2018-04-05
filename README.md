@@ -2,8 +2,8 @@
 
 [![Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 [![API](https://img.shields.io/badge/API-21%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=21)
-[![Build Status](https://travis-ci.org/WhosNickDoglio/Notes.svg?branch=master)](https://travis-ci.org/WhosNickDoglio/Notes)
-[![codecov](https://codecov.io/gh/WhosNickDoglio/Notes/branch/master/graph/badge.svg)](https://codecov.io/gh/WhosNickDoglio/Notes)
+[![Build Status](https://travis-ci.org/WhosNickDoglio/Notes-Android.svg?branch=master)](https://travis-ci.org/WhosNickDoglio/Notes-Android)
+[![codecov](https://codecov.io/gh/WhosNickDoglio/Notes-Android/branch/master/graph/badge.svg)](https://codecov.io/gh/WhosNickDoglio/Notes-Android)
 
 A simple Material Design note taking Android application written entirely in Kotlin!
 

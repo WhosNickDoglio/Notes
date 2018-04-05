@@ -36,6 +36,7 @@ class NoteFragment : DaggerFragment(), OnBackPressedListener {
     @Inject
     lateinit var navigationController: NavigationController
 
+    private val mainActivity = activity as MainActivity
     private var buttonsEnabled: Boolean = false
     private val scopeProvider by lazy { AndroidLifecycleScopeProvider.from(this) }
     private val noteViewModel by lazy {
@@ -44,8 +45,6 @@ class NoteFragment : DaggerFragment(), OnBackPressedListener {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val mainActivity = activity as MainActivity
-
         mainActivity.setOnBackPressedListener(this)
 
 
@@ -120,7 +119,6 @@ class NoteFragment : DaggerFragment(), OnBackPressedListener {
         if (noteTitle.text.toString().isNotEmpty() && noteContent.text.toString().isNotEmpty()) {
             showDiscardAlert()
         } else {
-            val mainActivity = activity as MainActivity
             mainActivity.supportFragmentManager.popBackStack()
         }
     }
