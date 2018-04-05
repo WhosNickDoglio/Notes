@@ -4,6 +4,7 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.*
@@ -49,9 +50,11 @@ class NoteListFragment : DaggerFragment() {
 
         setupToolbar(activity as AppCompatActivity, noteListToolbar, "Notes", true)
 
+        val linearLayoutManager = LinearLayoutManager(context)
         notesListRecyclerView.apply {
+            addItemDecoration(DividerItemDecoration(context, linearLayoutManager.orientation))
             adapter = notesListAdapter
-            layoutManager = LinearLayoutManager(this.context)
+            layoutManager = linearLayoutManager
             addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     createNoteFab.hideOnScroll(dy)

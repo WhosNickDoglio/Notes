@@ -10,7 +10,7 @@ import com.jakewharton.rxrelay2.PublishRelay
 import com.nicholasdoglio.notes.R
 import com.nicholasdoglio.notes.data.model.note.Note
 import com.nicholasdoglio.notes.util.inflate
-import kotlinx.android.synthetic.main.item_note_compact.view.*
+import kotlinx.android.synthetic.main.item_note.view.*
 
 
 /**
@@ -24,7 +24,7 @@ class NoteListAdapter : PagedListAdapter<Note, NoteListAdapter.NoteListViewHolde
         holder.bindTo(this.getItem(position)!!)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteListViewHolder =
-        NoteListViewHolder(parent.inflate(R.layout.item_note_card))
+        NoteListViewHolder(parent.inflate(R.layout.item_note))
 
     fun noteListItemClickListener(): PublishRelay<Note> = noteListClick
 

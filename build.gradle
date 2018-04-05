@@ -8,7 +8,7 @@ buildscript {
     dependencies {
         classpath 'io.fabric.tools:gradle:1.+'
         classpath 'org.jacoco:org.jacoco.core:0.8.0'
-        classpath 'com.android.tools.build:gradle:3.2.0-alpha08'
+        classpath 'com.android.tools.build:gradle:3.2.0-alpha09'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
@@ -33,7 +33,7 @@ ext {
 
     //Libraries
     anko = '0.10.4'
-    ktx = '0.2'
+    ktx = '0.3'
     support = '27.1.0'
     constraint = '1.1.0-beta6'
     paging = '1.0.0-alpha7'

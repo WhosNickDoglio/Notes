@@ -9,7 +9,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.nicholasdoglio.notes.R
+import com.nicholasdoglio.notes.ui.MainActivity
 import com.nicholasdoglio.notes.ui.common.NavigationController
+import com.nicholasdoglio.notes.ui.common.OnBackPressedListener
 import com.nicholasdoglio.notes.util.inflate
 import com.nicholasdoglio.notes.util.setupToolbar
 import com.nicholasdoglio.notes.viewmodel.NotesViewModelFactory
@@ -24,8 +26,7 @@ import javax.inject.Inject
 /**
  * @author Nicholas Doglio
  */
-class AboutFragment : DaggerFragment() {
-
+class AboutFragment : DaggerFragment(), OnBackPressedListener {
     @Inject
     lateinit var viewModelFactory: NotesViewModelFactory
 
@@ -33,14 +34,22 @@ class AboutFragment : DaggerFragment() {
     lateinit var navigationController: NavigationController
 
     private lateinit var linearLayoutManager: LinearLayoutManager
+
     private val scopeProvider by lazy { AndroidLifecycleScopeProvider.from(this) }
     private val aboutAdapter by lazy { AboutAdapter() }
     private val aboutViewModel by lazy {
         ViewModelProviders.of(this, viewModelFactory).get(AboutViewModel::class.java)
     }
 
+    override fun doBack() {
+        activity!!.supportFragmentManager.popBackStack()
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
+        val mainActivity = activity as MainActivity
+        mainActivity.setOnBackPressedListener(this)
 
         setupToolbar(activity as AppCompatActivity, aboutToolbar, "About")
 

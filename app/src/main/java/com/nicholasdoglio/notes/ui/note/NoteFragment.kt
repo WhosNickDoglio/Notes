@@ -117,20 +117,25 @@ class NoteFragment : DaggerFragment(), OnBackPressedListener {
     }
 
     override fun doBack() {
-        showDiscardAlert()
+        if (noteTitle.text.toString().isNotEmpty() && noteContent.text.toString().isNotEmpty()) {
+            showDiscardAlert()
+        } else {
+            val mainActivity = activity as MainActivity
+            mainActivity.supportFragmentManager.popBackStack()
+        }
     }
 
-    fun showDiscardAlert() {
-        //this works but needs to be cleaned up!
-        AlertDialog.Builder(this.context!!)
-            .setMessage("TESTING")
+    private fun showDiscardAlert() {
+        //Clean this up
+        AlertDialog.Builder(context!!)
+            .setMessage("Would you like to discard or save this note?")
             .setPositiveButton("SAVE") { p0, p1 ->
                 saveNote("Note saved")
                 navigationController.openList()
             }
             .setNegativeButton(
                 "DISCARD"
-            ) { p0, p1 -> returnToList("discarded") }.create()
+            ) { p0, p1 -> deleteNote("Discarded") }.create()
             .show()
     }
 
@@ -180,11 +185,11 @@ class NoteFragment : DaggerFragment(), OnBackPressedListener {
 
     companion object {
         fun create(id: Long): NoteFragment {
-            val fragment = NoteFragment()
-            val arg = Bundle()
-            arg.putLong(Const.noteFragmentArgumentId, id)
-            fragment.arguments = arg
-            return fragment
+            val noteFragment = NoteFragment()
+            val arguments = Bundle()
+            arguments.putLong(Const.noteFragmentArgumentId, id)
+            noteFragment.arguments = arguments
+            return noteFragment
         }
     }
 }
