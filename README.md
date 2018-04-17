@@ -32,7 +32,6 @@ All the releases and change logs are kept under [releases](https://github.com/Wh
 # Libraries 
 
 - [Android Support](https://developer.android.com/topic/libraries/support-library/index.html)
-- [Anko-Commons](https://github.com/Kotlin/anko)
 - [Android Architecture Components](https://developer.android.com/topic/libraries/architecture/index.html) 
   - [Paging](https://developer.android.com/topic/libraries/architecture/paging.html)
   - [Room](https://developer.android.com/topic/libraries/architecture/room.html)

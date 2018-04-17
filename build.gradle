@@ -3,12 +3,11 @@ buildscript {
     repositories {
         google()
         jcenter()
-        maven { url 'https://maven.fabric.io/public' }
     }
     dependencies {
-        classpath 'io.fabric.tools:gradle:1.+'
-        classpath 'org.jacoco:org.jacoco.core:0.8.0'
-        classpath 'com.android.tools.build:gradle:3.2.0-alpha09'
+        classpath 'com.google.gms:google-services:3.2.0'
+        classpath 'org.jacoco:org.jacoco.core:0.8.1'
+        classpath 'com.android.tools.build:gradle:3.2.0-alpha11'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
@@ -32,13 +31,13 @@ ext {
     targetSdk = 27
 
     //Libraries
-    anko = '0.10.4'
     ktx = '0.3'
-    support = '27.1.0'
-    constraint = '1.1.0-beta6'
-    paging = '1.0.0-alpha7'
+    support = '27.1.1'
+    constraint = '1.1.0'
+    paging = '1.0.0-beta1'
+    rxpaging = '1.0.0-alpha1'
     archComponents = '1.1.1'
-    room = '1.1.0-beta1'
+    room = '1.1.0-beta2'
     dagger = '2.15'
     rxJava = '2.1.12'
     rxAndroid = '2.0.2'
@@ -48,9 +47,9 @@ ext {
     dispose = '0.7.0'
 
     //Debugging
+    firebase = '12.0.1'
     timber = '4.7.0'
     canary = '1.5.4'
-    crashlytics = "2.6.8@aar"
 
     //Testing
     junit = '4.12'

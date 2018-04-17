@@ -1,7 +1,7 @@
 package com.nicholasdoglio.notes.util
 
 import android.util.Log
-import com.crashlytics.android.Crashlytics
+import com.google.firebase.crash.FirebaseCrash
 import timber.log.Timber
 
 class ReleaseTree : Timber.Tree() {
@@ -21,8 +21,7 @@ class ReleaseTree : Timber.Tree() {
         if (isLoggable(tag, priority)) {
             when (priority) {
                 Log.ERROR -> {
-                    Crashlytics.log(message)
-                    Crashlytics.logException(t)
+                    FirebaseCrash.log(message)
                 }
             }
         }

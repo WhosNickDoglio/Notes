@@ -2,8 +2,8 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'com.google.gms.google-services'
 apply plugin: 'jacoco'
-apply plugin: 'io.fabric'
 apply from: rootProject.file("quality.gradle")
 
 def keystorePropertiesFile = rootProject.file("keystore.properties")
@@ -38,12 +38,10 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.config
-            manifestPlaceholders = [FABRIC_KEY: keystoreProperties['fabricKey']]
         }
         debug {
             ext.enableCrashlytics = false
             testCoverageEnabled true
-            manifestPlaceholders = [FABRIC_KEY: keystoreProperties['fabricKey']]
         }
     }
     testOptions {
@@ -56,11 +54,6 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 }
-
-repositories {
-    maven { url 'https://maven.fabric.io/public' }
-}
-
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
@@ -77,14 +70,11 @@ dependencies {
     //ktx
     implementation "androidx.core:core-ktx:$rootProject.ktx"
 
-    //Anko
-    implementation "org.jetbrains.anko:anko-appcompat-v7-commons:$rootProject.anko"
-    implementation "org.jetbrains.anko:anko-design:$rootProject.anko"
-
     //Android Architecture Components
     implementation "android.arch.lifecycle:common-java8:$rootProject.archComponents"
     implementation "android.arch.lifecycle:extensions:$rootProject.archComponents"
     implementation "android.arch.paging:runtime:$rootProject.paging"
+    implementation "android.arch.paging:rxjava2:$rootProject.rxpaging"
     implementation "android.arch.persistence.room:runtime:$rootProject.room"
     implementation "android.arch.persistence.room:rxjava2:$rootProject.room"
     kapt "android.arch.persistence.room:compiler:$rootProject.room"
@@ -108,12 +98,10 @@ dependencies {
     kapt "com.google.dagger:dagger-android-processor:$rootProject.dagger"
 
     //Debugging
+    implementation "com.google.firebase:firebase-crash:$rootProject.firebase"
     implementation "com.jakewharton.timber:timber:$rootProject.timber"
     releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.canary"
     debugImplementation "com.squareup.leakcanary:leakcanary-android:$rootProject.canary"
-    implementation("com.crashlytics.sdk.android:crashlytics:$rootProject.crashlytics") {
-        transitive = true
-    }
 
     //Testing
     testImplementation "junit:junit:$rootProject.junit"

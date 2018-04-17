@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.view.*
+import androidx.core.widget.toast
 import com.jakewharton.rxbinding2.widget.textChanges
 import com.nicholasdoglio.notes.R
 import com.nicholasdoglio.notes.data.model.note.Note
@@ -22,7 +23,6 @@ import dagger.android.support.DaggerFragment
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_note.*
-import org.jetbrains.anko.support.v4.toast
 import javax.inject.Inject
 
 /**
@@ -36,7 +36,7 @@ class NoteFragment : DaggerFragment(), OnBackPressedListener {
     @Inject
     lateinit var navigationController: NavigationController
 
-    private val mainActivity = activity as MainActivity
+    private lateinit var mainActivity: MainActivity
     private var buttonsEnabled: Boolean = false
     private val scopeProvider by lazy { AndroidLifecycleScopeProvider.from(this) }
     private val noteViewModel by lazy {
@@ -45,6 +45,9 @@ class NoteFragment : DaggerFragment(), OnBackPressedListener {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        mainActivity = activity as MainActivity
+
+
         mainActivity.setOnBackPressedListener(this)
 
 
@@ -140,7 +143,7 @@ class NoteFragment : DaggerFragment(), OnBackPressedListener {
 
     private fun returnToList(finished: String) {
         navigationController.openList()
-        toast(finished)
+        context?.toast(finished)
     }
 
     private fun oldNoteFound() = arguments!!.getLong(Const.noteFragmentArgumentId) > 0
@@ -157,7 +160,7 @@ class NoteFragment : DaggerFragment(), OnBackPressedListener {
                 "deleted" -> deleteNote(clickAction)
             }
         } else {
-            toast(getString(R.string.empty_note_toast))
+            context?.toast(getString(R.string.empty_note_toast))
         }
     }
 

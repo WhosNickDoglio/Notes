@@ -1,6 +1,8 @@
 package com.nicholasdoglio.notes.ui.about
 
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
@@ -19,9 +21,9 @@ import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
 import com.uber.autodispose.kotlin.autoDisposable
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_about.*
-import org.jetbrains.anko.support.v4.browse
 import timber.log.Timber
 import javax.inject.Inject
+
 
 /**
  * @author Nicholas Doglio
@@ -59,31 +61,41 @@ class AboutFragment : DaggerFragment(), OnBackPressedListener {
             .autoDisposable(scopeProvider)
             .subscribe()
 
-        linearLayoutManager = LinearLayoutManager(this.context)
+        linearLayoutManager = LinearLayoutManager(context)
         aboutList.apply {
             adapter = aboutAdapter
             layoutManager = linearLayoutManager
-            addItemDecoration(DividerItemDecoration(this.context, linearLayoutManager.orientation))
+            addItemDecoration(DividerItemDecoration(context, linearLayoutManager.orientation))
             setHasFixedSize(true)
         }
     }
 
-    override fun onResume() {
-        super.onResume()
+    override fun onStart() {
+        super.onStart()
         aboutAdapter.aboutListClickListener()
             .doOnNext { Timber.d(it.text) }
             .map {
                 when (it.link) {
                     "" -> navigationController.openLibs()
-                    else -> this.browse(it.link)
+                    else -> openWebPage(it.link)
                 }
             }
             .autoDisposable(scopeProvider)
             .subscribe()
     }
 
+//    override fun onResume() {
+//        super.onResume()
+//    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? = container?.inflate(R.layout.fragment_about)
+
+    private fun openWebPage(url: String) {
+        val webpage = Uri.parse(url)
+        val intent = Intent(Intent.ACTION_VIEW, webpage)
+        startActivity(intent)
+    }
 }
