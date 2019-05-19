@@ -2,23 +2,28 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
-apply plugin: 'com.google.gms.google-services'
-apply plugin: 'jacoco'
-apply from: rootProject.file("quality.gradle")
+apply plugin: "androidx.navigation.safeargs.kotlin"
+apply plugin: 'io.gitlab.arturbosch.detekt'
+apply plugin: 'jacoco-android'
+apply plugin: 'com.jaredsburrows.license'
 
 def keystorePropertiesFile = rootProject.file("keystore.properties")
 def keystoreProperties = new Properties()
 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
+androidExtensions {
+    experimental = true
+}
+
 android {
-    compileSdkVersion rootProject.ext.compileSdk
+    compileSdkVersion app.compileSdk
     defaultConfig {
         applicationId "com.nicholasdoglio.notes"
-        minSdkVersion rootProject.ext.minSdk
-        targetSdkVersion rootProject.ext.targetSdk
-        versionCode 5
-        versionName "1.1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        minSdkVersion app.minSdk
+        targetSdkVersion app.targetSdk
+        versionCode app.versionCode
+        versionName app.versionName
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
@@ -39,90 +44,53 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.config
         }
-        debug {
-            ext.enableCrashlytics = false
-            testCoverageEnabled true
-        }
-    }
-    testOptions {
-        unitTests {
-            includeAndroidResources = true
-        }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
 }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
-
-    //Android
-    implementation "com.android.support:appcompat-v7:$rootProject.support"
-    implementation "com.android.support:recyclerview-v7:$rootProject.support"
-    implementation "com.android.support:cardview-v7:$rootProject.support"
-    implementation "com.android.support:design:$rootProject.support"
-    implementation "com.android.support:support-v4:$rootProject.support"
-    implementation "com.android.support.constraint:constraint-layout:$rootProject.constraint"
-
-    //ktx
-    implementation "androidx.core:core-ktx:$rootProject.ktx"
-
-    //Android Architecture Components
-    implementation "android.arch.lifecycle:common-java8:$rootProject.archComponents"
-    implementation "android.arch.lifecycle:extensions:$rootProject.archComponents"
-    implementation "android.arch.paging:runtime:$rootProject.paging"
-    implementation "android.arch.paging:rxjava2:$rootProject.rxpaging"
-    implementation "android.arch.persistence.room:runtime:$rootProject.room"
-    implementation "android.arch.persistence.room:rxjava2:$rootProject.room"
-    kapt "android.arch.persistence.room:compiler:$rootProject.room"
-
-    //Rx
-    implementation "io.reactivex.rxjava2:rxjava:$rootProject.rxJava"
-    implementation "io.reactivex.rxjava2:rxandroid:$rootProject.rxAndroid"
-    implementation "com.jakewharton.rxbinding2:rxbinding-kotlin:$rootProject.rxBinding"
-    implementation "com.jakewharton.rxrelay2:rxrelay:$rootProject.rxRelay"
-
-    //AutoDispose
-    implementation "com.uber.autodispose:autodispose-kotlin:$rootProject.dispose"
-    implementation "com.uber.autodispose:autodispose-android-kotlin:$rootProject.dispose"
-    implementation "com.uber.autodispose:autodispose-android-archcomponents-kotlin:$rootProject.dispose"
-
-    //Dagger
-    implementation "com.google.dagger:dagger:$rootProject.dagger"
-    implementation "com.google.dagger:dagger-android:$rootProject.dagger"
-    implementation "com.google.dagger:dagger-android-support:$rootProject.dagger"
-    kapt "com.google.dagger:dagger-compiler:$rootProject.dagger"
-    kapt "com.google.dagger:dagger-android-processor:$rootProject.dagger"
-
-    //Debugging
-    implementation "com.google.firebase:firebase-crash:$rootProject.firebase"
-    implementation "com.jakewharton.timber:timber:$rootProject.timber"
-    releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.canary"
-    debugImplementation "com.squareup.leakcanary:leakcanary-android:$rootProject.canary"
-
-    //Testing
-    testImplementation "junit:junit:$rootProject.junit"
-    testImplementation "android.arch.persistence.room:testing:$rootProject.room"
-    testImplementation "android.arch.core:core-testing:$rootProject.archComponents"
-    testImplementation "org.robolectric:robolectric:$rootProject.robo"
-    androidTestImplementation "com.android.support.test:rules:$rootProject.espressoTest"
-    androidTestImplementation "com.android.support.test:runner:$rootProject.espressoTest"
-    androidTestImplementation "com.android.support.test.espresso:espresso-intents:$rootProject.espresso"
-    androidTestImplementation("com.android.support.test.espresso:espresso-core:$rootProject.espresso", {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
-}
-
-// Ensure the no-op dependency is always used in JVM tests.
-configurations.all { config ->
-    if (config.name.contains('UnitTest')) {
-        config.resolutionStrategy.eachDependency { details ->
-            if (details.requested.group == 'com.squareup.leakcanary' && details.requested.name == 'leakcanary-android') {
-                details.useTarget(group: details.requested.group, name: 'leakcanary-android-no-op', version: details.requested.version)
-            }
-        }
-    }
+    implementation libs.kotlin
+    implementation libs.appcompat
+    implementation libs.recyclerview
+    implementation libs.cardview
+    implementation libs.material
+    implementation libs.constraint
+    implementation libs.lifecycle_commons
+    implementation libs.lifecycle_extensions
+    implementation libs.room_runtime
+    implementation libs.room_rxjava
+    implementation libs.navigation_fragment
+    implementation libs.navigation_ui
+    implementation libs.fragment_ktx
+    implementation libs.core_ktx
+    kapt libs.room_compiler
+    implementation libs.rxjava
+    implementation libs.rxandroid
+    implementation libs.rxrelay
+    implementation libs.rxkotlin
+    implementation libs.rxbinding
+    implementation libs.rxbinding_core
+    implementation libs.rxbinding_app_compat
+    implementation libs.autodispose_android
+    implementation libs.autodispose_arch_components
+    implementation libs.dagger
+    implementation libs.dagger_android
+    implementation libs.dagger_android_support
+    kapt libs.dagger_compiler
+    kapt libs.dagger_android_processor
+    implementation libs.timber
+    debugImplementation libs.canary
+    implementation libs.dog_tag
+    implementation libs.dog_tag_autodispose
+    testImplementation libs.junit
+    androidTestImplementation libs.room_testing
+    androidTestImplementation libs.androidx_test_core
+    androidTestImplementation libs.androidx_test_junit
 }

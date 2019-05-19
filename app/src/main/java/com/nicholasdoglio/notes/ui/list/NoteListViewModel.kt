@@ -1,23 +1,17 @@
 package com.nicholasdoglio.notes.ui.list
 
-import android.arch.lifecycle.ViewModel
-import android.arch.paging.LivePagedListBuilder
-import com.nicholasdoglio.notes.data.model.note.Note
+import androidx.lifecycle.ViewModel
+import com.nicholasdoglio.notes.data.model.Note
 import com.nicholasdoglio.notes.data.repo.NoteRepository
+import io.reactivex.Flowable
 import javax.inject.Inject
 
 /**
  * @author Nicholas Doglio
  */
-class NoteListViewModel @Inject constructor(
-    private val noteRepository: NoteRepository
-) : ViewModel() {
+class NoteListViewModel @Inject constructor(private val noteRepository: NoteRepository) : ViewModel() {
 
-    val notesList =
-        LivePagedListBuilder<Int, Note>(noteRepository.getAllNotes(), 10).build()
+    val notesList: Flowable<List<Note>> = noteRepository.observeNotes()
 
-    fun deleteNote(note: Note) =
-        noteRepository.deleteNote(note) //Implement with Swipe to delete
-
-    fun checkForNotes() = noteRepository.getNumberOfNotes()
+    val checkForNotes: Flowable<Int> = noteRepository.countOfNotes()
 }

@@ -1,101 +1,58 @@
 package com.nicholasdoglio.notes.ui.about
 
-import android.arch.lifecycle.ViewModelProviders
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.DividerItemDecoration
-import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.nicholasdoglio.notes.R
-import com.nicholasdoglio.notes.ui.MainActivity
-import com.nicholasdoglio.notes.ui.common.NavigationController
-import com.nicholasdoglio.notes.ui.common.OnBackPressedListener
-import com.nicholasdoglio.notes.util.inflate
-import com.nicholasdoglio.notes.util.setupToolbar
-import com.nicholasdoglio.notes.viewmodel.NotesViewModelFactory
-import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
-import com.uber.autodispose.kotlin.autoDisposable
-import dagger.android.support.DaggerFragment
+import com.nicholasdoglio.notes.data.model.AboutAction
+import com.nicholasdoglio.notes.di.NotesViewModelFactory
+import com.nicholasdoglio.notes.util.createViewModel
+import com.nicholasdoglio.notes.util.openWebPage
+import com.uber.autodispose.android.lifecycle.autoDisposable
+import dagger.android.support.DaggerDialogFragment
 import kotlinx.android.synthetic.main.fragment_about.*
-import timber.log.Timber
 import javax.inject.Inject
-
 
 /**
  * @author Nicholas Doglio
  */
-class AboutFragment : DaggerFragment(), OnBackPressedListener {
+class AboutFragment : DaggerDialogFragment() {
+
     @Inject
     lateinit var viewModelFactory: NotesViewModelFactory
 
-    @Inject
-    lateinit var navigationController: NavigationController
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? = inflater.inflate(R.layout.fragment_about, container)
 
-    private lateinit var linearLayoutManager: LinearLayoutManager
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-    private val scopeProvider by lazy { AndroidLifecycleScopeProvider.from(this) }
-    private val aboutAdapter by lazy { AboutAdapter() }
-    private val aboutViewModel by lazy {
-        ViewModelProviders.of(this, viewModelFactory).get(AboutViewModel::class.java)
-    }
+        val viewModel: AboutViewModel = createViewModel(viewModelFactory)
 
-    override fun doBack() {
-        activity!!.supportFragmentManager.popBackStack()
-    }
+        val aboutAdapter = AboutAdapter()
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-        val mainActivity = activity as MainActivity
-        mainActivity.setOnBackPressedListener(this)
-
-        setupToolbar(activity as AppCompatActivity, aboutToolbar, "About")
-
-        aboutViewModel
-            .aboutItems()
-            .map { aboutAdapter.setList(it.toList()) }
-            .autoDisposable(scopeProvider)
-            .subscribe()
-
-        linearLayoutManager = LinearLayoutManager(context)
-        aboutList.apply {
+        aboutRecyclerView.apply {
             adapter = aboutAdapter
-            layoutManager = linearLayoutManager
-            addItemDecoration(DividerItemDecoration(context, linearLayoutManager.orientation))
-            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(context)
         }
-    }
 
-    override fun onStart() {
-        super.onStart()
-        aboutAdapter.aboutListClickListener()
-            .doOnNext { Timber.d(it.text) }
-            .map {
-                when (it.link) {
-                    "" -> navigationController.openLibs()
-                    else -> openWebPage(it.link)
+        viewModel.aboutItems
+            .autoDisposable(viewLifecycleOwner)
+            .subscribe { list -> aboutAdapter.submitList(list) }
+
+        aboutAdapter.aboutListClickListener
+            .autoDisposable(viewLifecycleOwner)
+            .subscribe {
+                when (it.action) {
+                    is AboutAction.OpenWebsite ->
+                        requireContext().openWebPage(requireContext().getString(it.action.url))
+                    is AboutAction.OpenLibs -> LibsFragment().show(requireFragmentManager(), "LIBS")
                 }
             }
-            .autoDisposable(scopeProvider)
-            .subscribe()
-    }
-
-//    override fun onResume() {
-//        super.onResume()
-//    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? = container?.inflate(R.layout.fragment_about)
-
-    private fun openWebPage(url: String) {
-        val webpage = Uri.parse(url)
-        val intent = Intent(Intent.ACTION_VIEW, webpage)
-        startActivity(intent)
     }
 }

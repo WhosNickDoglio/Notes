@@ -1,13 +1,12 @@
 package com.nicholasdoglio.notes.ui.note
 
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.ViewModel
 import com.jakewharton.rxrelay2.BehaviorRelay
-import com.nicholasdoglio.notes.data.model.note.Note
+import com.nicholasdoglio.notes.data.model.Note
 import com.nicholasdoglio.notes.data.repo.NoteRepository
 import io.reactivex.Completable
-import io.reactivex.Observable
+import io.reactivex.Maybe
 import io.reactivex.Single
-import io.reactivex.functions.BiFunction
 import javax.inject.Inject
 
 /**
@@ -15,57 +14,22 @@ import javax.inject.Inject
  */
 class NoteViewModel @Inject constructor(private val noteRepository: NoteRepository) : ViewModel() {
 
-    private val titleSubject: BehaviorRelay<String> = BehaviorRelay.create()
-    private val contentSubject: BehaviorRelay<String> = BehaviorRelay.create()
-    private val idSubject: BehaviorRelay<Long> = BehaviorRelay.create()
-    private val noteSubject: BehaviorRelay<Note> = BehaviorRelay.create()
-    private lateinit var titleEmpty: Observable<Boolean>
-    private lateinit var contentsEmpty: Observable<Boolean>
+    private val titleRelay: BehaviorRelay<String> = BehaviorRelay.create()
+    private val contentsRelay: BehaviorRelay<String> = BehaviorRelay.create()
+    private val noteRelay: BehaviorRelay<Note> = BehaviorRelay.create()
 
-    fun title(title: String) = titleSubject.accept(title)
+    fun title(title: String) = titleRelay.accept(title)
 
-    fun contents(content: String) = contentSubject.accept(content)
+    fun contents(content: String) = contentsRelay.accept(content)
 
-    fun id(id: Long) = idSubject.accept(id)
+    fun note(note: Note) = noteRelay.accept(note)
 
-    fun note(note: Note) = noteSubject.accept(note)
+    fun start(id: Long): Maybe<Note> = noteRepository.note(id)
 
-    fun currentNote() = noteSubject
+    fun deleteNote(): Completable =
+        noteRepository.deleteNote(noteRelay.value ?: throw IllegalStateException("Note doesn't exist!"))
 
-    fun start(id: Long): Single<Note> = noteRepository.getNote(id)
-
-    fun isTitleEmpty(titleEmpty: Observable<Boolean>) {
-        this.titleEmpty = titleEmpty
-    }
-
-    fun isContentsEmpty(contentsEmpty: Observable<Boolean>) {
-        this.contentsEmpty = contentsEmpty
-    }
-
-    fun isNoteEmpty(): Observable<Boolean> = Observable.combineLatest(
-        titleEmpty,
-        contentsEmpty,
-        BiFunction<Boolean, Boolean, Boolean> { firstBool, secondBool -> firstBool && secondBool })
-        .distinctUntilChanged()
-
-    fun deleteNote(note: Note): Completable = Completable.fromAction {
-        noteRepository.deleteNote(note)
-    }
-
-    fun saveNote(id: Long): Completable = Single.just(id > 0)
-        .map { saveOrUpdate(it) }
-        .toCompletable()
-
-    private fun createNote(): Note = Note(
-        idSubject.value,
-        titleSubject.value,
-        contentSubject.value
-    )
-
-    private fun saveOrUpdate(doesNoteAlreadyExist: Boolean) {
-        when (doesNoteAlreadyExist) {
-            true -> noteRepository.updateNote(createNote())
-            false -> noteRepository.saveNote(createNote())
-        }
-    }
+    fun saveNote(): Completable =
+        Single.just(Note(noteRelay.value?.id ?: 0, titleRelay.value ?: "", contentsRelay.value ?: ""))
+            .flatMapCompletable { if (it.id > 0) noteRepository.updateNote(it) else noteRepository.saveNote(it) }
 }

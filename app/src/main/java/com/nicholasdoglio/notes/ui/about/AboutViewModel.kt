@@ -1,10 +1,12 @@
 package com.nicholasdoglio.notes.ui.about
 
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.ViewModel
 import com.nicholasdoglio.notes.data.local.AboutDataStore
+import com.nicholasdoglio.notes.data.model.AboutItem
+import io.reactivex.Single
 import javax.inject.Inject
 
-class AboutViewModel @Inject constructor(private val aboutDataStore: AboutDataStore) : ViewModel() {
+class AboutViewModel @Inject constructor(aboutDataStore: AboutDataStore) : ViewModel() {
 
-    fun aboutItems() = aboutDataStore.aboutItems()
+    val aboutItems: Single<List<AboutItem>> = aboutDataStore.aboutItems
 }

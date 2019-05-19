@@ -5,6 +5,10 @@
     <string name="title_hint">Title</string>
     <string name="note_hint">Note</string>
     <string name="empty_note_toast">This note is empty! Try writing something.</string>
+    <string name="discard_warning">Would you like to discard or save this note?</string>
+    <string name="save_button">SAVE</string>
+    <string name="discard_button">DISCARD</string>
+
 
     <!--Note List Fragment-->
     <string name="empty_list_view">No notes</string>
@@ -18,81 +22,12 @@
     <!--Shortcut-->
     <string name="create_note_shortcut">Create note</string>
 
+    <!--About-->
+    <string name="dev">Developed by Nicholas Doglio</string>
+    <string name="dev_url">https://whosnickdoglio.github.io</string>
+    <string name="source_code">Source Code</string>
+    <string name="source_code_url">https://github.com/WhosNickDoglio/Notes</string>
+    <string name="libs">Libraries</string>
 
-    <!--Libraries names-->
-    <string name="android_support">Android Support</string>
-    <string name="android_architecture_components">Android Architecture Components</string>
-    <string name="rxjava">RxJava</string>
-    <string name="rxandroid">RxAndroid</string>
-    <string name="rxbinding">RxBinding</string>
-    <string name="autodispose">AutoDispose</string>
-    <string name="dagger">Dagger</string>
-
-
-    <!--Libraries licenses-->
-    <string name="support_components_license">"Copyright © 2017 Google
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License."</string>
-    <string name="rxjava_android_license">"Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License."</string>
-    <string name="rxbinding_license">"Copyright © 2015 Jake Wharton
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-   http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License."</string>
-    <string name="autodispose_license">"Copyright © 2017 Uber Technologies
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-   http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License."</string>
-    <string name="dagger_license">"Copyright 2012 The Dagger Authors
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-   http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License."</string>
-    <string name="delete_note">DELETE</string>
 
 </resources>

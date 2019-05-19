@@ -1,9 +1,14 @@
 package com.nicholasdoglio.notes.data.local
 
-import android.arch.paging.DataSource
-import android.arch.persistence.room.*
-import com.nicholasdoglio.notes.data.model.note.Note
-import io.reactivex.Single
+import androidx.room.Dao
+import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import androidx.room.Update
+import com.nicholasdoglio.notes.data.model.Note
+import io.reactivex.Flowable
+import io.reactivex.Maybe
 
 /**
  * @author Nicholas Doglio
@@ -26,13 +31,13 @@ interface NoteDao {
 
     /** Gets the total number of notes in the table */
     @Query("SELECT count(*) FROM Note")
-    fun getNumberOfNotes(): Single<Int>
+    fun countOfNotes(): Flowable<Int>
 
     /** Returns the selected note from the database */
     @Query("SELECT * From Note WHERE id = :id")
-    fun getNote(id: Long): Single<Note>
+    fun note(id: Long): Maybe<Note>
 
-    /** Pulls all the notes from the database in a asynchronous manner using Paging Library */
+    /** Pulls all the notes from the database as a list */
     @Query("SELECT * FROM Note")
-    fun getAllNotes(): DataSource.Factory<Int, Note>
+    fun observeNotes(): Flowable<List<Note>>
 }

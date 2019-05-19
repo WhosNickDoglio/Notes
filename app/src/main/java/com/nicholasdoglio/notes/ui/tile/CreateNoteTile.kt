@@ -3,21 +3,20 @@ package com.nicholasdoglio.notes.ui.tile
 import android.content.Intent
 import android.os.Build
 import android.service.quicksettings.TileService
-import android.support.annotation.RequiresApi
+import androidx.annotation.RequiresApi
 import com.nicholasdoglio.notes.ui.MainActivity
-import com.nicholasdoglio.notes.util.Const
+
+const val NOTES_TILE_SHORTCUT = "NOTES_TILE_SHORTCUT"
 
 @RequiresApi(Build.VERSION_CODES.N)
 class CreateNoteTile : TileService() {
 
-    //TODO clean this up
     override fun onClick() {
         super.onClick()
-
-        val intent = Intent(applicationContext, MainActivity::class.java)
-
-        intent.putExtra(Const.shortcutNoteIntentId, Const.shortcutNoteIntentId)
-
-        startActivityAndCollapse(intent)
+        startActivityAndCollapse(Intent(applicationContext, MainActivity::class.java)
+            .apply {
+                putExtra(NOTES_TILE_SHORTCUT, NOTES_TILE_SHORTCUT)
+            }
+        )
     }
 }

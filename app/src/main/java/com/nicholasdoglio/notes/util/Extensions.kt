@@ -1,17 +1,20 @@
 package com.nicholasdoglio.notes.util
 
 import android.app.Activity
-import android.support.annotation.IdRes
-import android.support.annotation.LayoutRes
-import android.support.design.widget.FloatingActionButton
-import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.Toolbar
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
+import androidx.annotation.LayoutRes
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 /**
  * @author Nicholas Doglio
@@ -25,76 +28,32 @@ fun ViewGroup.inflate(@LayoutRes layoutRes: Int, attachToRoot: Boolean = false):
     return LayoutInflater.from(context).inflate(layoutRes, this, attachToRoot)
 }
 
-/**
- * Removes boilerplate with navigating between fragments
- * Used in NavigationController
- */
-fun AppCompatActivity.showFragment(
-    fragment: Fragment,
-    tag: String,
-    name: String,
-    transition: Int,
-    @IdRes containerViewId: Int,
-    backstack: Boolean = true
-) {
-    when (backstack) {
-        true -> {
-            supportFragmentManager
-                .beginTransaction()
-                .replace(containerViewId, fragment, tag)
-                .addToBackStack(name)
-                .setTransition(transition)
-                .setReorderingAllowed(true)
-                .commit()
-        }
-        false -> {
-            supportFragmentManager
-                .beginTransaction()
-                .replace(containerViewId, fragment, tag)
-                .setTransition(transition)
-                .setReorderingAllowed(true)
-                .commit()
-
-        }
-    }
-}
-
-/** Sets up toolbars in all the fragments */
-fun Fragment.setupToolbar(
-    activity: AppCompatActivity,
-    toolbar: Toolbar,
-    title: String = "",
-    optionsMenu: Boolean = false
-) {
-    activity.setSupportActionBar(toolbar)
-    activity.supportActionBar?.setDisplayShowTitleEnabled(false)
-    toolbar.title = title
-    setHasOptionsMenu(optionsMenu)
-}
-
 /**  */
 fun TextView.setEditableText(text: String) {
-    setText(text)
+    this.text = text
     TextView.BufferType.EDITABLE
 }
 
 /** */
-fun AppCompatActivity.hideKeyboard() {
+fun Activity.hideKeyboard() {
     val input = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
     input.hideSoftInputFromWindow(this.currentFocus?.windowToken, 0)
 }
 
 fun View.showIf(visibility: Boolean) {
-    when (visibility) {
-        true -> this.visibility = View.VISIBLE
-        false -> this.visibility = View.INVISIBLE
-    }
+    this.visibility = if (visibility) View.VISIBLE else View.GONE
 }
 
 fun FloatingActionButton.hideOnScroll(dy: Int) {
-    when {
-        dy > 0 -> this.hide()
-        else -> this.show()
-    }
+    if (dy > 0) this.hide() else this.show()
 }
 
+inline fun <reified VIEW_MODEL : ViewModel> Fragment.createViewModel(factory: ViewModelProvider.Factory): VIEW_MODEL =
+    ViewModelProviders.of(this, factory).get(VIEW_MODEL::class.java)
+
+fun Context.openWebPage(url: String) {
+    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+    if (intent.resolveActivity(this.packageManager) != null) {
+        this.startActivity(intent)
+    }
+}

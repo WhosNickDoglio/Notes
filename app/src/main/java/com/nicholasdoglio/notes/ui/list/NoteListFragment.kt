@@ -1,90 +1,35 @@
 package com.nicholasdoglio.notes.ui.list
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.DividerItemDecoration
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.view.*
-import com.jakewharton.rxbinding2.view.clicks
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.jakewharton.rxbinding3.view.clicks
 import com.nicholasdoglio.notes.R
-import com.nicholasdoglio.notes.ui.common.NavigationController
+import com.nicholasdoglio.notes.ui.about.AboutFragment
+import com.nicholasdoglio.notes.ui.base.NotesFragment
+import com.nicholasdoglio.notes.util.createViewModel
 import com.nicholasdoglio.notes.util.hideOnScroll
 import com.nicholasdoglio.notes.util.inflate
-import com.nicholasdoglio.notes.util.setupToolbar
 import com.nicholasdoglio.notes.util.showIf
-import com.nicholasdoglio.notes.viewmodel.NotesViewModelFactory
-import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
-import com.uber.autodispose.kotlin.autoDisposable
-import dagger.android.support.DaggerFragment
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+import com.uber.autodispose.android.lifecycle.autoDisposable
 import kotlinx.android.synthetic.main.fragment_note_list.*
-import javax.inject.Inject
-
 
 /**
  * @author Nicholas Doglio
  */
-class NoteListFragment : DaggerFragment() {
+class NoteListFragment : NotesFragment<NoteListViewModel>() {
 
-    @Inject
-    lateinit var viewModelFactory: NotesViewModelFactory
-
-    @Inject
-    lateinit var navigationController: NavigationController
-
-    private val noteListObserver by lazy { Observer(notesListAdapter::submitList) }
-    private val scopeProvider by lazy { AndroidLifecycleScopeProvider.from(this) }
-    private val notesListAdapter by lazy { NoteListAdapter() }
-    private val notesListViewModel by lazy {
-        ViewModelProviders.of(this, viewModelFactory).get(NoteListViewModel::class.java)
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-        notesListViewModel.notesList.observe(this, noteListObserver)
-
-        setupToolbar(activity as AppCompatActivity, noteListToolbar, "Notes", true)
-
-        val linearLayoutManager = LinearLayoutManager(context)
-        notesListRecyclerView.apply {
-            addItemDecoration(DividerItemDecoration(context, linearLayoutManager.orientation))
-            adapter = notesListAdapter
-            layoutManager = linearLayoutManager
-            addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                    createNoteFab.hideOnScroll(dy)
-                }
-            })
-        }
-
-        notesListViewModel.checkForNotes()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .map {
-                emptyList.showIf(it == 0)
-                notesListRecyclerView.showIf(it > 0)
-            }
-            .autoDisposable(scopeProvider)
-            .subscribe()
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-        notesListAdapter.noteListItemClickListener()
-            .map { navigationController.openNote(it.id) }
-            .autoDisposable(scopeProvider)
-            .subscribe()
-
-        createNoteFab.clicks()
-            .map { navigationController.openNote() }
-            .autoDisposable(scopeProvider)
-            .subscribe()
+    override fun createViewModel() {
+        viewModel = createViewModel(viewModelFactory)
     }
 
     override fun onCreateView(
@@ -93,6 +38,52 @@ class NoteListFragment : DaggerFragment() {
         savedInstanceState: Bundle?
     ): View? = container?.inflate(R.layout.fragment_note_list)
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val notesListAdapter = NoteListAdapter()
+
+        (activity as AppCompatActivity).supportActionBar?.apply {
+            setDisplayShowTitleEnabled(true)
+            title = "Notes"
+            setHasOptionsMenu(true)
+        }
+
+        notesRecyclerView.apply {
+            addItemDecoration(DividerItemDecoration(context, RecyclerView.VERTICAL))
+            adapter = notesListAdapter
+            layoutManager = LinearLayoutManager(context)
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    createNoteFab.hideOnScroll(dy)
+                }
+            })
+        }
+
+        createNoteFab.clicks()
+            .autoDisposable(viewLifecycleOwner)
+            .subscribe { findNavController().navigate(NoteListFragmentDirections.openNote()) }
+
+        viewModel.notesList
+            .subscribeOn(appSchedulers.database)
+            .observeOn(appSchedulers.main)
+            .autoDisposable(viewLifecycleOwner)
+            .subscribe { list -> notesListAdapter.submitList(list) }
+
+        viewModel.checkForNotes
+            .subscribeOn(appSchedulers.database)
+            .observeOn(appSchedulers.main)
+            .autoDisposable(viewLifecycleOwner)
+            .subscribe { count ->
+                emptyStateView.showIf(count == 0)
+                notesRecyclerView.showIf(count > 0)
+            }
+
+        notesListAdapter.noteListItemClickListener
+            .autoDisposable(viewLifecycleOwner)
+            .subscribe { findNavController().navigate(NoteListFragmentDirections.openNote(it.id)) }
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater?.inflate(R.menu.list_menu, menu)
@@ -100,14 +91,9 @@ class NoteListFragment : DaggerFragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
         R.id.about_item -> {
-            navigationController.openAbout()
+            AboutFragment().show(requireFragmentManager(), "ABOUT")
             true
         }
         else -> super.onOptionsItemSelected(item)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        notesListViewModel.notesList.removeObserver(noteListObserver)
     }
 }

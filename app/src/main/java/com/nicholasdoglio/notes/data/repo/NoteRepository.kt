@@ -1,23 +1,25 @@
 package com.nicholasdoglio.notes.data.repo
 
-import android.arch.paging.DataSource
-import com.nicholasdoglio.notes.data.local.NoteDatabase
-import com.nicholasdoglio.notes.data.model.note.Note
-import io.reactivex.Single
+import com.nicholasdoglio.notes.data.local.NoteDao
+import com.nicholasdoglio.notes.data.model.Note
+import io.reactivex.Completable
+import io.reactivex.Flowable
+import io.reactivex.Maybe
 import javax.inject.Inject
+import javax.inject.Singleton
 
-class NoteRepository @Inject constructor(private val noteDatabase: NoteDatabase) :
-    Repository {
+@Singleton
+class NoteRepository @Inject constructor(private val noteDao: NoteDao) {
 
-    override fun saveNote(note: Note) = noteDatabase.noteDao().saveNote(note)
+    fun saveNote(note: Note): Completable = Completable.fromAction { noteDao.saveNote(note) }
 
-    override fun deleteNote(note: Note) = noteDatabase.noteDao().deleteNote(note)
+    fun deleteNote(note: Note): Completable = Completable.fromAction { noteDao.deleteNote(note) }
 
-    override fun updateNote(note: Note) = noteDatabase.noteDao().updateNote(note)
+    fun updateNote(note: Note): Completable = Completable.fromAction { noteDao.updateNote(note) }
 
-    override fun getNumberOfNotes(): Single<Int> = noteDatabase.noteDao().getNumberOfNotes()
+    fun countOfNotes(): Flowable<Int> = noteDao.countOfNotes()
 
-    override fun getNote(id: Long): Single<Note> = noteDatabase.noteDao().getNote(id)
+    fun note(id: Long): Maybe<Note> = noteDao.note(id)
 
-    override fun getAllNotes(): DataSource.Factory<Int, Note> = noteDatabase.noteDao().getAllNotes()
+    fun observeNotes(): Flowable<List<Note>> = noteDao.observeNotes()
 }

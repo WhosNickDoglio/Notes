@@ -1,8 +1,8 @@
 # Notes
 
-[![Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![API](https://img.shields.io/badge/API-21%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=21)
-[![Build Status](https://travis-ci.org/WhosNickDoglio/Notes-Android.svg?branch=master)](https://travis-ci.org/WhosNickDoglio/Notes-Android)
+[![Build Status](https://app.bitrise.io/app/4ee2127ae266bab7/status.svg?token=RGGcIbgEhhRPiBFV2iT0fg&branch=master)](https://app.bitrise.io/app/4ee2127ae266bab7)
 [![codecov](https://codecov.io/gh/WhosNickDoglio/Notes-Android/branch/master/graph/badge.svg)](https://codecov.io/gh/WhosNickDoglio/Notes-Android)
 
 A simple Material Design note taking Android application written entirely in Kotlin!
@@ -29,43 +29,6 @@ All planned work is detailed in the [projects](https://github.com/WhosNickDoglio
 
 All the releases and change logs are kept under [releases](https://github.com/WhosNickDoglio/Notes/releases).
 
-# Libraries 
-
-- [Android Support](https://developer.android.com/topic/libraries/support-library/index.html)
-- [Android Architecture Components](https://developer.android.com/topic/libraries/architecture/index.html) 
-  - [Paging](https://developer.android.com/topic/libraries/architecture/paging.html)
-  - [Room](https://developer.android.com/topic/libraries/architecture/room.html)
-  - [ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel.html) 
-- [RxJava](https://github.com/ReactiveX/RxJava)
-- [RxAndroid](https://github.com/ReactiveX/RxAndroid)
-- [RxBinding](https://github.com/JakeWharton/RxBinding)
-- [AutoDispose](https://github.com/uber/AutoDispose)
-- [Dagger](https://google.github.io/dagger/) 
-
-
-# Testing
-- [JUnit](http://junit.org/junit5/)
-- [Robolectric](http://robolectric.org/)
-- [Espresso](https://developer.android.com/training/testing/espresso/index.html)
-
-
-# Presentation Architecture 
-
-The Presentation layer was written using the Model-View-ViewModel (MVVM) pattern. Each `Fragment` is given it's own `ViewModel` which emits data for the Fragment to observe.
-
-
-This application also uses a single activity with multiple fragments architecture. 
-
-
-# Feedback
-
-Bugs found? Suggestions? Requests?
-
-Feel free to contact me or open up a issue:
-
-[Twitter](https://twitter.com/WhosNickDoglio)
-
-[Email](mailto:NicholasDoglio@Gmail.com)
 
 # License
 

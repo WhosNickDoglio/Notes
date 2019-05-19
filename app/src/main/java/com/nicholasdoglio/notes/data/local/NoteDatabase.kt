@@ -1,8 +1,8 @@
 package com.nicholasdoglio.notes.data.local
 
-import android.arch.persistence.room.Database
-import android.arch.persistence.room.RoomDatabase
-import com.nicholasdoglio.notes.data.model.note.Note
+import androidx.room.Database
+import androidx.room.RoomDatabase
+import com.nicholasdoglio.notes.data.model.Note
 
 /**
  * @author Nicholas Doglio
