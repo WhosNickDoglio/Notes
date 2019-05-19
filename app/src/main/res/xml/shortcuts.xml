@@ -11,6 +11,7 @@
         <intent
             android:action="createNote"
             android:targetClass="com.nicholasdoglio.notes.ui.MainActivity"
+            android:data="com.nicholasdoglio.notes://create_new_note"
             android:targetPackage="com.nicholasdoglio.notes"/>
 
         <categories android:name="android.shortcut.conversation"/>

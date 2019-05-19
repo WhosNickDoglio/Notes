@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ MIT License
   ~
   ~ Copyright (c) 2019 Nicholas Doglio
@@ -24,26 +23,40 @@
   -->
 
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            xmlns:tools="http://schemas.android.com/tools" android:id="@+id/nav_graph"
-            app:startDestination="@id/noteListFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/noteListFragment">
 
-    <fragment android:id="@+id/noteListFragment" android:name="com.nicholasdoglio.notes.ui.list.NoteListFragment"
-              android:label="fragment_note_list" tools:layout="@layout/fragment_note_list">
+    <fragment
+        android:id="@+id/noteListFragment"
+        android:name="com.nicholasdoglio.notes.ui.list.NoteListFragment"
+        android:label="fragment_note_list"
+        tools:layout="@layout/fragment_note_list">
 
-        <action android:id="@+id/openNote"
-                app:destination="@id/noteFragment" app:enterAnim="@anim/nav_default_enter_anim"
-                app:exitAnim="@anim/nav_default_exit_anim" app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-                app:popExitAnim="@anim/nav_default_pop_exit_anim">
+        <action
+            android:id="@+id/openNote"
+            app:destination="@id/noteFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim">
             <argument
                 android:name="noteId"
-                app:argType="long"
-                android:defaultValue="-1L"/>
+                android:defaultValue="-1L"
+                app:argType="long" />
         </action>
 
     </fragment>
-    <fragment android:id="@+id/noteFragment" android:name="com.nicholasdoglio.notes.ui.note.NoteFragment"
-              android:label="fragment_note" tools:layout="@layout/fragment_note">
-        <argument android:name="noteId" app:argType="long" android:defaultValue="-1L"/>
+    <fragment
+        android:id="@+id/noteFragment"
+        android:name="com.nicholasdoglio.notes.ui.note.NoteFragment"
+        android:label="fragment_note"
+        tools:layout="@layout/fragment_note">
+        <deepLink app:uri="com.nicholasdoglio.notes://create_new_note" />
+        <argument
+            android:name="noteId"
+            android:defaultValue="-1L"
+            app:argType="long" />
     </fragment>
 </navigation>

@@ -6,8 +6,6 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.nicholasdoglio.notes.R
 import com.nicholasdoglio.notes.ui.common.OnBackPressedListener
-import com.nicholasdoglio.notes.ui.list.NoteListFragmentDirections
-import com.nicholasdoglio.notes.ui.tile.NOTES_TILE_SHORTCUT
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -21,19 +19,10 @@ class MainActivity : DaggerAppCompatActivity() {
         setTheme(R.style.AppTheme)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
-
-        val navController = findNavController(R.id.navHostFragment)
-        toolbar.setupWithNavController(navController, AppBarConfiguration(navController.graph))
-
-        if (NOTES_TILE_SHORTCUT == intent.action) {
-            navController.navigate(NoteListFragmentDirections.openNote())
-        }
-
-        intent.extras?.let {
-            if (it.containsKey(NOTES_TILE_SHORTCUT)) {
-                navController.navigate(NoteListFragmentDirections.openNote())
-            }
-        }
+        toolbar.setupWithNavController(
+            findNavController(R.id.navHostFragment),
+            AppBarConfiguration(findNavController(R.id.navHostFragment).graph)
+        )
     }
 
     override fun onBackPressed() {
