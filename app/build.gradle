@@ -123,6 +123,7 @@ dependencies {
     androidTestImplementation libs.room_testing
     androidTestImplementation libs.androidx_test_core
     androidTestImplementation libs.androidx_test_junit
+    androidTestImplementation libs.androidx_test_truth
     androidTestImplementation libs.androidx_test_runner
     androidTestImplementation libs.androidx_test_rules
     androidTestImplementation libs.espresso_core
