@@ -1,3 +1,27 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2019 Nicholas Doglio
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
@@ -6,6 +30,7 @@ apply plugin: "androidx.navigation.safeargs.kotlin"
 apply plugin: 'io.gitlab.arturbosch.detekt'
 apply plugin: 'jacoco-android'
 apply plugin: 'com.jaredsburrows.license'
+apply from: "../ktlint.gradle"
 
 androidExtensions {
     experimental = true
@@ -22,20 +47,36 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         javaCompileOptions {
             annotationProcessorOptions {
-                arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
+                arguments = [
+                        "room.schemaLocation": "$projectDir/schemas".toString(),
+                        "room.incremental":"true"
+                ]
             }
         }
     }
+
+    dataBinding {
+        enabled = true
+    }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    sourceSets {
+        main { java.srcDirs = ['src/main/kotlin'] }
+        test { java.srcDirs = ['src/test/kotlin'] }
+        androidTest { java.srcDirs = ['src/androidTest/kotlin'] }
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
     kotlinOptions {
         jvmTarget = '1.8'
     }
@@ -44,40 +85,48 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation libs.kotlin
+    implementation libs.coroutines_core
+    implementation libs.coroutines_android
+
+    implementation libs.activity
     implementation libs.appcompat
     implementation libs.recyclerview
     implementation libs.cardview
     implementation libs.material
     implementation libs.constraint
+    implementation libs.lifecycle_viewmodel
+    implementation libs.lifecycle_runtime
+    implementation libs.lifecycle_livedata
     implementation libs.lifecycle_commons
-    implementation libs.lifecycle_extensions
-    implementation libs.room_runtime
-    implementation libs.room_rxjava
     implementation libs.navigation_fragment
     implementation libs.navigation_ui
     implementation libs.fragment_ktx
     implementation libs.core_ktx
+
+    implementation libs.room_runtime
+    implementation libs.room_ktx
     kapt libs.room_compiler
-    implementation libs.rxjava
-    implementation libs.rxandroid
-    implementation libs.rxrelay
-    implementation libs.rxkotlin
-    implementation libs.rxbinding
-    implementation libs.rxbinding_core
-    implementation libs.rxbinding_app_compat
-    implementation libs.autodispose_android
-    implementation libs.autodispose_arch_components
+
     implementation libs.dagger
-    implementation libs.dagger_android
-    implementation libs.dagger_android_support
     kapt libs.dagger_compiler
-    kapt libs.dagger_android_processor
+
     implementation libs.timber
     debugImplementation libs.canary
-    implementation libs.dog_tag
-    implementation libs.dog_tag_autodispose
+
     testImplementation libs.junit
+    testImplementation libs.coroutines_test
+    testImplementation libs.truth
+    testImplementation libs.mockk
+//    testImplementation libs.robolectric TODO not androidx yet
+
+    androidTestImplementation "io.mockk:mockk-android:1.9.3"
+    androidTestImplementation libs.coroutines_test
+    androidTestImplementation libs.truth
+    androidTestImplementation libs.lifecycle_test
     androidTestImplementation libs.room_testing
     androidTestImplementation libs.androidx_test_core
     androidTestImplementation libs.androidx_test_junit
+    androidTestImplementation libs.androidx_test_runner
+    androidTestImplementation libs.androidx_test_rules
+    androidTestImplementation libs.espresso_core
 }

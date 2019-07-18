@@ -46,6 +46,9 @@
                 android:defaultValue="-1L"
                 app:argType="long" />
         </action>
+        <action
+            android:id="@+id/open_about"
+            app:destination="@id/aboutFragment" />
 
     </fragment>
     <fragment
@@ -58,5 +61,43 @@
             android:name="noteId"
             android:defaultValue="-1L"
             app:argType="long" />
+        <action
+            android:id="@+id/open_discard"
+            app:destination="@id/discardFragment" />
+    </fragment>
+    <dialog
+        android:id="@+id/libsFragment"
+        android:name="com.nicholasdoglio.notes.ui.about.LibsFragment"
+        android:label="LibsFragment" />
+    <dialog
+        android:id="@+id/aboutFragment"
+        android:name="com.nicholasdoglio.notes.ui.about.AboutFragment"
+        android:label="fragment_note_list"
+        tools:layout="@layout/fragment_note_list">
+        <action
+            android:id="@+id/open_libs"
+            app:destination="@id/libsFragment" />
+    </dialog>
+    <fragment
+        android:id="@+id/discardFragment"
+        android:name="com.nicholasdoglio.notes.ui.note.DiscardFragment"
+        android:label="DiscardFragment">
+        <action
+            android:id="@+id/open_list"
+            app:destination="@id/noteListFragment" />
+        <argument
+            android:name="id"
+            android:defaultValue="0L"
+            app:argType="long" />
+        <argument
+            android:name="title"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="contents"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
     </fragment>
 </navigation>

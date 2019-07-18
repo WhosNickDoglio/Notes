@@ -27,6 +27,6 @@
     <item>
         <shape
             android:gravity="center"
-            android:src="@drawable/ic_launch_screen" />
+            android:src="@mipmap/ic_launch_screen" />
     </item>
 </layer-list>
