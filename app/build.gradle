@@ -116,7 +116,7 @@ dependencies {
     testImplementation libs.mockk
 //    testImplementation libs.robolectric TODO not androidx yet
 
-    androidTestImplementation "io.mockk:mockk-android:1.9.3"
+    androidTestImplementation libs.mockk_android
     androidTestImplementation libs.coroutines_test
     androidTestImplementation libs.truth
     androidTestImplementation libs.lifecycle_test

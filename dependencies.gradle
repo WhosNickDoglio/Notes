@@ -98,6 +98,7 @@ ext {
             junit               : "junit:junit:${versions.junit}",
             truth               : "com.google.truth:truth:${versions.truth}",
             mockk               : "io.mockk:mockk:${versions.mockk}",
+            mockk_android       : "io.mockk:mockk-android:${versions.mockk}",
             robolectric         : "org.robolectric:robolectric:${versions.robo}",
     ]
 }
