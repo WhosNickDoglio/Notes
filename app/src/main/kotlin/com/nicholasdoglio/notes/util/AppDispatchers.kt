@@ -24,10 +24,9 @@
 
 package com.nicholasdoglio.notes.util
 
+import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import javax.inject.Inject
-
 
 // TODO I  don't think I need this?
 class NotesDispatchers @Inject constructor() : AppDispatchers {

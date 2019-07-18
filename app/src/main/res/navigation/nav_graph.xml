@@ -23,10 +23,10 @@
   -->
 
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_graph"
-    app:startDestination="@id/noteListFragment">
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/nav_graph"
+            app:startDestination="@id/noteListFragment">
 
     <fragment
         android:id="@+id/noteListFragment"
@@ -44,11 +44,11 @@
             <argument
                 android:name="noteId"
                 android:defaultValue="-1L"
-                app:argType="long" />
+                app:argType="long"/>
         </action>
         <action
             android:id="@+id/open_about"
-            app:destination="@id/aboutFragment" />
+            app:destination="@id/aboutFragment"/>
 
     </fragment>
     <fragment
@@ -56,19 +56,19 @@
         android:name="com.nicholasdoglio.notes.ui.note.NoteFragment"
         android:label="fragment_note"
         tools:layout="@layout/fragment_note">
-        <deepLink app:uri="com.nicholasdoglio.notes://create_new_note" />
+        <deepLink app:uri="com.nicholasdoglio.notes://create_new_note"/>
         <argument
             android:name="noteId"
             android:defaultValue="-1L"
-            app:argType="long" />
+            app:argType="long"/>
         <action
             android:id="@+id/open_discard"
-            app:destination="@id/discardFragment" />
+            app:destination="@id/discardFragment"/>
     </fragment>
     <dialog
         android:id="@+id/libsFragment"
         android:name="com.nicholasdoglio.notes.ui.about.LibsFragment"
-        android:label="LibsFragment" />
+        android:label="LibsFragment"/>
     <dialog
         android:id="@+id/aboutFragment"
         android:name="com.nicholasdoglio.notes.ui.about.AboutFragment"
@@ -76,7 +76,7 @@
         tools:layout="@layout/fragment_note_list">
         <action
             android:id="@+id/open_libs"
-            app:destination="@id/libsFragment" />
+            app:destination="@id/libsFragment"/>
     </dialog>
     <fragment
         android:id="@+id/discardFragment"
@@ -84,20 +84,20 @@
         android:label="DiscardFragment">
         <action
             android:id="@+id/open_list"
-            app:destination="@id/noteListFragment" />
+            app:destination="@id/noteListFragment"/>
         <argument
             android:name="id"
             android:defaultValue="0L"
-            app:argType="long" />
+            app:argType="long"/>
         <argument
             android:name="title"
             android:defaultValue="@null"
             app:argType="string"
-            app:nullable="true" />
+            app:nullable="true"/>
         <argument
             android:name="contents"
             android:defaultValue="@null"
             app:argType="string"
-            app:nullable="true" />
+            app:nullable="true"/>
     </fragment>
 </navigation>

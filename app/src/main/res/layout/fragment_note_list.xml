@@ -44,7 +44,7 @@
             android:background="?android:attr/colorPrimary"
             android:elevation="4dp"
             android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"
-            app:popupTheme="@style/ThemeOverlay.MaterialComponents.Light" />
+            app:popupTheme="@style/ThemeOverlay.MaterialComponents.Light"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 

@@ -22,20 +22,20 @@
   ~ SOFTWARE.
   -->
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
-        <import type="android.view.View.OnClickListener" />
+        <import type="android.view.View.OnClickListener"/>
 
         <variable
             name="click"
-            type="OnClickListener" />
+            type="OnClickListener"/>
 
         <variable
             name="item"
-            type="com.nicholasdoglio.notes.data.model.AboutItem" />
+            type="com.nicholasdoglio.notes.data.model.AboutItem"/>
 
     </data>
 
@@ -55,7 +55,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="DEVELOPER" />
+            tools:text="DEVELOPER"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
