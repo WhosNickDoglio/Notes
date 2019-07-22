@@ -42,7 +42,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.nicholasdoglio.notes.R
 import com.nicholasdoglio.notes.di.injector
-import com.nicholasdoglio.notes.util.hideOnScroll
+import com.nicholasdoglio.notes.util.hideIf
 import kotlinx.android.synthetic.main.fragment_note_list.*
 
 class NoteListFragment : Fragment(R.layout.fragment_note_list) {
@@ -75,7 +75,7 @@ class NoteListFragment : Fragment(R.layout.fragment_note_list) {
             layoutManager = LinearLayoutManager(context)
             addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                    createNoteFab.hideOnScroll(dy)
+                    createNoteFab.hideIf(0 > dy)
                 }
             })
         }

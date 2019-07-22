@@ -32,24 +32,20 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-/**
- * @author Nicholas Doglio
- */
+inline var TextView.textEditable: String
+    get() = this.text.toString() // TODO is the get necessary?
+    set(value) {
+        this.text = value
+        TextView.BufferType.EDITABLE
+    }
 
-/**  */
-fun TextView.setEditableText(text: String) {
-    this.text = text
-    TextView.BufferType.EDITABLE
-}
-
-/** */
 fun Activity.hideKeyboard() {
     val input = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
     input.hideSoftInputFromWindow(this.currentFocus?.windowToken, 0)
 }
 
-fun FloatingActionButton.hideOnScroll(dy: Int) {
-    if (dy > 0) this.hide() else this.show()
+fun FloatingActionButton.hideIf(bool: Boolean) {
+    if (bool) hide() else show()
 }
 
 fun Context.openWebPage(url: String) {
