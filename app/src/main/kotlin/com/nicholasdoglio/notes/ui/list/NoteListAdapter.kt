@@ -28,9 +28,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import com.nicholasdoglio.notes.data.model.Note
 
-/**
- * @author Nicholas Doglio
- */
 class NoteListAdapter : ListAdapter<Note, NoteViewHolder>(Note.diffCallback) {
 
     override fun onBindViewHolder(holder: NoteViewHolder, position: Int) =

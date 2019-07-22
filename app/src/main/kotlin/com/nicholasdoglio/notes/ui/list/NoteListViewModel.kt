@@ -32,9 +32,6 @@ import com.nicholasdoglio.notes.data.model.Note
 import com.nicholasdoglio.notes.data.repo.NoteRepository
 import javax.inject.Inject
 
-/**
- * @author Nicholas Doglio
- */
 class NoteListViewModel @Inject constructor(private val noteRepository: NoteRepository) :
     ViewModel() {
 

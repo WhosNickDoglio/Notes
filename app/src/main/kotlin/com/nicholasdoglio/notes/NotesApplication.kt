@@ -31,9 +31,6 @@ import com.nicholasdoglio.notes.di.AppComponentProvider
 import com.nicholasdoglio.notes.di.DaggerAppComponent
 import timber.log.Timber
 
-/**
- * @author Nicholas Doglio
- */
 class NotesApplication : Application(), AppComponentProvider {
 
     override val component: AppComponent by lazy {
@@ -71,5 +68,6 @@ class NotesApplication : Application(), AppComponentProvider {
 }
 
 //    TODO
+//         - Sample JSON
 //         - Write lots of tests
-//         - Fix splash screen
+//         - More debug tools

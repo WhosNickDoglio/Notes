@@ -27,7 +27,4 @@ package com.nicholasdoglio.notes.ui
 import androidx.appcompat.app.AppCompatActivity
 import com.nicholasdoglio.notes.R
 
-/**
- * @author Nicholas Doglio
- */
 class MainActivity : AppCompatActivity(R.layout.activity_main)

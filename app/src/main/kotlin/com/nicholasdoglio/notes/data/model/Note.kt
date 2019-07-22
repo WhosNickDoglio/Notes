@@ -30,8 +30,6 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 /**
- * @author Nicholas Doglio
- *
  *  @param id: primary key used to identify notes
  *  @param title: The title or headline of the findNote
  *  @param contents: the body of the findNote

@@ -32,10 +32,6 @@ import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
 
-/**
- * @author Nicholas Doglio
- */
-
 @Module
 object DatabaseModule {
 
@@ -44,10 +40,10 @@ object DatabaseModule {
     @Singleton
     @Provides
     @JvmStatic
-    fun room(app: Application): NoteDatabase =
+    fun provideRoomDatabase(app: Application): NoteDatabase =
         Room.databaseBuilder(app, NoteDatabase::class.java, NOTES_DB).build()
 
     @Provides
     @JvmStatic
-    fun noteDao(roomDatabase: NoteDatabase): NoteDao = roomDatabase.noteDao()
+    fun provideNoteDao(roomDatabase: NoteDatabase): NoteDao = roomDatabase.noteDao
 }

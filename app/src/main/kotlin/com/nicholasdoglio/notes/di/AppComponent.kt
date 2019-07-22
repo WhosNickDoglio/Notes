@@ -31,9 +31,6 @@ import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton
 
-/**
- * @author Nicholas Doglio
- */
 @Singleton
 @Component(modules = [DatabaseModule::class, BindingModule::class])
 interface AppComponent {

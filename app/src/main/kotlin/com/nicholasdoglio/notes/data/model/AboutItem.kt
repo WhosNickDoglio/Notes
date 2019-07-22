@@ -28,7 +28,6 @@ import androidx.annotation.StringRes
 import androidx.recyclerview.widget.DiffUtil
 
 /**
- * @author Nicholas Doglio
  * @param text text description of each item
  * @param link website URL for better understanding each of item
  */

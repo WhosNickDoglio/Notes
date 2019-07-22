@@ -36,9 +36,6 @@ import com.nicholasdoglio.notes.R
 import com.nicholasdoglio.notes.di.injector
 import kotlinx.android.synthetic.main.fragment_about.*
 
-/**
- * @author Nicholas Doglio
- */
 class AboutFragment : DialogFragment() {
 
     private val viewModel by viewModels<AboutViewModel> {

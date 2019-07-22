@@ -31,9 +31,6 @@ import com.nicholasdoglio.notes.data.model.AboutAction
 import com.nicholasdoglio.notes.data.model.AboutItem
 import javax.inject.Inject
 
-/**
- * @author Nicholas Doglio
- */
 class AboutDataStore @Inject constructor() {
 
     val aboutItems: LiveData<List<AboutItem>> = MutableLiveData(

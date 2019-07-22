@@ -46,9 +46,6 @@ import com.nicholasdoglio.notes.di.injector
 import com.nicholasdoglio.notes.util.hideKeyboard
 import kotlinx.android.synthetic.main.fragment_note.*
 
-/**
- * @author Nicholas Doglio
- */
 class NoteFragment : Fragment() {
 
     private val args: NoteFragmentArgs by navArgs()

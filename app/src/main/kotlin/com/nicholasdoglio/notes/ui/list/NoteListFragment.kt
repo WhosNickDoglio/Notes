@@ -45,9 +45,6 @@ import com.nicholasdoglio.notes.di.injector
 import com.nicholasdoglio.notes.util.hideOnScroll
 import kotlinx.android.synthetic.main.fragment_note_list.*
 
-/**
- * @author Nicholas Doglio
- */
 class NoteListFragment : Fragment(R.layout.fragment_note_list) {
 
     private val viewModel by viewModels<NoteListViewModel> {

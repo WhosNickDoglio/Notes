@@ -34,7 +34,6 @@ import androidx.room.Update
 import com.nicholasdoglio.notes.data.model.Note
 
 /**
- * @author Nicholas Doglio
  * Data access object for Note class for Room database
  */
 @Dao

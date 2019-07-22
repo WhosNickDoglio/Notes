@@ -30,9 +30,6 @@ import android.webkit.WebView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 
-/**
- * @author Nicholas Doglio
- */
 class LibsFragment : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {

@@ -31,9 +31,6 @@ import com.nicholasdoglio.notes.data.repo.NoteRepository
 import javax.inject.Inject
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 
-/**
- * @author Nicholas Doglio
- */
 class NoteViewModel @Inject constructor(private val noteRepository: NoteRepository) : ViewModel() {
 
     val note: ConflatedBroadcastChannel<Note> = ConflatedBroadcastChannel()
