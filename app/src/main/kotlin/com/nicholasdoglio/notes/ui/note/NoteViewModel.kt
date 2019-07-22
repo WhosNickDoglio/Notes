@@ -28,8 +28,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.nicholasdoglio.notes.data.model.Note
 import com.nicholasdoglio.notes.data.repo.NoteRepository
-import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import javax.inject.Inject
+import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 
 /**
  * @author Nicholas Doglio
@@ -38,6 +38,8 @@ class NoteViewModel @Inject constructor(private val noteRepository: NoteReposito
 
     val note: ConflatedBroadcastChannel<Note> = ConflatedBroadcastChannel()
 
+    val noteId: ConflatedBroadcastChannel<Long> = ConflatedBroadcastChannel()
+
     val deleteTrigger: ConflatedBroadcastChannel<Unit> = ConflatedBroadcastChannel()
 
     val upsertTrigger: ConflatedBroadcastChannel<Unit> = ConflatedBroadcastChannel()
@@ -45,7 +47,4 @@ class NoteViewModel @Inject constructor(private val noteRepository: NoteReposito
     val title: MutableLiveData<String> = MutableLiveData()
 
     val contents: MutableLiveData<String> = MutableLiveData()
-
-    fun findNote(id: Long) {
-    }
 }

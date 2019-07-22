@@ -46,7 +46,9 @@ class NoteDaoTest {
 
     private lateinit var noteDatabase: NoteDatabase
 
-    private lateinit var noteDao: NoteDao
+    private val noteDao: NoteDao by lazy {
+        noteDatabase.noteDao
+    }
 
     @Before
     fun setUp() {
@@ -54,8 +56,6 @@ class NoteDaoTest {
             ApplicationProvider.getApplicationContext(),
             NoteDatabase::class.java
         ).allowMainThreadQueries().build()
-
-        noteDao = noteDatabase.noteDao()
     }
 
     @After
