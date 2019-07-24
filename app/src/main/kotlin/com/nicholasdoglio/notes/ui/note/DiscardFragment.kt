@@ -26,10 +26,10 @@ package com.nicholasdoglio.notes.ui.note
 
 import android.app.Dialog
 import android.os.Bundle
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.nicholasdoglio.notes.R
 import com.nicholasdoglio.notes.di.injector
 import kotlinx.coroutines.launch
@@ -41,7 +41,7 @@ class DiscardFragment : DialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog =
-        AlertDialog.Builder(requireContext())
+        MaterialAlertDialogBuilder(requireContext())
             .setMessage(R.string.discard_warning)
             .setPositiveButton(R.string.save_button) { _, _ -> upsert() }
             .setNegativeButton(R.string.discard_button) { _, _ -> delete() }

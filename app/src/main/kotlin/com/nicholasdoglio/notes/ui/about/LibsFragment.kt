@@ -27,8 +27,8 @@ package com.nicholasdoglio.notes.ui.about
 import android.app.Dialog
 import android.os.Bundle
 import android.webkit.WebView
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class LibsFragment : DialogFragment() {
 
@@ -37,7 +37,7 @@ class LibsFragment : DialogFragment() {
 
         libsWebView.loadUrl("file:///android_asset/open_source_licenses.html")
 
-        return AlertDialog.Builder(requireActivity())
+        return MaterialAlertDialogBuilder(requireActivity())
             .setTitle("Open Source Licenses")
             .setView(libsWebView)
             .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
