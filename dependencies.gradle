@@ -56,7 +56,7 @@ ext {
             navigation    : '2.1.0-beta02',
             core_ktx      : "1.2.0-alpha02",
             fragment_ktx  : "1.2.0-alpha01",
-            ktlint        : '0.34.0',
+            ktlint        : '0.34.2',
             coroutines    : '1.3.0-RC',
             truth         : '1.0',
             mockk         : '1.9.3',
