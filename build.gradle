@@ -65,23 +65,6 @@ allprojects {
 
     tasks.matching { task -> task.name.startsWith('assemble') }
             .all { task -> task.finalizedBy quality  }
-
-    tasks.withType(JavaCompile).configureEach {
-        options.compilerArgs += [
-                "-Adagger.gradle.incremental=true"
-        ]
-    }
-
-    afterEvaluate {
-        if (project.plugins.hasPlugin("kotlin-kapt")) {
-            kapt {
-                useBuildCache = true
-                arguments {
-                    arg("dagger.gradle.incremental", "enabled")
-                }
-            }
-        }
-    }
 }
 
 task clean(type: Delete) {

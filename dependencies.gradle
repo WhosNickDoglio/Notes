@@ -43,7 +43,7 @@ ext {
             lifecycle     : '2.2.0-alpha02',
             core_testing  : '2.1.0-rc01',
             room          : '2.2.0-alpha01',
-            dagger        : '2.23.2',
+            dagger        : '2.24',
             timber        : '4.7.1',
             canary        : '2.0-alpha-3',
             junit         : '4.12',
