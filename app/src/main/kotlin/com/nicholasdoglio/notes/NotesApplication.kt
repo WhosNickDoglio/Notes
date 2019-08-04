@@ -70,4 +70,5 @@ class NotesApplication : Application(), AppComponentProvider {
 //    TODO
 //         - Sample JSON
 //         - Write lots of tests
+//         - Fix weird colors
 //         - More debug tools
