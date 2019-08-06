@@ -41,7 +41,8 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class NoteDaoTest {
 
-    @Rule @JvmField
+    @Rule
+    @JvmField
     val instantRule = InstantTaskExecutorRule()
 
     private lateinit var noteDatabase: NoteDatabase

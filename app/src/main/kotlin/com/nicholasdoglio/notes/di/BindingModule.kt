@@ -38,9 +38,11 @@ import dagger.multibindings.IntoMap
 @Module
 interface BindingModule {
 
-    @Binds fun bindDispatchers(dispatchers: NotesDispatchers): AppDispatchers
+    @Binds
+    fun bindDispatchers(dispatchers: NotesDispatchers): AppDispatchers
 
-    @Binds fun bindViewModelFactory(factory: NotesViewModelFactory): ViewModelProvider.Factory
+    @Binds
+    fun bindViewModelFactory(factory: NotesViewModelFactory): ViewModelProvider.Factory
 
     @Binds
     @IntoMap
