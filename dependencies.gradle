@@ -48,7 +48,7 @@ ext {
             canary      : '2.0-alpha-1',
             junit       : '4.12',
             test        : '1.1.0',
-            rxkotlin    : '2.3.0',
+            rxkotlin    : '2.4.0',
             navigation  : '2.0.0',
             core_ktx    : "1.0.1",
             fragment_ktx: "1.0.0",
