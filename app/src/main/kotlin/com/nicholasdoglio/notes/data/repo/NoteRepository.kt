@@ -24,20 +24,20 @@
 
 package com.nicholasdoglio.notes.data.repo
 
-import androidx.lifecycle.LiveData
 import com.nicholasdoglio.notes.data.local.NoteDao
 import com.nicholasdoglio.notes.data.model.Note
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlinx.coroutines.flow.Flow
 
 @Singleton
 class NoteRepository @Inject constructor(private val dao: NoteDao) {
 
-    val countOfNotes: LiveData<Int> = dao.countOfNotes
+    val countOfNotes: Flow<Int> = dao.countOfNotes
 
-    val observeNotes: LiveData<List<Note>> = dao.observeNotes
+    val observeNotes: Flow<List<Note>> = dao.observeNotes
 
-    fun findNote(id: Long): LiveData<Note> = dao.note(id)
+    fun findNote(id: Long): Flow<Note> = dao.note(id)
 
     suspend fun upsert(note: Note) {
         val success = dao.insertNote(note)

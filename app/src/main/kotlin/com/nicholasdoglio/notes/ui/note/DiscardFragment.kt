@@ -49,13 +49,13 @@ class DiscardFragment : DialogFragment() {
 
     private fun upsert() {
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.upsertTrigger.send(Unit)
+            viewModel.upsertTrigger.offer(Unit)
         }
     }
 
     private fun delete() {
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.deleteTrigger.send(Unit)
+            viewModel.deleteTrigger.offer(Unit)
         }
     }
 }

@@ -24,7 +24,6 @@
 
 package com.nicholasdoglio.notes.data.local
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -32,24 +31,24 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.nicholasdoglio.notes.data.model.Note
+import kotlinx.coroutines.flow.Flow
 
 /**
  * Data access object for Note class for Room database
  */
 @Dao
 interface NoteDao {
-
     /** Pulls all the notes from the database as a list */
     @get:Query("SELECT * FROM Note")
-    val observeNotes: LiveData<List<Note>>
+    val observeNotes: Flow<List<Note>>
 
     /** Gets the total number of notes in the table */
     @get:Query("SELECT count(*) FROM Note")
-    val countOfNotes: LiveData<Int>
+    val countOfNotes: Flow<Int>
 
     /** Returns the selected findNote from the database */
     @Query("SELECT * From Note WHERE id = :id")
-    fun note(id: Long): LiveData<Note>
+    fun note(id: Long): Flow<Note>
 
     /** Takes a given findNote from the user and enters it into the database */
     @Insert(onConflict = OnConflictStrategy.IGNORE)

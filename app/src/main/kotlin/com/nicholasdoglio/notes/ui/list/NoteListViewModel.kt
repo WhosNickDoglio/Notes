@@ -26,16 +26,23 @@ package com.nicholasdoglio.notes.ui.list
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.distinctUntilChanged
-import androidx.lifecycle.map
+import androidx.lifecycle.liveData
 import com.nicholasdoglio.notes.data.model.Note
 import com.nicholasdoglio.notes.data.repo.NoteRepository
 import javax.inject.Inject
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.map
 
 class NoteListViewModel @Inject constructor(private val noteRepository: NoteRepository) :
     ViewModel() {
 
-    val notesList: LiveData<List<Note>> = noteRepository.observeNotes.distinctUntilChanged()
+    val notesList: LiveData<List<Note>> = liveData {
+        noteRepository.observeNotes.collect { emit(it) }
+    }
 
-    val hasNotes: LiveData<Boolean> = noteRepository.countOfNotes.map { it > 0 }
+    val hasNotes: LiveData<Boolean> = liveData {
+        noteRepository.countOfNotes
+            .map { it > 0 }
+            .collect { emit(it) }
+    }
 }
