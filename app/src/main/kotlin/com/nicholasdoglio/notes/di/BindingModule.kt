@@ -29,17 +29,12 @@ import androidx.lifecycle.ViewModelProvider
 import com.nicholasdoglio.notes.ui.about.AboutViewModel
 import com.nicholasdoglio.notes.ui.list.NoteListViewModel
 import com.nicholasdoglio.notes.ui.note.NoteViewModel
-import com.nicholasdoglio.notes.util.AppDispatchers
-import com.nicholasdoglio.notes.util.NotesDispatchers
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
 
 @Module
 interface BindingModule {
-
-    @Binds
-    fun bindDispatchers(dispatchers: NotesDispatchers): AppDispatchers
 
     @Binds
     fun bindViewModelFactory(factory: NotesViewModelFactory): ViewModelProvider.Factory
