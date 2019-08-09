@@ -39,9 +39,9 @@ buildscript {
 }
 
 plugins {
-    id('com.gradle.build-scan') version('2.3')
-    id("io.gitlab.arturbosch.detekt") version("1.0.0-RC16")
-    id "com.github.ben-manes.versions" version ("0.21.0")
+    id('com.gradle.build-scan') version('2.4')
+    id("io.gitlab.arturbosch.detekt") version("1.0.0")
+    id "com.github.ben-manes.versions" version ("0.22.0")
 }
 
 buildScan {
@@ -66,10 +66,20 @@ allprojects {
     tasks.matching { task -> task.name.startsWith('assemble') }
             .all { task -> task.finalizedBy quality  }
 
+    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+        kotlinOptions {
+            // Treat all Kotlin warnings as errors
+            allWarningsAsErrors = true
+
+            // Enable experimental coroutines APIs, including Flow
+            freeCompilerArgs += "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi"
+            freeCompilerArgs += "-Xuse-experimental=kotlinx.coroutines.FlowPreview"
+        }
+    }
+
+
     if (project.hasProperty('kapt')) {
-        // Reference for 'kapt' DSL: https://kotlinlang.org/docs/reference/kapt.html#java-compiler-options
         kapt {
-            // we expect this closure to run over a org.jetbrains.kotlin.gradle.plugin.KaptExtension
             javacOptions {
                 option("-source", "8")
                 option("-target", "8")
