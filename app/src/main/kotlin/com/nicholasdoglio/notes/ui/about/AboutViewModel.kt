@@ -26,11 +26,15 @@ package com.nicholasdoglio.notes.ui.about
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.liveData
 import com.nicholasdoglio.notes.data.local.AboutDataStore
 import com.nicholasdoglio.notes.data.model.AboutItem
+import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
 
 class AboutViewModel @Inject constructor(aboutDataStore: AboutDataStore) : ViewModel() {
 
-    val aboutItems: LiveData<List<AboutItem>> = aboutDataStore.aboutItems
+    val aboutItems: LiveData<List<AboutItem>> = liveData {
+        aboutDataStore.aboutItems.collect { emit(it) }
+    }
 }

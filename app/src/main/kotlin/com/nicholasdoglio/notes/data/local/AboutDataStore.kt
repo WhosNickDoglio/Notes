@@ -24,16 +24,16 @@
 
 package com.nicholasdoglio.notes.data.local
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.nicholasdoglio.notes.R
 import com.nicholasdoglio.notes.data.model.AboutAction
 import com.nicholasdoglio.notes.data.model.AboutItem
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import javax.inject.Inject
 
 class AboutDataStore @Inject constructor() {
 
-    val aboutItems: LiveData<List<AboutItem>> = MutableLiveData(
+    val aboutItems: Flow<List<AboutItem>> = flowOf(
         listOf(
             AboutItem(R.string.dev, AboutAction.OpenWebsite(R.string.dev_url)),
             AboutItem(R.string.libs, AboutAction.OpenLibs),
