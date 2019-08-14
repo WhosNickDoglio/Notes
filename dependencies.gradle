@@ -60,7 +60,8 @@ ext {
             coroutines    : '1.3.0-RC2',
             truth         : '1.0',
             mockk         : '1.9.3',
-            robo          : '4.3'
+            robo          : '4.3',
+            delect        : '0.1.0'
     ]
     libs = [
             ktlint              : "com.pinterest:ktlint:${versions.ktlint}",

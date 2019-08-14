@@ -34,4 +34,5 @@ import kotlin.reflect.KClass
     AnnotationTarget.PROPERTY_SETTER
 )
 @MapKey
+@Retention(AnnotationRetention.RUNTIME)
 internal annotation class ViewModelKey(val value: KClass<out ViewModel>)

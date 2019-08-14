@@ -35,6 +35,7 @@ buildscript {
         classpath "com.dicedmelon.gradle:jacoco-android:${versions.jacoco_android}"
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$versions.navigation"
         classpath "com.jaredsburrows:gradle-license-plugin:${versions.license}"
+        classpath "com.soundcloud.delect:delect-plugin:${versions.delect}"
     }
 }
 
@@ -63,8 +64,10 @@ allprojects {
         }
     }
 
-    tasks.matching { task -> task.name.startsWith('assemble') }
-            .all { task -> task.finalizedBy quality  }
+
+    // TODO figure a better time to run this
+//    tasks.matching { task -> task.name.startsWith('assemble') }
+//            .all { task -> task.finalizedBy quality  }
 
     tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
         kotlinOptions {
