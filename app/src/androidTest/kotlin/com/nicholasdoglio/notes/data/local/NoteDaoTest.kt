@@ -30,7 +30,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
 import com.nicholasdoglio.notes.data.model.Note
-import com.nicholasdoglio.notes.waitForValue
+import com.nicholasdoglio.notes.test
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.After
 import org.junit.Before
@@ -41,8 +41,7 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class NoteDaoTest {
 
-    @Rule
-    @JvmField
+    @get:Rule
     val instantRule = InstantTaskExecutorRule()
 
     private lateinit var noteDatabase: NoteDatabase
@@ -65,12 +64,12 @@ class NoteDaoTest {
     }
 
     @Test
-    fun empty_database_successful() {
+    fun empty_database_successful() = runBlockingTest {
+        noteDao.countOfNotes.test {
+            assertThat(expectItem()).isEqualTo(0)
 
-        val count = noteDao.countOfNotes.waitForValue
-
-        assertThat(count)
-            .isEqualTo(0)
+            cancel()
+        }
     }
 
     @Test
@@ -80,9 +79,11 @@ class NoteDaoTest {
 
         noteDao.insertNote(note)
 
-        val retrievedNote = noteDao.note(note.id).waitForValue
+        noteDao.note(note.id).test {
+            assertThat(note).isEqualTo(expectItem())
 
-        assertThat(note).isEqualTo(retrievedNote)
+            cancel()
+        }
     }
 
     @Test
@@ -93,19 +94,23 @@ class NoteDaoTest {
         noteDao.insertNote(first)
         noteDao.insertNote(second)
 
-        val count = noteDao.countOfNotes.waitForValue
-
-        assertThat(count).isEqualTo(2)
+        noteDao.countOfNotes.test {
+            assertThat(expectItem()).isEqualTo(2)
+            cancel()
+        }
 
         noteDao.deleteNote(second)
 
-        val retrievedNote = noteDao.note(first.id).waitForValue
+        noteDao.note(first.id).test {
+            assertThat(first).isEqualTo(expectItem())
 
-        assertThat(first).isEqualTo(retrievedNote)
+            cancel()
+        }
 
-        val secondCount = noteDao.countOfNotes.waitForValue
-
-        assertThat(secondCount).isEqualTo(1)
+        noteDao.countOfNotes.test {
+            assertThat(expectItem()).isEqualTo(1)
+            cancel()
+        }
     }
 
     @Test
@@ -114,19 +119,19 @@ class NoteDaoTest {
 
         noteDao.insertNote(originalNote)
 
-        val retrievedOriginalNote = noteDao.note(originalNote.id).waitForValue
-
-        assertThat(originalNote).isEqualTo(retrievedOriginalNote)
+        noteDao.note(originalNote.id).test {
+            assertThat(originalNote).isEqualTo(expectItem())
+            cancel()
+        }
 
         val updatedNote = Note(1, "Hello", "Earth!")
 
         noteDao.updateNote(updatedNote)
 
-        val retrievedUpdatedNote = noteDao.note(updatedNote.id).waitForValue
-
-        assertThat(updatedNote).isEqualTo(retrievedUpdatedNote)
-
-        assertThat(originalNote.id).isEqualTo(retrievedUpdatedNote.id)
+        noteDao.note(updatedNote.id).test {
+            assertThat(updatedNote).isEqualTo(expectItem())
+            cancel()
+        }
     }
 
     @Test
@@ -136,21 +141,28 @@ class NoteDaoTest {
         val third = Note(3, "Third Note", "test")
 
         noteDao.insertNote(first)
-        val firstCount = noteDao.countOfNotes.waitForValue
+        noteDao.countOfNotes.test {
+            assertThat(expectItem()).isEqualTo(1)
+            cancel()
+        }
 
         noteDao.insertNote(second)
-        val secondCount = noteDao.countOfNotes.waitForValue
+        noteDao.countOfNotes.test {
+            assertThat(expectItem()).isEqualTo(2)
+            cancel()
+        }
 
         noteDao.insertNote(third)
-        val thirdCount = noteDao.countOfNotes.waitForValue
+        noteDao.countOfNotes.test {
+            assertThat(expectItem()).isEqualTo(3)
+            cancel()
+        }
 
         noteDao.deleteNote(third)
-        val fourthCount = noteDao.countOfNotes.waitForValue
-
-        assertThat(firstCount).isEqualTo(1)
-        assertThat(secondCount).isEqualTo(2)
-        assertThat(thirdCount).isEqualTo(3)
-        assertThat(fourthCount).isEqualTo(2)
+        noteDao.countOfNotes.test {
+            assertThat(expectItem()).isEqualTo(2)
+            cancel()
+        }
     }
 
     @Test
@@ -163,12 +175,17 @@ class NoteDaoTest {
         noteDao.insertNote(second)
         noteDao.insertNote(third)
 
-        val firstRetrieved = noteDao.note(first.id).waitForValue
-        val secondRetrieved = noteDao.note(second.id).waitForValue
-        val thirdRetrieved = noteDao.note(third.id).waitForValue
-
-        assertThat(first).isEqualTo(firstRetrieved)
-        assertThat(second).isEqualTo(secondRetrieved)
-        assertThat(third).isEqualTo(thirdRetrieved)
+        noteDao.note(first.id).test {
+            assertThat(first).isEqualTo(expectItem())
+            cancel()
+        }
+        noteDao.note(second.id).test {
+            assertThat(second).isEqualTo(expectItem())
+            cancel()
+        }
+        noteDao.note(third.id).test {
+            assertThat(third).isEqualTo(expectItem())
+            cancel()
+        }
     }
 }
