@@ -56,9 +56,9 @@ interface NoteDao {
 
     /** Updates the selected findNote title or content */
     @Update(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun updateNote(note: Note): Int
+    suspend fun updateNote(note: Note)
 
     /** Deletes the given findNote from the database */
     @Delete
-    suspend fun deleteNote(note: Note): Int
+    suspend fun deleteNote(note: Note)
 }
