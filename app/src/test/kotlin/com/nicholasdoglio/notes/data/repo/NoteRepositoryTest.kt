@@ -24,6 +24,9 @@
 
 package com.nicholasdoglio.notes.data.repo
 
+import com.google.common.truth.Truth.assertThat
+import com.nicholasdoglio.notes.test
+import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Test
 
 class NoteRepositoryTest {
@@ -31,52 +34,37 @@ class NoteRepositoryTest {
     private val repository = NoteRepository(FakeDao())
 
     @Test
-    fun `observe number of notes - success`() {
-        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
+    fun `observe number of notes - empty`() = runBlockingTest {
+        repository.countOfNotes.test {
+            assertThat(expectItem()).isEqualTo(0)
+            cancel()
+        }
     }
 
     @Test
-    fun `observe notes -  success`() {
-        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
-    }
+    fun `observe notes -  success`() = runBlockingTest { }
 
     @Test
-    fun `find note - success`() {
-        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
-    }
+    fun `find note - success`() = runBlockingTest { }
 
     @Test
-    fun `find note -- failure`() {
-        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
-    }
+    fun `find note -- failure`() = runBlockingTest { }
 
     @Test
-    fun `upsert note - insert - success`() {
-        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
-    }
+    fun `upsert note - insert - success`() = runBlockingTest { }
 
     @Test
-    fun `upsert note - insert - failure`() {
-        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
-    }
+    fun `upsert note - insert - failure`() = runBlockingTest { }
 
     @Test
-    fun `upsert note - update - success`() {
-        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
-    }
+    fun `upsert note - update - success`() = runBlockingTest { }
 
     @Test
-    fun `upsert note - update - failure`() {
-        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
-    }
+    fun `upsert note - update - failure`() = runBlockingTest { }
 
     @Test
-    fun `delete note -  success`() {
-        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
-    }
+    fun `delete note -  success`() = runBlockingTest { }
 
     @Test
-    fun `delete note -  failure`() {
-        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
-    }
+    fun `delete note -  failure`() = runBlockingTest { }
 }

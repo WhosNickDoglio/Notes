@@ -24,58 +24,47 @@
 
 package com.nicholasdoglio.notes.data.repo
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.nicholasdoglio.notes.data.local.NoteDao
 import com.nicholasdoglio.notes.data.model.Note
+import kotlinx.coroutines.channels.ConflatedBroadcastChannel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.flowOf
 
 class FakeDao : NoteDao {
 
     private val notes: MutableList<Note> = mutableListOf()
-    private val _notes: MutableLiveData<List<Note>> = MutableLiveData(notes)
-    private val _count: MutableLiveData<Int> = MutableLiveData(notes.size)
+    private val _notes: ConflatedBroadcastChannel<List<Note>> = ConflatedBroadcastChannel(notes)
+    private val _count: ConflatedBroadcastChannel<Int> = ConflatedBroadcastChannel(notes.size)
 
-    override val observeNotes: LiveData<List<Note>> = _notes
-    override val countOfNotes: LiveData<Int> = _count
+    override val observeNotes: Flow<List<Note>> = _notes.asFlow()
+    override val countOfNotes: Flow<Int> = _count.asFlow()
 
-    override fun note(id: Long): LiveData<Note> {
-        val currentNote = notes.find { it.id == id }
-
-        return MutableLiveData(currentNote)
-    }
+    override fun note(id: Long): Flow<Note> = flowOf(notes.first { it.id == id })
 
     override suspend fun insertNote(note: Note): Long {
-        return if (notes.add(note)) {
-            _count.postValue(notes.size)
-            _notes.postValue(notes)
-            1
+        if (notes.add(note)) {
+            _count.offer(notes.size)
+            _notes.offer(notes)
+            return notes.indexOf(note).toLong()
         } else {
-            0
+            return -1L
         }
     }
 
-    // TODO do this better
-    override suspend fun updateNote(note: Note): Int {
+    override suspend fun updateNote(note: Note) {
         val oldNote = notes.find { it.id == note.id }
 
         val index = notes.indexOf(oldNote)
 
-        // update
         notes.removeAt(index)
         notes.add(index, note)
-
-        return 0
     }
 
-    override suspend fun deleteNote(note: Note): Int {
-        return if (notes.remove(note)) {
-            _count.postValue(notes.size)
-            _notes.postValue(notes)
-            0
-        } else {
-            _count.postValue(notes.size)
-            _notes.postValue(notes)
-            1
+    override suspend fun deleteNote(note: Note) {
+        if (notes.remove(note)) {
+            _count.offer(notes.size)
+            _notes.offer(notes)
         }
     }
 }
