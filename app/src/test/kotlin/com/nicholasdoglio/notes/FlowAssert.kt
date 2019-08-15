@@ -3,12 +3,10 @@ package com.nicholasdoglio.notes
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.channels.Channel.Factory.UNLIMITED
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withTimeout
 
 /**
  * Pulled from
@@ -20,7 +18,7 @@ import kotlinx.coroutines.withTimeout
 
 suspend fun <T> Flow<T>.test(timeoutMs: Long = 1000L, validate: suspend FlowAssert<T>.() -> Unit) {
     coroutineScope {
-        val events = Channel<Event<T>>(UNLIMITED)
+        val events = Channel<Event<T>>(Channel.UNLIMITED)
         val collectJob = launch {
             val terminalEvent = try {
                 collect { item ->
@@ -70,7 +68,7 @@ class FlowAssert<T> internal constructor(
         return if (timeoutMs == 0L) {
             body()
         } else {
-            withTimeout(timeoutMs) {
+            kotlinx.coroutines.withTimeout(timeoutMs) {
                 body()
             }
         }
