@@ -29,8 +29,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import com.nicholasdoglio.notes.data.local.AboutDataStore
 import com.nicholasdoglio.notes.data.model.AboutItem
-import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
+import kotlinx.coroutines.flow.collect
 
 class AboutViewModel @Inject constructor(aboutDataStore: AboutDataStore) : ViewModel() {
 

@@ -27,9 +27,9 @@ package com.nicholasdoglio.notes.data.local
 import com.nicholasdoglio.notes.R
 import com.nicholasdoglio.notes.data.model.AboutAction
 import com.nicholasdoglio.notes.data.model.AboutItem
+import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
-import javax.inject.Inject
 
 class AboutDataStore @Inject constructor() {
 
