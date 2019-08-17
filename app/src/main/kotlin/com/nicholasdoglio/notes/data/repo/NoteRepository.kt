@@ -35,7 +35,7 @@ class NoteRepository @Inject constructor(private val dao: NoteDao) {
 
     val observeNotes: Flow<List<Note>> = dao.observeNotes
 
-    fun findNote(id: Long): Flow<Note> = dao.note(id)
+    fun findNoteById(id: Long): Flow<Note> = dao.note(id)
 
     suspend fun upsert(note: Note) {
         val success = dao.insertNote(note)
