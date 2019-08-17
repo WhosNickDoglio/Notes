@@ -27,10 +27,8 @@ package com.nicholasdoglio.notes.data.repo
 import com.nicholasdoglio.notes.data.local.NoteDao
 import com.nicholasdoglio.notes.data.model.Note
 import javax.inject.Inject
-import javax.inject.Singleton
 import kotlinx.coroutines.flow.Flow
 
-@Singleton
 class NoteRepository @Inject constructor(private val dao: NoteDao) {
 
     val countOfNotes: Flow<Int> = dao.countOfNotes
