@@ -46,19 +46,19 @@ interface NoteDao {
     @get:Query("SELECT count(*) FROM Note")
     val countOfNotes: Flow<Int>
 
-    /** Returns the selected findNote from the database */
+    /** Returns the selected note from the database */
     @Query("SELECT * From Note WHERE id = :id")
     fun note(id: Long): Flow<Note>
 
-    /** Takes a given findNote from the user and enters it into the database */
+    /** Takes a given note from the user and enters it into the database */
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertNote(note: Note): Long
 
-    /** Updates the selected findNote title or content */
+    /** Updates the selected note title or content */
     @Update(onConflict = OnConflictStrategy.IGNORE)
     suspend fun updateNote(note: Note)
 
-    /** Deletes the given findNote from the database */
+    /** Deletes the given note from the database */
     @Delete
     suspend fun deleteNote(note: Note)
 }

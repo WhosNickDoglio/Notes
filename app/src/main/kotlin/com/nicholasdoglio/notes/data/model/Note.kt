@@ -31,8 +31,8 @@ import androidx.room.PrimaryKey
 
 /**
  *  @param id: primary key used to identify notes
- *  @param title: The title or headline of the findNote
- *  @param contents: the body of the findNote
+ *  @param title: The title or headline of the Note
+ *  @param contents: the body of the Note
  */
 @Entity
 data class Note(
