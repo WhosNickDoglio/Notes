@@ -40,7 +40,11 @@ class FakeDao : NoteDao {
     override val observeNotes: Flow<List<Note>> = _notes.asFlow()
     override val countOfNotes: Flow<Int> = _count.asFlow()
 
-    override fun note(id: Long): Flow<Note> = flowOf(notes.first { it.id == id })
+    override fun note(id: Long): Flow<Note?> {
+        val note = notes.find { it.id == id }
+
+        return flowOf(note)
+    }
 
     override suspend fun insertNote(note: Note): Long {
         if (notes.add(note)) {

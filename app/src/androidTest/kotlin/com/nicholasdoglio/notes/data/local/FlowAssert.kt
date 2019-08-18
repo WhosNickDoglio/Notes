@@ -1,4 +1,4 @@
-package com.nicholasdoglio.notes
+package com.nicholasdoglio.notes.data.local
 
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job

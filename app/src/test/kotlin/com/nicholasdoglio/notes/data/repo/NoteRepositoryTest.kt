@@ -25,6 +25,8 @@
 package com.nicholasdoglio.notes.data.repo
 
 import com.google.common.truth.Truth.assertThat
+import com.nicholasdoglio.notes.TestData
+import com.nicholasdoglio.notes.data.model.Note
 import com.nicholasdoglio.notes.test
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Test
@@ -34,24 +36,90 @@ class NoteRepositoryTest {
     private val repository = NoteRepository(FakeDao())
 
     @Test
-    fun `observe number of notes - empty`() = runBlockingTest {
+    fun `observe number of notes - success`() = runBlockingTest {
         repository.countOfNotes.test {
             assertThat(expectItem()).isEqualTo(0)
+            cancel()
+        }
+
+        repository.upsert(TestData.firstNote)
+
+        repository.countOfNotes.test {
+            assertThat(expectItem()).isEqualTo(1)
             cancel()
         }
     }
 
     @Test
-    fun `observe notes -  success`() = runBlockingTest { }
+    fun `observe notes -  success`() = runBlockingTest {
+        repository.observeNotes.test {
+            assertThat(expectItem()).isEqualTo(emptyList<Note>())
+            cancel()
+        }
+
+        repository.upsert(TestData.firstNote)
+
+        repository.observeNotes.test {
+            assertThat(expectItem()).isEqualTo(listOf(TestData.firstNote))
+            cancel()
+        }
+    }
 
     @Test
-    fun `find note - success`() = runBlockingTest { }
+    fun `find note - success`() = runBlockingTest {
+        TestData.someNotes.forEach {
+            repository.upsert(it)
+        }
+
+        repository.findNoteById(TestData.firstNote.id).test {
+            assertThat(expectItem()).isEqualTo(TestData.firstNote)
+            expectComplete()
+            cancel()
+        }
+
+        repository.findNoteById(TestData.secondNote.id).test {
+            assertThat(expectItem()).isEqualTo(TestData.secondNote)
+            expectComplete()
+            cancel()
+        }
+
+        repository.findNoteById(TestData.thirdNote.id).test {
+            assertThat(expectItem()).isEqualTo(TestData.thirdNote)
+            expectComplete()
+            cancel()
+        }
+    }
 
     @Test
-    fun `find note -- failure`() = runBlockingTest { }
+    fun `find note -- failure`() = runBlockingTest {
+        repository.findNoteById(TestData.thirdNote.id).test {
+            assertThat(expectItem()).isEqualTo(null)
+            expectComplete()
+            cancel()
+        }
+    }
 
     @Test
-    fun `upsert note - insert - success`() = runBlockingTest { }
+    fun `upsert note - insert - success`() = runBlockingTest {
+        val note = Note(5, "Hello World", "Testing upsert success")
+        repository.upsert(note)
+
+        repository.observeNotes.test {
+            assertThat(expectItem()).isEqualTo(listOf(note))
+            cancel()
+        }
+
+        repository.countOfNotes.test {
+            assertThat(expectItem()).isEqualTo(1)
+            cancel()
+        }
+
+        repository.findNoteById(note.id).test {
+            assertThat(expectItem()).isEqualTo(note)
+            expectComplete()
+            cancel()
+        }
+    }
 
     @Test
     fun `upsert note - insert - failure`() = runBlockingTest { }

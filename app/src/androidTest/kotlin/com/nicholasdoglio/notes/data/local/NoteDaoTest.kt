@@ -30,7 +30,6 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
 import com.nicholasdoglio.notes.data.model.Note
-import com.nicholasdoglio.notes.test
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.After
 import org.junit.Before
@@ -185,6 +184,14 @@ class NoteDaoTest {
         }
         noteDao.note(third.id).test {
             assertThat(third).isEqualTo(expectItem())
+            cancel()
+        }
+    }
+
+    @Test
+    fun return_note_failure() = runBlockingTest {
+        noteDao.note(10).test {
+            assertThat(expectItem()).isEqualTo(null)
             cancel()
         }
     }

@@ -48,7 +48,7 @@ interface NoteDao {
 
     /** Returns the selected note from the database */
     @Query("SELECT * From Note WHERE id = :id")
-    fun note(id: Long): Flow<Note>
+    fun note(id: Long): Flow<Note?>
 
     /** Takes a given note from the user and enters it into the database */
     @Insert(onConflict = OnConflictStrategy.IGNORE)
