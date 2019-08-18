@@ -76,15 +76,6 @@ allprojects {
             freeCompilerArgs += "-Xuse-experimental=kotlinx.coroutines.FlowPreview"
         }
     }
-
-    if (project.hasProperty('kapt')) {
-        kapt {
-            javacOptions {
-                option("-source", "8")
-                option("-target", "8")
-            }
-        }
-    }
 }
 
 task clean(type: Delete) {

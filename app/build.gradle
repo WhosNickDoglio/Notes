@@ -30,7 +30,7 @@ apply plugin: "androidx.navigation.safeargs.kotlin"
 apply plugin: 'io.gitlab.arturbosch.detekt'
 apply plugin: 'jacoco-android'
 apply plugin: 'com.jaredsburrows.license'
-apply plugin: 'com.soundcloud.delect'
+//apply plugin: 'com.soundcloud.delect'
 apply from: "../ktlint.gradle"
 
 androidExtensions {
@@ -39,6 +39,10 @@ androidExtensions {
 
 kapt {
     useBuildCache = true
+    javacOptions {
+        option("-source", "8")
+        option("-target", "8")
+    }
 }
 
 android {
