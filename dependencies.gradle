@@ -30,7 +30,7 @@ ext {
             versionName: "1.1.1"
     ]
     versions = [
-            agp           : '3.4.2',
+            agp           : '3.5.0',
             jacoco_android: '0.1.4',
             license       : '0.8.5',
             kotlin        : '1.3.41',
