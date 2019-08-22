@@ -28,7 +28,7 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.nicholasdoglio.notes.data.model.Note
 
-@Database(entities = [(Note::class)], version = 2, exportSchema = true)
+@Database(entities = [(Note::class)], version = 2, exportSchema = false)
 abstract class NoteDatabase : RoomDatabase() {
     abstract val noteDao: NoteDao
 }

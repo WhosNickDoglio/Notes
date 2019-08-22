@@ -38,11 +38,20 @@ androidExtensions {
 }
 
 kapt {
+    correctErrorTypes = true
     useBuildCache = true
     javacOptions {
         option("-source", "8")
         option("-target", "8")
     }
+}
+
+jacoco {
+    toolVersion = "0.8.4"
+}
+
+tasks.withType(Test) {
+    jacoco.includeNoLocationClasses = true
 }
 
 android {

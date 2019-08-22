@@ -64,14 +64,12 @@ allprojects {
         }
     }
 
-
     // TODO figure a better time to run this
 //    tasks.matching { task -> task.name.startsWith('assemble') }
 //            .all { task -> task.finalizedBy quality  }
 
     tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
         kotlinOptions {
-            // Enable experimental coroutines APIs, including Flow
             freeCompilerArgs += "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi"
             freeCompilerArgs += "-Xuse-experimental=kotlinx.coroutines.FlowPreview"
         }
