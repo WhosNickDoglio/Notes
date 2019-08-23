@@ -35,6 +35,8 @@ class NoteRepositoryTest {
 
     private val repository = NoteRepository(FakeDao())
 
+    // TODO better naming
+
     @Test
     fun `observe number of notes - success`() = runBlockingTest {
         repository.countOfNotes.test {
@@ -99,7 +101,7 @@ class NoteRepositoryTest {
         }
     }
 
-    @Test
+    @Test // TODO think about failure case?
     fun `upsert note - insert - success`() = runBlockingTest {
         val note = Note(5, "Hello World", "Testing upsert success")
         repository.upsert(note)
@@ -121,18 +123,23 @@ class NoteRepositoryTest {
         }
     }
 
-    @Test
-    fun `upsert note - insert - failure`() = runBlockingTest { }
-
-    @Test
+    @Test // TODO think about failure case?
     fun `upsert note - update - success`() = runBlockingTest { }
 
-    @Test
-    fun `upsert note - update - failure`() = runBlockingTest { }
+    @Test // TODO think about failure case?
+    fun `delete note -  success`() = runBlockingTest {
+        repository.upsert(TestData.firstNote)
 
-    @Test
-    fun `delete note -  success`() = runBlockingTest { }
+        repository.countOfNotes.test {
+            assertThat(expectItem()).isEqualTo(1)
+            cancel()
+        }
 
-    @Test
-    fun `delete note -  failure`() = runBlockingTest { }
+        repository.delete(TestData.firstNote)
+
+        repository.countOfNotes.test {
+            assertThat(expectItem()).isEqualTo(0)
+            cancel()
+        }
+    }
 }
