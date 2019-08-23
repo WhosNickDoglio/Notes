@@ -22,25 +22,10 @@
  * SOFTWARE.
  */
 
-configurations {
-    ktlint
+plugins {
+    `kotlin-dsl`
 }
 
-dependencies {
-    ktlint Libs.ktlint
-}
-
-task ktlint(type: JavaExec, group: "verification") {
-    description = "Check Kotlin code style."
-    classpath = configurations.ktlint
-    main = "com.pinterest.ktlint.Main"
-    args "src/**/*.kt"
-}
-check.dependsOn ktlint
-
-task ktlintFormat(type: JavaExec, group: "formatting") {
-    description = "Fix Kotlin code style deviations."
-    classpath = configurations.ktlint
-    main = "com.pinterest.ktlint.Main"
-    args "-F", "src/**/*.kt"
+repositories {
+    jcenter()
 }

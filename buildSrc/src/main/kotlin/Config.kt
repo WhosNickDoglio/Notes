@@ -22,25 +22,10 @@
  * SOFTWARE.
  */
 
-configurations {
-    ktlint
-}
-
-dependencies {
-    ktlint Libs.ktlint
-}
-
-task ktlint(type: JavaExec, group: "verification") {
-    description = "Check Kotlin code style."
-    classpath = configurations.ktlint
-    main = "com.pinterest.ktlint.Main"
-    args "src/**/*.kt"
-}
-check.dependsOn ktlint
-
-task ktlintFormat(type: JavaExec, group: "formatting") {
-    description = "Fix Kotlin code style deviations."
-    classpath = configurations.ktlint
-    main = "com.pinterest.ktlint.Main"
-    args "-F", "src/**/*.kt"
+object Config {
+    const val compileSdk = 29
+    const val targetSdk = 29
+    const val minSdk = 21
+    const val versionCode = 5
+    const val versionName = "1.1.1"
 }

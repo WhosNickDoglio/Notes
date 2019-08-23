@@ -55,13 +55,13 @@ tasks.withType(Test) {
 }
 
 android {
-    compileSdkVersion app.compileSdk
+    compileSdkVersion Config.compileSdk
     defaultConfig {
         applicationId "com.nicholasdoglio.notes"
-        minSdkVersion app.minSdk
-        targetSdkVersion app.targetSdk
-        versionCode app.versionCode
-        versionName app.versionName
+        minSdkVersion Config.minSdk
+        targetSdkVersion Config.targetSdk
+        versionCode Config.versionCode
+        versionName Config.versionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         javaCompileOptions {
             annotationProcessorOptions {
@@ -99,50 +99,49 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation libs.kotlin
-    implementation libs.coroutines_core
-    implementation libs.coroutines_android
+    implementation Libs.kotlin_stdlib_jdk8
+    implementation Libs.kotlinx_coroutines_core
+    implementation Libs.kotlinx_coroutines_android
 
-    implementation libs.activity
-    implementation libs.appcompat
-    implementation libs.recyclerview
-    implementation libs.cardview
-    implementation libs.material
-    implementation libs.constraint
-    implementation libs.lifecycle_viewmodel
-    implementation libs.lifecycle_runtime
-    implementation libs.lifecycle_livedata
-    implementation libs.lifecycle_commons
-    implementation libs.navigation_fragment
-    implementation libs.navigation_ui
-    implementation libs.fragment_ktx
-    implementation libs.core_ktx
+    implementation Libs.activity_ktx
+    implementation Libs.appcompat
+    implementation Libs.recyclerview
+    implementation Libs.cardview
+    implementation Libs.material
+    implementation Libs.constraintlayout
+    implementation Libs.lifecycle_viewmodel_ktx
+    implementation Libs.lifecycle_runtime_ktx
+    implementation Libs.lifecycle_livedata_ktx
+    implementation Libs.lifecycle_common_java8
+    implementation Libs.navigation_fragment_ktx
+    implementation Libs.navigation_ui_ktx
+    implementation Libs.fragment_ktx
+    implementation Libs.core_ktx
 
-    implementation libs.room_runtime
-    implementation libs.room_ktx
-    kapt libs.room_compiler
+    implementation Libs.room_runtime
+    implementation Libs.room_ktx
+    kapt Libs.room_compiler
 
-    implementation libs.dagger
-    kapt libs.dagger_compiler
+    implementation Libs.dagger
+    kapt Libs.dagger_compiler
 
-    implementation libs.timber
-    debugImplementation libs.canary
+    implementation Libs.timber
+    debugImplementation Libs.leakcanary_android
 
-    testImplementation libs.junit
-    testImplementation libs.coroutines_test
-    testImplementation libs.truth
-    testImplementation libs.mockk
-//    testImplementation libs.robolectric TODO not androidx yet
+    testImplementation Libs.junit_junit
+    testImplementation Libs.kotlinx_coroutines_test
+    testImplementation Libs.com_google_truth_truth
+    testImplementation Libs.mockk
 
-    androidTestImplementation libs.mockk_android
-    androidTestImplementation libs.coroutines_test
-    androidTestImplementation libs.truth
-    androidTestImplementation libs.lifecycle_test
-    androidTestImplementation libs.room_testing
-    androidTestImplementation libs.androidx_test_core
-    androidTestImplementation libs.androidx_test_junit
-    androidTestImplementation libs.androidx_test_truth
-    androidTestImplementation libs.androidx_test_runner
-    androidTestImplementation libs.androidx_test_rules
-    androidTestImplementation libs.espresso_core
+    androidTestImplementation Libs.mockk_android
+    androidTestImplementation Libs.kotlinx_coroutines_test
+    androidTestImplementation Libs.com_google_truth_truth
+    androidTestImplementation Libs.core_testing
+    androidTestImplementation Libs.room_testing
+    androidTestImplementation Libs.androidx_test_core
+    androidTestImplementation Libs.androidx_test_ext_junit
+    androidTestImplementation Libs.androidx_test_ext_truth
+    androidTestImplementation Libs.androidx_test_runner
+    androidTestImplementation Libs.androidx_test_rules
+    androidTestImplementation Libs.espresso_core
 }
