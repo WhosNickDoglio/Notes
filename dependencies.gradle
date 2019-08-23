@@ -45,7 +45,7 @@ ext {
             room          : '2.2.0-beta01',
             dagger        : '2.24',
             timber        : '4.7.1',
-            canary        : '2.0-beta-2',
+            canary        : '2.0-beta-3',
             junit         : '4.12',
             test_junit    : '1.1.2-alpha02',
             test_truth    : '1.3.0-alpha02',
