@@ -71,7 +71,7 @@ object Versions {
 
     const val delect_plugin: String = "0.1.0"
 
-    const val leakcanary_android: String = "2.0-beta-2"
+    const val leakcanary_android: String = "2.0-beta-3"
 
     const val de_fayard_buildsrcversions_gradle_plugin: String = "0.4.2"
 
