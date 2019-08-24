@@ -24,21 +24,22 @@
 
 package com.nicholasdoglio.notes.ui.note
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.distinctUntilChanged
+import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.nicholasdoglio.notes.data.model.Note
 import com.nicholasdoglio.notes.data.repo.NoteRepository
-import javax.inject.Inject
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.launch
-import timber.log.Timber
+import javax.inject.Inject
 
 class NoteViewModel @Inject constructor(private val noteRepository: NoteRepository) : ViewModel() {
-    // TODO think about some warning if Note is empty from here?
 
     init {
         findNoteById()
@@ -46,23 +47,23 @@ class NoteViewModel @Inject constructor(private val noteRepository: NoteReposito
         delete()
     }
 
-    val inputNoteId: ConflatedBroadcastChannel<Long> = ConflatedBroadcastChannel()
-
     val triggerUpsert: ConflatedBroadcastChannel<Unit> = ConflatedBroadcastChannel()
 
     val triggerDelete: ConflatedBroadcastChannel<Unit> = ConflatedBroadcastChannel()
 
     val note: MutableLiveData<Note> = MutableLiveData()
 
+    val inputNoteId: ConflatedBroadcastChannel<Long> = ConflatedBroadcastChannel()
+
+    // TODO think about some warning if Note is empty from here?
+    val isNoteEmpty: LiveData<Boolean> =
+        note.map { it.title.isBlank() && it.contents.isBlank() }.distinctUntilChanged()
+
     private fun findNoteById() {
         viewModelScope.launch {
             inputNoteId.asFlow()
                 .flatMapConcat { noteRepository.findNoteById(it) }
-                .collect {
-                    note.value = it
-                    Timber.d("LIVE DATA VALUE ${note.value}")
-                    Timber.d("INPUT NOTE ID TRIGGERED")
-                }
+                .collect { note.value = it }
         }
     }
 
@@ -71,8 +72,6 @@ class NoteViewModel @Inject constructor(private val noteRepository: NoteReposito
             triggerUpsert.asFlow()
                 .collect {
                     val currentNote = note.value
-                        Timber.d("LIVE DATA VALUE ${note.value}")
-                        Timber.d(" UPSERT TRIGGERED")
 
                     if (currentNote != null) {
                         noteRepository.upsert(currentNote)
@@ -86,9 +85,8 @@ class NoteViewModel @Inject constructor(private val noteRepository: NoteReposito
             triggerDelete.asFlow()
                 .collect {
                     val currentNote = note.value
-                        Timber.d("LIVE DATA VALUE ${note.value}")
-                        Timber.d("DELETE NOTE TRIGGERED TRIGGERED")
 
+                    // TODO check if ID is above -1 here?
                     if (currentNote != null) {
                         noteRepository.delete(currentNote)
                     }
@@ -96,13 +94,3 @@ class NoteViewModel @Inject constructor(private val noteRepository: NoteReposito
         }
     }
 }
-
-// TODO I think this can be simplified and moved here instead of in the Fragment
-//        Observable.combineLatest(
-//            noteTitle.textChanges().map { it.isNotEmpty() },
-//            noteContent.textChanges().map { it.isNotEmpty() },
-//            BiFunction<Boolean, Boolean, Boolean> { firstBool, secondBool -> firstBool && secondBool })
-//            .distinctUntilChanged()
-//            .autoDisposable(viewLifecycleOwner)
-//            .subscribe { buttonsRelay.accept(it) }
-//

@@ -81,8 +81,10 @@ class NoteViewModelTest {
 
             viewModel.triggerUpsert.offer(Unit)
 
-            repository.findNoteById(newNote.id).test {
+            repository.findNoteById(TestData.firstNote.id).test {
                 assertThat(expectItem()).isEqualTo(newNote)
+                expectComplete()
+                cancel()
             }
         }
 
@@ -95,6 +97,8 @@ class NoteViewModelTest {
 
             repository.findNoteById(TestData.firstNote.id).test {
                 assertThat(expectItem()).isEqualTo(null)
+                expectComplete()
+                cancel()
             }
         }
 }
