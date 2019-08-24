@@ -131,6 +131,7 @@ dependencies {
     testImplementation Libs.junit_junit
     testImplementation Libs.kotlinx_coroutines_test
     testImplementation Libs.com_google_truth_truth
+    testImplementation Libs.core_testing
     testImplementation Libs.mockk
 
     androidTestImplementation Libs.mockk_android

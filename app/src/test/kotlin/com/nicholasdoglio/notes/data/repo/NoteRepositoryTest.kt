@@ -103,7 +103,7 @@ class NoteRepositoryTest {
 
     @Test // TODO think about failure case?
     fun `upsert note - insert - success`() = runBlockingTest {
-        val note = Note(5, "Hello World", "Testing upsert success")
+        val note = Note(5, "Hello World", "Testing triggerUpsert success")
         repository.upsert(note)
 
         repository.observeNotes.test {
