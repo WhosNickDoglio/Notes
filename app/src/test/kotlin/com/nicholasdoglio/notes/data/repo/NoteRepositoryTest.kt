@@ -38,34 +38,44 @@ class NoteRepositoryTest {
     // TODO better naming
 
     @Test
-    fun `observe number of notes - success`() = runBlockingTest {
-        repository.countOfNotes.test {
-            assertThat(expectItem()).isEqualTo(0)
-            cancel()
+    fun `given repository is empty when observing number of  notes then return zero`() =
+        runBlockingTest {
+            repository.countOfNotes.test {
+                assertThat(expectItem()).isEqualTo(0)
+                cancel()
+            }
         }
-
-        repository.upsert(TestData.firstNote)
-
-        repository.countOfNotes.test {
-            assertThat(expectItem()).isEqualTo(1)
-            cancel()
-        }
-    }
 
     @Test
-    fun `observe notes -  success`() = runBlockingTest {
-        repository.observeNotes.test {
-            assertThat(expectItem()).isEqualTo(emptyList<Note>())
-            cancel()
+    fun `given a note is inserted when observing the number of notes then return one`() =
+        runBlockingTest {
+            repository.upsert(TestData.firstNote)
+
+            repository.countOfNotes.test {
+                assertThat(expectItem()).isEqualTo(1)
+                cancel()
+            }
         }
 
-        repository.upsert(TestData.firstNote)
-
-        repository.observeNotes.test {
-            assertThat(expectItem()).isEqualTo(listOf(TestData.firstNote))
-            cancel()
+    @Test
+    fun `given repository is empty when observing notes then return empty list`() =
+        runBlockingTest {
+            repository.observeNotes.test {
+                assertThat(expectItem()).isEqualTo(emptyList<Note>())
+                cancel()
+            }
         }
-    }
+
+    @Test
+    fun `given a note is inserted when observing notes then return a list of one note`() =
+        runBlockingTest {
+            repository.upsert(TestData.firstNote)
+
+            repository.observeNotes.test {
+                assertThat(expectItem()).isEqualTo(listOf(TestData.firstNote))
+                cancel()
+            }
+        }
 
     @Test
     fun `find note - success`() = runBlockingTest {
@@ -93,13 +103,14 @@ class NoteRepositoryTest {
     }
 
     @Test
-    fun `find note -- failure`() = runBlockingTest {
-        repository.findNoteById(TestData.thirdNote.id).test {
-            assertThat(expectItem()).isEqualTo(null)
-            expectComplete()
-            cancel()
+    fun `given a note ID that doesn't exist in the repository when finding a note then return null`() =
+        runBlockingTest {
+            repository.findNoteById(TestData.thirdNote.id).test {
+                assertThat(expectItem()).isEqualTo(null)
+                expectComplete()
+                cancel()
+            }
         }
-    }
 
     @Test // TODO think about failure case?
     fun `upsert note - insert - success`() = runBlockingTest {
