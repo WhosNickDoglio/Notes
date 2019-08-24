@@ -22,22 +22,30 @@
   ~ SOFTWARE.
   -->
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <!--TODO improve this layout-->
-    <data>
-
-        <variable
-            name="viewModel"
-            type="com.nicholasdoglio.notes.ui.note.NoteViewModel"/>
-
-    </data>
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context="com.nicholasdoglio.notes.ui.note.NoteFragment">
+
+        <Button
+            android:id="@+id/deleteButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="DELETE"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/rightGuide" />
+
+        <Button
+            android:id="@+id/upsertButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SAVE"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/leftGuide" />
 
         <EditText
             android:id="@+id/noteTitle"
@@ -45,10 +53,9 @@
             android:layout_height="wrap_content"
             android:hint="@string/title_hint"
             android:inputType="textCapSentences"
-            android:text="@={viewModel.title}"
             app:layout_constraintEnd_toStartOf="@+id/rightGuide"
             app:layout_constraintStart_toStartOf="@+id/leftGuide"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ScrollView
             android:id="@+id/noteContentScroll"
@@ -68,8 +75,7 @@
                 android:backgroundTint="@android:color/transparent"
                 android:hint="@string/note_hint"
                 android:inputType="textMultiLine|textCapSentences"
-                android:singleLine="false"
-                android:text="@={viewModel.contents}"/>
+                android:singleLine="false" />
 
         </ScrollView>
 
@@ -80,7 +86,7 @@
             android:layout_marginStart="16dp"
             android:orientation="vertical"
             app:layout_constraintGuide_begin="16dp"
-            app:layout_constraintStart_toStartOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/rightGuide"
@@ -89,7 +95,11 @@
             android:layout_marginEnd="16dp"
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintGuide_end="16dp"/>
+            app:layout_constraintGuide_end="16dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <data>
+
+    </data>
 </layout>

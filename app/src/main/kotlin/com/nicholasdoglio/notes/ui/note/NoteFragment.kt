@@ -26,30 +26,27 @@ package com.nicholasdoglio.notes.ui.note
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.activity.addCallback
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.nicholasdoglio.notes.R
 import com.nicholasdoglio.notes.databinding.FragmentNoteBinding
 import com.nicholasdoglio.notes.di.injector
 import com.nicholasdoglio.notes.util.hideKeyboard
+import com.nicholasdoglio.notes.util.textEditable
 import kotlinx.android.synthetic.main.fragment_note.*
+import kotlinx.coroutines.launch
 
 class NoteFragment : Fragment() {
 
     private val args: NoteFragmentArgs by navArgs()
-    private val viewModel by viewModels<NoteViewModel> {
+    private val viewModel: NoteViewModel by viewModels {
         requireActivity().injector.viewModelFactory
     }
 
@@ -64,7 +61,6 @@ class NoteFragment : Fragment() {
         val view = binding.root
 
         binding.apply {
-            viewModel = viewModel
             lifecycleOwner = viewLifecycleOwner
         }
 
@@ -74,75 +70,37 @@ class NoteFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner) { doBack() }
+        // activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner) { TODO() }
 
-        (activity as AppCompatActivity).supportActionBar?.apply {
-            setDisplayShowTitleEnabled(false)
-            setHasOptionsMenu(true)
-            title = ""
+        // TODO I don't think I'll show a toolbar here, just want home arrow
+        // (activity as AppCompatActivity).supportActionBar?.apply {
+        //     setDisplayShowTitleEnabled(false)
+        //     setHasOptionsMenu(true)
+        //     title = ""
+        // }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.inputNoteId.offer(args.noteId)
         }
 
-//        viewModel.start(args.noteId)
-//            .subscribeOn(appSchedulers.database)
-//            .observeOn(appSchedulers.main)
-//            .autoDisposable(viewLifecycleOwner)
-//            .subscribe { findNote ->
-//                viewModel.findNote.accept(findNote)
-//                noteTitle.setEditableText(findNote.title)
-//                noteContent.setEditableText(findNote.contents)
-//            }
-//
-//        Observable.combineLatest(
-//            noteTitle.textChanges().map { it.isNotEmpty() },
-//            noteContent.textChanges().map { it.isNotEmpty() },
-//            BiFunction<Boolean, Boolean, Boolean> { firstBool, secondBool -> firstBool && secondBool })
-//            .distinctUntilChanged()
-//            .autoDisposable(viewLifecycleOwner)
-//            .subscribe { buttonsRelay.accept(it) }
-//
-//        noteTitle.textChanges()
-//            .autoDisposable(viewLifecycleOwner)
-//            .subscribe { viewModel.title.accept(it.toString()) }
-//
-//        noteContent.textChanges()
-//            .autoDisposable(viewLifecycleOwner)
-//            .subscribe { viewModel.contents.accept(it.toString()) }
-//
-//        viewModel.delete
-//            .subscribeOn(appSchedulers.database)
-//            .observeOn(appSchedulers.main)
-//            .autoDisposable(viewLifecycleOwner)
-//            .subscribe { returnToList() }
-//
-//        viewModel.insertNote
-//            .subscribeOn(appSchedulers.database)
-//            .observeOn(appSchedulers.main)
-//            .autoDisposable(viewLifecycleOwner)
-//            .subscribe { returnToList() }
-    }
+        viewModel.note.observe(viewLifecycleOwner, Observer {
+            if (it != null) {
+                noteTitle.textEditable = it.title
+                noteContent.textEditable = it.contents
+            }
+        })
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.note_menu, menu)
-    }
+        deleteButton.setOnClickListener {
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewModel.triggerDelete.offer(Unit)
+                // TODO on unsaved notes remember to just go back to list here
+            }
+        }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
-        R.id.save_item -> showAction(NoteAction.SAVE)
-        R.id.delete_item -> showAction(NoteAction.DELETE)
-        else -> super.onOptionsItemSelected(item)
-    }
-
-    private fun doBack() {
-        // TODO move this to own fragment
-        if (noteTitle.text.toString().isNotEmpty() && noteContent.text.toString().isNotEmpty()) {
-            MaterialAlertDialogBuilder(requireContext())
-                .setMessage(R.string.discard_warning)
-                .setPositiveButton(R.string.save_button) { _, _ -> saveNote() }
-                .setNegativeButton(R.string.discard_button) { _, _ -> deleteNote() }
-                .create()
-                .show()
-        } else {
-            findNavController().popBackStack()
+        upsertButton.setOnClickListener {
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewModel.triggerUpsert.offer(Unit)
+            }
         }
     }
 
@@ -150,33 +108,5 @@ class NoteFragment : Fragment() {
         findNavController()
             .popBackStack()
             .also { requireActivity().hideKeyboard() }
-    }
-
-    private fun showAction(action: NoteAction): Boolean {
-//        val enabled = buttonsRelay.value ?: false
-
-        if (true) {
-            when (action) {
-                NoteAction.SAVE -> saveNote()
-                NoteAction.DELETE -> deleteNote()
-            }
-
-            return true
-        } else {
-            Toast.makeText(context, R.string.empty_note_toast, Toast.LENGTH_SHORT).show()
-            return true
-        }
-    }
-
-    private fun saveNote() {
-//        viewModel.saveTrigger.accept(Unit)
-    }
-
-    private fun deleteNote() {
-        if (args.noteId.toInt() == -1) {
-            returnToList()
-        } else {
-//            viewModel.deleteTrigger.accept(Unit)
-        }
     }
 }
