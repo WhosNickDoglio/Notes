@@ -36,7 +36,7 @@ import kotlinx.coroutines.launch
 
 class DiscardFragment : DialogFragment() {
 
-    private val viewModel by viewModels<NoteViewModel> {
+    private val viewModel: NoteViewModel by viewModels {
         requireActivity().injector.viewModelFactory
     }
 
@@ -49,13 +49,13 @@ class DiscardFragment : DialogFragment() {
 
     private fun upsert() {
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.upsertTrigger.offer(Unit)
+            viewModel.triggerUpsert.offer(Unit)
         }
     }
 
     private fun delete() {
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.deleteTrigger.offer(Unit)
+            viewModel.triggerDelete.offer(Unit)
         }
     }
 }

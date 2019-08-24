@@ -35,13 +35,13 @@ class NoteViewModel @Inject constructor(private val noteRepository: NoteReposito
 
     val note: ConflatedBroadcastChannel<Note> = ConflatedBroadcastChannel()
 
-    val noteId: ConflatedBroadcastChannel<Long> = ConflatedBroadcastChannel()
+    val inputNoteId: ConflatedBroadcastChannel<Long> = ConflatedBroadcastChannel()
 
     val deleteTrigger: ConflatedBroadcastChannel<Unit> = ConflatedBroadcastChannel()
 
-    val upsertTrigger: ConflatedBroadcastChannel<Unit> = ConflatedBroadcastChannel()
+    val triggerDelete: ConflatedBroadcastChannel<Unit> = ConflatedBroadcastChannel()
 
-    val title: MutableLiveData<String> = MutableLiveData()
+    val note: MutableLiveData<Note> = MutableLiveData()
 
     val contents: MutableLiveData<String> = MutableLiveData()
 }
