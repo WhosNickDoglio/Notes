@@ -46,6 +46,7 @@ plugins {
 buildSrcVersions {
     singleFileMode = true
     rejectedVersionKeywords("")
+    indent = "    "
 }
 
 buildScan {

@@ -129,8 +129,8 @@ object Libs {
     /**
      * https://developer.android.com/testing
      */
-    const val espresso_core: String =
-        "androidx.test.espresso:espresso-core:" + Versions.espresso_core
+    const val espresso_core: String = "androidx.test.espresso:espresso-core:" +
+        Versions.espresso_core
 
     /**
      * https://developer.android.com/testing
@@ -208,8 +208,8 @@ object Libs {
 
     const val ktlint: String = "com.pinterest:ktlint:" + Versions.ktlint
 
-    const val delect_plugin: String =
-        "com.soundcloud.delect:delect-plugin:" + Versions.delect_plugin
+    const val delect_plugin: String = "com.soundcloud.delect:delect-plugin:" +
+        Versions.delect_plugin
 
     /**
      * http://github.com/square/leakcanary/
@@ -256,8 +256,7 @@ object Libs {
      * https://kotlinlang.org/
      */
     const val kotlin_android_extensions: String =
-        "org.jetbrains.kotlin:kotlin-android-extensions:" +
-            Versions.kotlin_android_extensions
+        "org.jetbrains.kotlin:kotlin-android-extensions:" + Versions.kotlin_android_extensions
 
     /**
      * https://kotlinlang.org/

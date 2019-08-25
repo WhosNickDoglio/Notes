@@ -32,19 +32,21 @@ import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.nicholasdoglio.notes.data.model.Note
 import com.nicholasdoglio.notes.data.repo.NoteRepository
+import javax.inject.Inject
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 class NoteViewModel @Inject constructor(private val noteRepository: NoteRepository) : ViewModel() {
 
     init {
-        findNoteById()
-        upsert()
-        delete()
+        viewModelScope.launch {
+            findNoteById()
+            upsert()
+            delete()
+        }
     }
 
     val triggerUpsert: ConflatedBroadcastChannel<Unit> = ConflatedBroadcastChannel()
@@ -59,38 +61,32 @@ class NoteViewModel @Inject constructor(private val noteRepository: NoteReposito
     val isNoteEmpty: LiveData<Boolean> =
         note.map { it.title.isBlank() && it.contents.isBlank() }.distinctUntilChanged()
 
-    private fun findNoteById() {
-        viewModelScope.launch {
-            inputNoteId.asFlow()
-                .flatMapConcat { noteRepository.findNoteById(it) }
-                .collect { note.value = it }
-        }
+    private suspend fun findNoteById() {
+        inputNoteId.asFlow()
+            .flatMapConcat { noteRepository.findNoteById(it) }
+            .collect { note.value = it }
     }
 
-    private fun upsert() {
-        viewModelScope.launch {
-            triggerUpsert.asFlow()
-                .collect {
-                    val currentNote = note.value
+    private suspend fun upsert() {
+        triggerUpsert.asFlow()
+            .collect {
+                val currentNote = note.value
 
-                    if (currentNote != null) {
-                        noteRepository.upsert(currentNote)
-                    }
+                if (currentNote != null) {
+                    noteRepository.upsert(currentNote)
                 }
-        }
+            }
     }
 
-    private fun delete() {
-        viewModelScope.launch {
-            triggerDelete.asFlow()
-                .collect {
-                    val currentNote = note.value
+    private suspend fun delete() {
+        triggerDelete.asFlow()
+            .collect {
+                val currentNote = note.value
 
-                    // TODO check if ID is above -1 here?
-                    if (currentNote != null) {
-                        noteRepository.delete(currentNote)
-                    }
+                // TODO check if ID is above -1 here?
+                if (currentNote != null) {
+                    noteRepository.delete(currentNote)
                 }
-        }
+            }
     }
 }
