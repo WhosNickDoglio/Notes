@@ -78,29 +78,30 @@ class NoteRepositoryTest {
         }
 
     @Test
-    fun `find note - success`() = runBlockingTest {
-        TestData.someNotes.forEach {
-            repository.upsert(it)
-        }
+    fun `given note ID exists when findNoteById is called then return the correct note`() =
+        runBlockingTest {
+            TestData.someNotes.forEach {
+                repository.upsert(it)
+            }
 
-        repository.findNoteById(TestData.firstNote.id).test {
-            assertThat(expectItem()).isEqualTo(TestData.firstNote)
-            expectComplete()
-            cancel()
-        }
+            repository.findNoteById(TestData.firstNote.id).test {
+                assertThat(expectItem()).isEqualTo(TestData.firstNote)
+                expectComplete()
+                cancel()
+            }
 
-        repository.findNoteById(TestData.secondNote.id).test {
-            assertThat(expectItem()).isEqualTo(TestData.secondNote)
-            expectComplete()
-            cancel()
-        }
+            repository.findNoteById(TestData.secondNote.id).test {
+                assertThat(expectItem()).isEqualTo(TestData.secondNote)
+                expectComplete()
+                cancel()
+            }
 
-        repository.findNoteById(TestData.thirdNote.id).test {
-            assertThat(expectItem()).isEqualTo(TestData.thirdNote)
-            expectComplete()
-            cancel()
+            repository.findNoteById(TestData.thirdNote.id).test {
+                assertThat(expectItem()).isEqualTo(TestData.thirdNote)
+                expectComplete()
+                cancel()
+            }
         }
-    }
 
     @Test
     fun `given a note ID that doesn't exist in the repository when finding a note then return null`() =
@@ -113,44 +114,60 @@ class NoteRepositoryTest {
         }
 
     @Test // TODO think about failure case?
-    fun `upsert note - insert - success`() = runBlockingTest {
-        val note = Note(5, "Hello World", "Testing triggerUpsert success")
-        repository.upsert(note)
+    fun `given a note doesn't exist when upsert is triggered then insert it into DB`() =
+        runBlockingTest {
+            val note = Note(5, "Hello World", "Testing triggerUpsert success")
+            repository.upsert(note)
 
-        repository.observeNotes.test {
-            assertThat(expectItem()).isEqualTo(listOf(note))
-            cancel()
-        }
+            repository.observeNotes.test {
+                assertThat(expectItem()).isEqualTo(listOf(note))
+                cancel()
+            }
 
-        repository.countOfNotes.test {
-            assertThat(expectItem()).isEqualTo(1)
-            cancel()
-        }
+            repository.countOfNotes.test {
+                assertThat(expectItem()).isEqualTo(1)
+                cancel()
+            }
 
-        repository.findNoteById(note.id).test {
-            assertThat(expectItem()).isEqualTo(note)
-            expectComplete()
-            cancel()
+            repository.findNoteById(note.id).test {
+                assertThat(expectItem()).isEqualTo(note)
+                expectComplete()
+                cancel()
+            }
         }
-    }
 
     @Test // TODO think about failure case?
-    fun `upsert note - update - success`() = runBlockingTest { }
+    fun `given a note exists in the DB when upsert is called then update the note in the DB`() =
+        runBlockingTest {
+            repository.upsert(TestData.firstNote)
+
+            val newNote = Note(TestData.firstNote.id, "New Note", "New Note")
+
+            repository.upsert(newNote)
+
+            repository.findNoteById(TestData.firstNote.id).test {
+                assertThat(expectItem()).isEqualTo(newNote)
+                assertThat(expectItem()).isNotEqualTo(TestData.firstNote)
+                expectComplete()
+                cancel()
+            }
+        }
 
     @Test // TODO think about failure case?
-    fun `delete note -  success`() = runBlockingTest {
-        repository.upsert(TestData.firstNote)
+    fun `given a note exists when delete is triggered then remove the note from the DB`() =
+        runBlockingTest {
+            repository.upsert(TestData.firstNote)
 
-        repository.countOfNotes.test {
-            assertThat(expectItem()).isEqualTo(1)
-            cancel()
+            repository.countOfNotes.test {
+                assertThat(expectItem()).isEqualTo(1)
+                cancel()
+            }
+
+            repository.delete(TestData.firstNote)
+
+            repository.countOfNotes.test {
+                assertThat(expectItem()).isEqualTo(0)
+                cancel()
+            }
         }
-
-        repository.delete(TestData.firstNote)
-
-        repository.countOfNotes.test {
-            assertThat(expectItem()).isEqualTo(0)
-            cancel()
-        }
-    }
 }
