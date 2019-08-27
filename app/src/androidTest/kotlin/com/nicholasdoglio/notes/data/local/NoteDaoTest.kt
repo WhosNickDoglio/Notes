@@ -63,8 +63,8 @@ class NoteDaoTest {
     }
 
     @Test
-    fun empty_database_successful() = runBlockingTest {
-        noteDao.countOfNotes.test {
+    fun give_db_is_empty_when_observing_db_then_return_zero() = runBlockingTest {
+        noteDao.observeNumOfNotes.test {
             assertThat(expectItem()).isEqualTo(0)
 
             cancel()
@@ -72,13 +72,12 @@ class NoteDaoTest {
     }
 
     @Test
-    fun save_note_successful() = runBlockingTest {
-
+    fun given_note_when_insert_note_is_called_then_save_note() = runBlockingTest {
         val note = Note(1, "Hello", "World")
 
         noteDao.insertNote(note)
 
-        noteDao.note(note.id).test {
+        noteDao.findNoteById(note.id).test {
             assertThat(note).isEqualTo(expectItem())
 
             cancel()
@@ -86,39 +85,39 @@ class NoteDaoTest {
     }
 
     @Test
-    fun delete_note_successful() = runBlockingTest {
+    fun given_note_exists_when_delete_note_is_called_then_delete_note() = runBlockingTest {
         val first = Note(1, "First Note", "test")
         val second = Note(2, "Second Note", "test")
 
         noteDao.insertNote(first)
         noteDao.insertNote(second)
 
-        noteDao.countOfNotes.test {
+        noteDao.observeNumOfNotes.test {
             assertThat(expectItem()).isEqualTo(2)
             cancel()
         }
 
         noteDao.deleteNote(second)
 
-        noteDao.note(first.id).test {
+        noteDao.findNoteById(first.id).test {
             assertThat(first).isEqualTo(expectItem())
 
             cancel()
         }
 
-        noteDao.countOfNotes.test {
+        noteDao.observeNumOfNotes.test {
             assertThat(expectItem()).isEqualTo(1)
             cancel()
         }
     }
 
     @Test
-    fun update_note_successful() = runBlockingTest {
+    fun given_note_exists_when_update_is_called_then_update_note() = runBlockingTest {
         val originalNote = Note(1, "Hello", "World!")
 
         noteDao.insertNote(originalNote)
 
-        noteDao.note(originalNote.id).test {
+        noteDao.findNoteById(originalNote.id).test {
             assertThat(originalNote).isEqualTo(expectItem())
             cancel()
         }
@@ -127,45 +126,45 @@ class NoteDaoTest {
 
         noteDao.updateNote(updatedNote)
 
-        noteDao.note(updatedNote.id).test {
+        noteDao.findNoteById(updatedNote.id).test {
             assertThat(updatedNote).isEqualTo(expectItem())
             cancel()
         }
     }
 
     @Test
-    fun number_of_notes_successful() = runBlockingTest {
+    fun given_notes_when_observing_number_of_notes_then_return_correct_number() = runBlockingTest {
         val first = Note(1, "First Note", "test")
         val second = Note(2, "Second Note", "test")
         val third = Note(3, "Third Note", "test")
 
         noteDao.insertNote(first)
-        noteDao.countOfNotes.test {
+        noteDao.observeNumOfNotes.test {
             assertThat(expectItem()).isEqualTo(1)
             cancel()
         }
 
         noteDao.insertNote(second)
-        noteDao.countOfNotes.test {
+        noteDao.observeNumOfNotes.test {
             assertThat(expectItem()).isEqualTo(2)
             cancel()
         }
 
         noteDao.insertNote(third)
-        noteDao.countOfNotes.test {
+        noteDao.observeNumOfNotes.test {
             assertThat(expectItem()).isEqualTo(3)
             cancel()
         }
 
         noteDao.deleteNote(third)
-        noteDao.countOfNotes.test {
+        noteDao.observeNumOfNotes.test {
             assertThat(expectItem()).isEqualTo(2)
             cancel()
         }
     }
 
     @Test
-    fun return_note_successful() = runBlockingTest {
+    fun given_note_id_that_exists_when_find_note_called_then_return_note() = runBlockingTest {
         val first = Note(1, "First Note", "test")
         val second = Note(2, "Second Note", "test")
         val third = Note(3, "Third Note", "test")
@@ -174,25 +173,26 @@ class NoteDaoTest {
         noteDao.insertNote(second)
         noteDao.insertNote(third)
 
-        noteDao.note(first.id).test {
+        noteDao.findNoteById(first.id).test {
             assertThat(first).isEqualTo(expectItem())
             cancel()
         }
-        noteDao.note(second.id).test {
+        noteDao.findNoteById(second.id).test {
             assertThat(second).isEqualTo(expectItem())
             cancel()
         }
-        noteDao.note(third.id).test {
+        noteDao.findNoteById(third.id).test {
             assertThat(third).isEqualTo(expectItem())
             cancel()
         }
     }
 
     @Test
-    fun return_note_failure() = runBlockingTest {
-        noteDao.note(10).test {
-            assertThat(expectItem()).isEqualTo(null)
-            cancel()
+    fun given_note_id_that_does_not_exist_when_find_note_called_then_return_null() =
+        runBlockingTest {
+            noteDao.findNoteById(10).test {
+                assertThat(expectItem()).isEqualTo(null)
+                cancel()
+            }
         }
-    }
 }

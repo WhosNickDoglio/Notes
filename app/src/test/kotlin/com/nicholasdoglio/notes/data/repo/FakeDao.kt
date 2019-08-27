@@ -38,9 +38,9 @@ class FakeDao : NoteDao {
     private val _count: ConflatedBroadcastChannel<Int> = ConflatedBroadcastChannel(notes.size)
 
     override val observeNotes: Flow<List<Note>> = _notes.asFlow()
-    override val countOfNotes: Flow<Int> = _count.asFlow()
+    override val observeNumOfNotes: Flow<Int> = _count.asFlow()
 
-    override fun note(id: Long): Flow<Note?> {
+    override fun findNoteById(id: Long): Flow<Note?> {
         val note = notes.find { it.id == id }
 
         return flowOf(note)

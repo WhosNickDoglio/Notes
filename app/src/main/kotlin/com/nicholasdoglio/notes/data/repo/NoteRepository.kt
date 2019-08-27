@@ -31,11 +31,11 @@ import kotlinx.coroutines.flow.Flow
 
 class NoteRepository @Inject constructor(private val dao: NoteDao) {
 
-    val countOfNotes: Flow<Int> = dao.countOfNotes
+    val countOfNotes: Flow<Int> = dao.observeNumOfNotes
 
     val observeNotes: Flow<List<Note>> = dao.observeNotes
 
-    fun findNoteById(id: Long): Flow<Note?> = dao.note(id)
+    fun findNoteById(id: Long): Flow<Note?> = dao.findNoteById(id)
 
     suspend fun upsert(note: Note) {
         val success = dao.insertNote(note)

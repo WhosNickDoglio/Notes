@@ -44,11 +44,11 @@ interface NoteDao {
 
     /** Gets the total number of notes in the table */
     @get:Query("SELECT count(*) FROM Note")
-    val countOfNotes: Flow<Int>
+    val observeNumOfNotes: Flow<Int>
 
     /** Returns the selected note from the database */
     @Query("SELECT * From Note WHERE id = :id")
-    fun note(id: Long): Flow<Note?>
+    fun findNoteById(id: Long): Flow<Note?>
 
     /** Takes a given note from the user and enters it into the database */
     @Insert(onConflict = OnConflictStrategy.IGNORE)
