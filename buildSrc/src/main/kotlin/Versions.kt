@@ -1,4 +1,3 @@
-import kotlin.String
 import org.gradle.plugin.use.PluginDependenciesSpec
 import org.gradle.plugin.use.PluginDependencySpec
 
@@ -113,7 +112,7 @@ object Versions {
      */
     const val gradleLatestVersion: String = "5.6"
 
-    const val gradleCurrentVersion: String = "5.6"
+    const val gradleCurrentVersion: String = "5.6.1"
 }
 
 /**
@@ -122,4 +121,4 @@ object Versions {
  */
 val PluginDependenciesSpec.buildSrcVersions: PluginDependencySpec
     inline get() =
-            id("de.fayard.buildSrcVersions").version(Versions.de_fayard_buildsrcversions_gradle_plugin)
+        id("de.fayard.buildSrcVersions").version(Versions.de_fayard_buildsrcversions_gradle_plugin)
