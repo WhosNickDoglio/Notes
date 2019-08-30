@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package com.nicholasdoglio.notes
+package com.nicholasdoglio.notes.shared
 
 import com.nicholasdoglio.notes.data.model.Note
 
@@ -33,5 +33,9 @@ object TestData {
     val secondNote = Note(2, "Second note", "This is my second note")
     val thirdNote = Note(3, "Third note", "This is my third note")
 
-    val someNotes = listOf(firstNote, secondNote, thirdNote)
+    val someNotes = listOf(
+        firstNote,
+        secondNote,
+        thirdNote
+    )
 }

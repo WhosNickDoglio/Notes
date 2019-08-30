@@ -22,27 +22,34 @@
  * SOFTWARE.
  */
 
-package com.nicholasdoglio.notes
+package com.nicholasdoglio.notes.shared
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.test.TestCoroutineDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.setMain
-import org.junit.rules.TestWatcher
-import org.junit.runner.Description
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
 
-class CoroutinesTestRule(
-    val dispatcher: TestCoroutineDispatcher = TestCoroutineDispatcher()
-) : TestWatcher() {
+/**
+ *
+ * Pulled from
+ * https://github.com/android/plaid/blob/342a28e6b5/test_shared/src/main/java/io/plaidapp/test/shared/LiveDataTestUtil.kt
+ *
+ * Safely handles observables from LiveData for testing.
+ */
 
-    override fun starting(description: Description?) {
-        super.starting(description)
-        Dispatchers.setMain(dispatcher)
+inline val <T> LiveData<T>.testValue: T?
+    get() {
+        var data: T? = null
+        val latch = CountDownLatch(1)
+        val observer = object : Observer<T> {
+            override fun onChanged(o: T?) {
+                data = o
+                latch.countDown()
+                this@testValue.removeObserver(this)
+            }
+        }
+        this@testValue.observeForever(observer)
+        latch.await(2, TimeUnit.SECONDS)
+
+        return data
     }
-
-    override fun finished(description: Description?) {
-        super.finished(description)
-        Dispatchers.resetMain()
-        dispatcher.cleanupTestCoroutines()
-    }
-}

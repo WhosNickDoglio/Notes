@@ -33,42 +33,34 @@ import kotlinx.coroutines.flow.flowOf
 
 class FakeDao : NoteDao {
 
-    private val notes: MutableList<Note> = mutableListOf()
-    private val _notes: ConflatedBroadcastChannel<List<Note>> = ConflatedBroadcastChannel(notes)
+    private val notes: MutableMap<Long, Note?> = mutableMapOf()
+    private val _notes: ConflatedBroadcastChannel<List<Note>> =
+        ConflatedBroadcastChannel(notes.map { it.value }.filterNotNull())
     private val _count: ConflatedBroadcastChannel<Int> = ConflatedBroadcastChannel(notes.size)
 
     override val observeNotes: Flow<List<Note>> = _notes.asFlow()
     override val observeNumOfNotes: Flow<Int> = _count.asFlow()
 
-    override fun findNoteById(id: Long): Flow<Note?> {
-        val note = notes.find { it.id == id }
-
-        return flowOf(note)
-    }
+    override fun findNoteById(id: Long): Flow<Note?> = flowOf(notes[id])
 
     override suspend fun insertNote(note: Note): Long {
-        if (notes.add(note)) {
-            _count.offer(notes.size)
-            _notes.offer(notes)
-            return notes.indexOf(note).toLong()
+        if (notes[note.id] == null) {
+            notes[note.id] = note
+            _count.send(notes.size)
+            _notes.send(notes.map { it.value }.filterNotNull())
+            return 0
         } else {
             return -1L
         }
     }
 
     override suspend fun updateNote(note: Note) {
-        val oldNote = notes.find { it.id == note.id }
-
-        val index = notes.indexOf(oldNote)
-
-        notes.removeAt(index)
-        notes.add(index, note)
+        notes[note.id] = note
     }
 
     override suspend fun deleteNote(note: Note) {
-        if (notes.remove(note)) {
-            _count.offer(notes.size)
-            _notes.offer(notes)
-        }
+        notes.remove(note.id)
+        _count.send(notes.size)
+        _notes.send(notes.map { it.value }.filterNotNull())
     }
 }

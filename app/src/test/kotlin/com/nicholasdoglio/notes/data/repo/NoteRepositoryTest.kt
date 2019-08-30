@@ -25,17 +25,15 @@
 package com.nicholasdoglio.notes.data.repo
 
 import com.google.common.truth.Truth.assertThat
-import com.nicholasdoglio.notes.TestData
 import com.nicholasdoglio.notes.data.model.Note
-import com.nicholasdoglio.notes.test
+import com.nicholasdoglio.notes.shared.TestData
+import com.nicholasdoglio.notes.shared.test
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Test
 
 class NoteRepositoryTest {
 
     private val repository = NoteRepository(FakeDao())
-
-    // TODO better naming
 
     @Test
     fun `given repository is empty when observing number of  notes then return zero`() =
@@ -146,8 +144,10 @@ class NoteRepositoryTest {
             repository.upsert(newNote)
 
             repository.findNoteById(TestData.firstNote.id).test {
-                assertThat(expectItem()).isEqualTo(newNote)
-                assertThat(expectItem()).isNotEqualTo(TestData.firstNote)
+                expectItem().apply {
+                    assertThat(this).isEqualTo(newNote)
+                    assertThat(this).isNotEqualTo(TestData.firstNote)
+                }
                 expectComplete()
                 cancel()
             }
