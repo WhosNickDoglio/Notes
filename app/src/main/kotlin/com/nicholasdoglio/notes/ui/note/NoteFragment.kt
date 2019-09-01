@@ -28,18 +28,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.nicholasdoglio.notes.R
-import com.nicholasdoglio.notes.databinding.FragmentNoteBinding
 import com.nicholasdoglio.notes.di.injector
 import com.nicholasdoglio.notes.util.hideKeyboard
-import com.nicholasdoglio.notes.util.textEditable
+import com.nicholasdoglio.notes.util.initDataBinding
 import kotlinx.android.synthetic.main.fragment_note.*
 import kotlinx.coroutines.launch
 
@@ -54,18 +51,7 @@ class NoteFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        val binding: FragmentNoteBinding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_note, container, false)
-
-        val view = binding.root
-
-        binding.apply {
-            lifecycleOwner = viewLifecycleOwner
-        }
-
-        return view
-    }
+    ): View? = initDataBinding(inflater, R.layout.fragment_note, container).root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -80,26 +66,26 @@ class NoteFragment : Fragment() {
         // }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.inputNoteId.offer(args.noteId)
+            viewModel.inputNoteId.send(args.noteId)
         }
 
-        viewModel.note.observe(viewLifecycleOwner, Observer {
-            if (it != null) {
-                noteTitle.textEditable = it.title
-                noteContent.textEditable = it.contents
-            }
-        })
+        // viewModel.note.observe(viewLifecycleOwner, Observer {
+        //     if (it != null) {
+        //         noteTitle.textEditable = it.title
+        //         noteContent.textEditable = it.contents
+        //     }
+        // })
 
         deleteButton.setOnClickListener {
             viewLifecycleOwner.lifecycleScope.launch {
-                viewModel.triggerDelete.offer(Unit)
+                viewModel.triggerDelete.send(Unit)
                 // TODO on unsaved notes remember to just go back to list here
             }
         }
 
         upsertButton.setOnClickListener {
             viewLifecycleOwner.lifecycleScope.launch {
-                viewModel.triggerUpsert.offer(Unit)
+                viewModel.triggerUpsert.send(Unit)
             }
         }
     }

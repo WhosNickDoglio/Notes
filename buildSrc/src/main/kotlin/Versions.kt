@@ -1,3 +1,4 @@
+import kotlin.String
 import org.gradle.plugin.use.PluginDependenciesSpec
 import org.gradle.plugin.use.PluginDependencySpec
 
@@ -23,7 +24,7 @@ object Versions {
 
     const val core_ktx: String = "1.2.0-alpha03"
 
-    const val androidx_databinding: String = "3.5.0" // available: "3.6.0-alpha07"
+    const val androidx_databinding: String = "3.5.0" // available: "3.6.0-alpha09"
 
     const val fragment_ktx: String = "1.2.0-alpha02"
 
@@ -49,9 +50,9 @@ object Versions {
 
     const val aapt2: String = "3.5.0-5435860"
 
-    const val com_android_tools_build_gradle: String = "3.5.0" // available: "3.6.0-alpha07"
+    const val com_android_tools_build_gradle: String = "3.5.0" // available: "3.6.0-alpha09"
 
-    const val lint_gradle: String = "26.5.0" // available: "26.6.0-alpha07"
+    const val lint_gradle: String = "26.5.0" // available: "26.6.0-alpha09"
 
     const val jacoco_android: String = "0.1.4"
 
@@ -110,7 +111,7 @@ object Versions {
      * See issue 19: How to update Gradle itself?
      * https://github.com/jmfayard/buildSrcVersions/issues/19
      */
-    const val gradleLatestVersion: String = "5.6"
+    const val gradleLatestVersion: String = "5.6.1"
 
     const val gradleCurrentVersion: String = "5.6.1"
 }
@@ -121,4 +122,4 @@ object Versions {
  */
 val PluginDependenciesSpec.buildSrcVersions: PluginDependencySpec
     inline get() =
-        id("de.fayard.buildSrcVersions").version(Versions.de_fayard_buildsrcversions_gradle_plugin)
+            id("de.fayard.buildSrcVersions").version(Versions.de_fayard_buildsrcversions_gradle_plugin)
