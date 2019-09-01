@@ -25,14 +25,9 @@
 package com.nicholasdoglio.notes.ui.note
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.google.common.truth.Truth.assertThat
-import com.nicholasdoglio.notes.CoroutinesTestRule
-import com.nicholasdoglio.notes.TestData
-import com.nicholasdoglio.notes.data.model.Note
 import com.nicholasdoglio.notes.data.repo.FakeDao
 import com.nicholasdoglio.notes.data.repo.NoteRepository
-import com.nicholasdoglio.notes.test
-import kotlinx.coroutines.test.runBlockingTest
+import com.nicholasdoglio.notes.shared.CoroutinesTestRule
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -45,60 +40,28 @@ class NoteViewModelTest {
     @get:Rule
     val coroutinesRule = CoroutinesTestRule()
 
-    private val repository: NoteRepository = NoteRepository(FakeDao())
-    private val viewModel: NoteViewModel = NoteViewModel(repository)
+    private lateinit var repository: NoteRepository
+    private lateinit var viewModel: NoteViewModel
 
     @Before
-    fun setUp() = runBlockingTest {
-        repository.upsert(TestData.firstNote)
+    fun setUp() {
+        repository = NoteRepository(FakeDao())
+        viewModel = NoteViewModel(repository)
     }
 
     @Test
-    fun `given note ID exists when find note is called then return a note`() =
-        coroutinesRule.dispatcher.runBlockingTest {
-            viewModel.inputNoteId.offer(TestData.firstNote.id)
-
-            viewModel.note.observeForever {
-                assertThat(it).isEqualTo(TestData.firstNote)
-            }
-        }
+    fun `given note ID exists when find note is called then return a note`() {
+    }
 
     @Test
-    fun `given note ID doesn't exist in DB when find note is called then return null`() =
-        coroutinesRule.dispatcher.runBlockingTest {
-            viewModel.inputNoteId.offer(TestData.secondNote.id)
-
-            viewModel.note.observeForever {
-                assertThat(it).isEqualTo(null)
-            }
-        }
+    fun `given note ID doesn't exist in DB when find note is called then return null`() {
+    }
 
     @Test
-    fun `given note upserted when upserted triggered then verify upserted called`() =
-        coroutinesRule.dispatcher.runBlockingTest {
-            val newNote = Note(1, "New First note", "This is my new first note")
-            viewModel.note.value = newNote
-
-            viewModel.triggerUpsert.offer(Unit)
-
-            repository.findNoteById(TestData.firstNote.id).test {
-                assertThat(expectItem()).isEqualTo(newNote)
-                expectComplete()
-                cancel()
-            }
-        }
+    fun `given note upserted when upserted triggered then verify upserted called`() {
+    }
 
     @Test
-    fun `given note deleted when delete triggered then verify delete called`() =
-        coroutinesRule.dispatcher.runBlockingTest {
-            viewModel.note.value = TestData.firstNote
-
-            viewModel.triggerDelete.offer(Unit)
-
-            repository.findNoteById(TestData.firstNote.id).test {
-                assertThat(expectItem()).isEqualTo(null)
-                expectComplete()
-                cancel()
-            }
-        }
+    fun `given note deleted when delete triggered then verify delete called`() {
+    }
 }
