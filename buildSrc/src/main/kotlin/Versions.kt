@@ -1,4 +1,3 @@
-import kotlin.String
 import org.gradle.plugin.use.PluginDependenciesSpec
 import org.gradle.plugin.use.PluginDependencySpec
 
@@ -76,7 +75,7 @@ object Versions {
 
     const val de_fayard_buildsrcversions_gradle_plugin: String = "0.4.2"
 
-    const val io_gitlab_arturbosch_detekt: String = "1.0.0"
+    const val io_gitlab_arturbosch_detekt: String = "1.0.1"
 
     const val io_mockk: String = "1.9.3"
 
@@ -122,4 +121,4 @@ object Versions {
  */
 val PluginDependenciesSpec.buildSrcVersions: PluginDependencySpec
     inline get() =
-            id("de.fayard.buildSrcVersions").version(Versions.de_fayard_buildsrcversions_gradle_plugin)
+        id("de.fayard.buildSrcVersions").version(Versions.de_fayard_buildsrcversions_gradle_plugin)
