@@ -14,7 +14,7 @@ import org.gradle.plugin.use.PluginDependencySpec
 object Versions {
     const val activity_ktx: String = "1.1.0-alpha03"
 
-    const val appcompat: String = "1.1.0-rc01"
+    const val appcompat: String = "1.1.0"
 
     const val core_testing: String = "2.1.0-rc01"
 
@@ -26,7 +26,7 @@ object Versions {
 
     const val androidx_databinding: String = "3.5.0"
 
-    const val fragment_ktx: String = "1.2.0-alpha03"
+    const val androidx_fragment: String = "1.2.0-alpha03"
 
     const val androidx_lifecycle: String = "2.2.0-alpha04"
 

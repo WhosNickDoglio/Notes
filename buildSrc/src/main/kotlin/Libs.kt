@@ -57,7 +57,13 @@ object Libs {
     /**
      * https://developer.android.com/jetpack/androidx
      */
-    const val fragment_ktx: String = "androidx.fragment:fragment-ktx:" + Versions.fragment_ktx
+    const val fragment_ktx: String = "androidx.fragment:fragment-ktx:" + Versions.androidx_fragment
+
+    /**
+     * https://developer.android.com/jetpack/androidx
+     */
+    const val fragment_testing: String = "androidx.fragment:fragment-testing:" +
+        Versions.androidx_fragment
 
     /**
      * https://developer.android.com/topic/libraries/architecture/index.html
