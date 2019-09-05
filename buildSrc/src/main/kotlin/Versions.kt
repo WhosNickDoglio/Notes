@@ -1,3 +1,4 @@
+import kotlin.String
 import org.gradle.plugin.use.PluginDependenciesSpec
 import org.gradle.plugin.use.PluginDependencySpec
 
@@ -11,7 +12,7 @@ import org.gradle.plugin.use.PluginDependencySpec
  * YOU are responsible for updating manually the dependency version.
  */
 object Versions {
-    const val activity_ktx: String = "1.1.0-alpha02"
+    const val activity_ktx: String = "1.1.0-alpha03"
 
     const val appcompat: String = "1.1.0-rc01"
 
@@ -21,19 +22,19 @@ object Versions {
 
     const val constraintlayout: String = "2.0.0-beta2"
 
-    const val core_ktx: String = "1.2.0-alpha03"
+    const val core_ktx: String = "1.2.0-alpha04"
 
-    const val androidx_databinding: String = "3.5.0" // available: "3.6.0-alpha09"
+    const val androidx_databinding: String = "3.5.0"
 
-    const val fragment_ktx: String = "1.2.0-alpha02"
+    const val fragment_ktx: String = "1.2.0-alpha03"
 
-    const val androidx_lifecycle: String = "2.2.0-alpha03"
+    const val androidx_lifecycle: String = "2.2.0-alpha04"
 
-    const val androidx_navigation: String = "2.2.0-alpha01"
+    const val androidx_navigation: String = "2.2.0-alpha02"
 
-    const val recyclerview: String = "1.1.0-beta03"
+    const val recyclerview: String = "1.1.0-beta04"
 
-    const val androidx_room: String = "2.2.0-beta01"
+    const val androidx_room: String = "2.2.0-rc01"
 
     const val espresso_core: String = "3.3.0-alpha02"
 
@@ -49,13 +50,13 @@ object Versions {
 
     const val aapt2: String = "3.5.0-5435860"
 
-    const val com_android_tools_build_gradle: String = "3.5.0" // available: "3.6.0-alpha09"
+    const val com_android_tools_build_gradle: String = "3.5.0"
 
-    const val lint_gradle: String = "26.5.0" // available: "26.6.0-alpha09"
+    const val lint_gradle: String = "26.5.0"
 
     const val jacoco_android: String = "0.1.4"
 
-    const val material: String = "1.1.0-alpha09"
+    const val material: String = "1.1.0-alpha10"
 
     const val com_google_dagger: String = "2.24"
 
@@ -103,16 +104,16 @@ object Versions {
 
     const val kotlin_stdlib_jdk8: String = "1.3.50"
 
-    const val org_jetbrains_kotlinx: String = "1.3.0"
+    const val org_jetbrains_kotlinx: String = "1.3.1"
 
     /**
      *
      * See issue 19: How to update Gradle itself?
      * https://github.com/jmfayard/buildSrcVersions/issues/19
      */
-    const val gradleLatestVersion: String = "5.6.1"
+    const val gradleLatestVersion: String = "5.6.2"
 
-    const val gradleCurrentVersion: String = "5.6.1"
+    const val gradleCurrentVersion: String = "5.6.2"
 }
 
 /**
@@ -121,4 +122,4 @@ object Versions {
  */
 val PluginDependenciesSpec.buildSrcVersions: PluginDependencySpec
     inline get() =
-        id("de.fayard.buildSrcVersions").version(Versions.de_fayard_buildsrcversions_gradle_plugin)
+            id("de.fayard.buildSrcVersions").version(Versions.de_fayard_buildsrcversions_gradle_plugin)

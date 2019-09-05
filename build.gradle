@@ -89,3 +89,8 @@ task quality() {
     dependsOn 'app:detekt'
 }
 
+wrapper {
+    gradleVersion = Versions.gradleLatestVersion
+    distributionType = Wrapper.DistributionType.ALL
+}
+
