@@ -26,6 +26,9 @@ package com.nicholasdoglio.notes.di
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.nicholasdoglio.notes.data.model.Note
+import com.nicholasdoglio.notes.data.repo.NoteRepository
+import com.nicholasdoglio.notes.data.repo.Repository
 import com.nicholasdoglio.notes.ui.about.AboutViewModel
 import com.nicholasdoglio.notes.ui.list.NoteListViewModel
 import com.nicholasdoglio.notes.ui.note.NoteViewModel
@@ -38,6 +41,9 @@ interface BindingModule {
 
     @Binds
     fun bindViewModelFactory(factory: NotesViewModelFactory): ViewModelProvider.Factory
+
+    @Binds
+    fun bindRepository(repository: NoteRepository): Repository<Note>
 
     @Binds
     @IntoMap

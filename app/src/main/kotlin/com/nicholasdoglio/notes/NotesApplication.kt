@@ -69,6 +69,7 @@ class NotesApplication : Application(), AppComponentProvider {
 
 //    TODO
 //         - Sample JSON
+//         - Mock flavor with mock notes in DB
 //         - Write lots of tests
 //         - Fix weird colors
 //         - More debug tools

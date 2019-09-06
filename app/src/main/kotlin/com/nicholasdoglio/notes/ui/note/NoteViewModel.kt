@@ -31,7 +31,7 @@ import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.nicholasdoglio.notes.data.model.Note
-import com.nicholasdoglio.notes.data.repo.NoteRepository
+import com.nicholasdoglio.notes.data.repo.Repository
 import com.nicholasdoglio.notes.util.asFlow
 import javax.inject.Inject
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
@@ -43,7 +43,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-class NoteViewModel @Inject constructor(private val noteRepository: NoteRepository) : ViewModel() {
+class NoteViewModel @Inject constructor(private val repository: Repository<Note>) : ViewModel() {
 
     init {
         findNoteById()
@@ -68,7 +68,7 @@ class NoteViewModel @Inject constructor(private val noteRepository: NoteReposito
             inputNoteId.asFlow()
                 .onEach { Timber.i("Input triggered") }
                 .filterNotNull()
-                .flatMapConcat { noteRepository.findNoteById(it) }
+                .flatMapConcat { repository.findItemById(it) }
                 .collect {
                     note.value = it
                     Timber.i(it.toString())
@@ -84,7 +84,7 @@ class NoteViewModel @Inject constructor(private val noteRepository: NoteReposito
                 .filterNotNull()
                 .collect {
                     Timber.i(it.toString())
-                    noteRepository.upsert(it)
+                    repository.upsert(it)
                 }
         }
     }
@@ -98,7 +98,7 @@ class NoteViewModel @Inject constructor(private val noteRepository: NoteReposito
                 .collect {
                     Timber.i(it.toString())
                     // TODO check if ID is above -1 here?
-                    noteRepository.delete(it)
+                    repository.delete(it)
                 }
         }
     }

@@ -38,7 +38,7 @@ class NoteRepositoryTest {
     @Test
     fun `given repository is empty when observing number of  notes then return zero`() =
         runBlockingTest {
-            repository.countOfNotes.test {
+            repository.observeCountOfItems.test {
                 assertThat(expectItem()).isEqualTo(0)
                 cancel()
             }
@@ -49,7 +49,7 @@ class NoteRepositoryTest {
         runBlockingTest {
             repository.upsert(TestData.firstNote)
 
-            repository.countOfNotes.test {
+            repository.observeCountOfItems.test {
                 assertThat(expectItem()).isEqualTo(1)
                 cancel()
             }
@@ -58,7 +58,7 @@ class NoteRepositoryTest {
     @Test
     fun `given repository is empty when observing notes then return empty list`() =
         runBlockingTest {
-            repository.observeNotes.test {
+            repository.observeItems.test {
                 assertThat(expectItem()).isEqualTo(emptyList<Note>())
                 cancel()
             }
@@ -69,7 +69,7 @@ class NoteRepositoryTest {
         runBlockingTest {
             repository.upsert(TestData.firstNote)
 
-            repository.observeNotes.test {
+            repository.observeItems.test {
                 assertThat(expectItem()).isEqualTo(listOf(TestData.firstNote))
                 cancel()
             }
@@ -82,19 +82,19 @@ class NoteRepositoryTest {
                 repository.upsert(it)
             }
 
-            repository.findNoteById(TestData.firstNote.id).test {
+            repository.findItemById(TestData.firstNote.id).test {
                 assertThat(expectItem()).isEqualTo(TestData.firstNote)
                 expectComplete()
                 cancel()
             }
 
-            repository.findNoteById(TestData.secondNote.id).test {
+            repository.findItemById(TestData.secondNote.id).test {
                 assertThat(expectItem()).isEqualTo(TestData.secondNote)
                 expectComplete()
                 cancel()
             }
 
-            repository.findNoteById(TestData.thirdNote.id).test {
+            repository.findItemById(TestData.thirdNote.id).test {
                 assertThat(expectItem()).isEqualTo(TestData.thirdNote)
                 expectComplete()
                 cancel()
@@ -104,7 +104,7 @@ class NoteRepositoryTest {
     @Test
     fun `given a note ID that doesn't exist in the repository when finding a note then return null`() =
         runBlockingTest {
-            repository.findNoteById(TestData.thirdNote.id).test {
+            repository.findItemById(TestData.thirdNote.id).test {
                 assertThat(expectItem()).isEqualTo(null)
                 expectComplete()
                 cancel()
@@ -117,17 +117,17 @@ class NoteRepositoryTest {
             val note = Note(5, "Hello World", "Testing triggerUpsert success")
             repository.upsert(note)
 
-            repository.observeNotes.test {
+            repository.observeItems.test {
                 assertThat(expectItem()).isEqualTo(listOf(note))
                 cancel()
             }
 
-            repository.countOfNotes.test {
+            repository.observeCountOfItems.test {
                 assertThat(expectItem()).isEqualTo(1)
                 cancel()
             }
 
-            repository.findNoteById(note.id).test {
+            repository.findItemById(note.id).test {
                 assertThat(expectItem()).isEqualTo(note)
                 expectComplete()
                 cancel()
@@ -143,7 +143,7 @@ class NoteRepositoryTest {
 
             repository.upsert(newNote)
 
-            repository.findNoteById(TestData.firstNote.id).test {
+            repository.findItemById(TestData.firstNote.id).test {
                 expectItem().apply {
                     assertThat(this).isEqualTo(newNote)
                     assertThat(this).isNotEqualTo(TestData.firstNote)
@@ -158,14 +158,14 @@ class NoteRepositoryTest {
         runBlockingTest {
             repository.upsert(TestData.firstNote)
 
-            repository.countOfNotes.test {
+            repository.observeCountOfItems.test {
                 assertThat(expectItem()).isEqualTo(1)
                 cancel()
             }
 
             repository.delete(TestData.firstNote)
 
-            repository.countOfNotes.test {
+            repository.observeCountOfItems.test {
                 assertThat(expectItem()).isEqualTo(0)
                 cancel()
             }

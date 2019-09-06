@@ -22,27 +22,19 @@
  * SOFTWARE.
  */
 
-package com.nicholasdoglio.notes.ui.list
+package com.nicholasdoglio.notes.data.repo
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
-import com.nicholasdoglio.notes.data.model.Note
-import com.nicholasdoglio.notes.data.repo.Repository
-import javax.inject.Inject
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.Flow
 
-class NoteListViewModel @Inject constructor(private val repository: Repository<Note>) :
-    ViewModel() {
+interface Repository<T> {
 
-    val notesList: LiveData<List<Note>> = liveData {
-        repository.observeItems.collect { emit(it) }
-    }
+    val observeCountOfItems: Flow<Int>
 
-    val hasNotes: LiveData<Boolean> = liveData {
-        repository.observeCountOfItems
-            .map { it > 0 }
-            .collect { emit(it) }
-    }
+    val observeItems: Flow<List<T>>
+
+    fun findItemById(id: Long): Flow<T?>
+
+    suspend fun upsert(item: T)
+
+    suspend fun delete(item: T)
 }

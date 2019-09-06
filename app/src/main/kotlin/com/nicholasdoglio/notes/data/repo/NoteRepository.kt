@@ -29,24 +29,24 @@ import com.nicholasdoglio.notes.data.model.Note
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 
-class NoteRepository @Inject constructor(private val dao: NoteDao) {
+class NoteRepository @Inject constructor(private val dao: NoteDao) : Repository<Note> {
 
-    val countOfNotes: Flow<Int> = dao.observeNumOfNotes
+    override val observeCountOfItems: Flow<Int> = dao.observeNumOfNotes
 
-    val observeNotes: Flow<List<Note>> = dao.observeNotes
+    override val observeItems: Flow<List<Note>> = dao.observeNotes
 
-    fun findNoteById(id: Long): Flow<Note?> = dao.findNoteById(id)
+    override fun findItemById(id: Long): Flow<Note?> = dao.findNoteById(id)
 
-    suspend fun upsert(note: Note) {
-        val success = dao.insertNote(note)
+    override suspend fun upsert(item: Note) {
+        val success = dao.insertNote(item)
 
         if (success == FAILED_INSERT) {
-            dao.updateNote(note)
+            dao.updateNote(item)
         }
     }
 
-    suspend fun delete(note: Note) {
-        dao.deleteNote(note)
+    override suspend fun delete(item: Note) {
+        dao.deleteNote(item)
     }
 
     private companion object {

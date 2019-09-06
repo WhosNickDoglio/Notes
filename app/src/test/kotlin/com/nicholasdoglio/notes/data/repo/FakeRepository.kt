@@ -22,27 +22,28 @@
  * SOFTWARE.
  */
 
-package com.nicholasdoglio.notes.ui.list
+package com.nicholasdoglio.notes.data.repo
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
 import com.nicholasdoglio.notes.data.model.Note
-import com.nicholasdoglio.notes.data.repo.Repository
-import javax.inject.Inject
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.Flow
 
-class NoteListViewModel @Inject constructor(private val repository: Repository<Note>) :
-    ViewModel() {
+// TODO implement this
+class FakeRepository : Repository<Note> {
 
-    val notesList: LiveData<List<Note>> = liveData {
-        repository.observeItems.collect { emit(it) }
+    override val observeCountOfItems: Flow<Int>
+        get() = TODO("not implemented") // To change initializer of created properties use File | Settings | File Templates.
+    override val observeItems: Flow<List<Note>>
+        get() = TODO("not implemented") // To change initializer of created properties use File | Settings | File Templates.
+
+    override fun findItemById(id: Long): Flow<Note?> {
+        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
     }
 
-    val hasNotes: LiveData<Boolean> = liveData {
-        repository.observeCountOfItems
-            .map { it > 0 }
-            .collect { emit(it) }
+    override suspend fun upsert(item: Note) {
+        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
+    }
+
+    override suspend fun delete(item: Note) {
+        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
     }
 }
