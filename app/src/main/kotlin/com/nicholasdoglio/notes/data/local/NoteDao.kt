@@ -33,32 +33,23 @@ import androidx.room.Update
 import com.nicholasdoglio.notes.data.model.Note
 import kotlinx.coroutines.flow.Flow
 
-/**
- * Data access object for Note class for Room database
- */
 @Dao
 interface NoteDao {
-    /** Pulls all the notes from the database as a list */
     @get:Query("SELECT * FROM Note")
     val observeNotes: Flow<List<Note>>
 
-    /** Gets the total number of notes in the table */
     @get:Query("SELECT count(*) FROM Note")
     val observeNumOfNotes: Flow<Int>
 
-    /** Returns the selected note from the database */
     @Query("SELECT * From Note WHERE id = :id")
     fun findNoteById(id: Long): Flow<Note?>
 
-    /** Takes a given note from the user and enters it into the database */
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertNote(note: Note): Long
 
-    /** Updates the selected note title or content */
     @Update(onConflict = OnConflictStrategy.IGNORE)
     suspend fun updateNote(note: Note)
 
-    /** Deletes the given note from the database */
     @Delete
     suspend fun deleteNote(note: Note)
 }
