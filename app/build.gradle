@@ -135,7 +135,6 @@ dependencies {
     testImplementation Libs.mockk
 
     androidTestImplementation Libs.fragment_testing
-    androidTestImplementation Libs.mockk_android
     androidTestImplementation Libs.kotlinx_coroutines_test
     androidTestImplementation Libs.com_google_truth_truth
     androidTestImplementation Libs.core_testing

@@ -73,3 +73,4 @@ class NotesApplication : Application(), AppComponentProvider {
 //         - Write lots of tests
 //         - Fix weird colors
 //         - More debug tools
+//         - Splash screen using Nav component?

@@ -38,15 +38,14 @@ buildscript {
 }
 
 plugins {
-    id('com.gradle.build-scan') version('2.4.1')
+    id('com.gradle.build-scan') version('2.4.2')
     id("io.gitlab.arturbosch.detekt") version("1.0.1")
-    id("de.fayard.buildSrcVersions") version ("0.4.2")
+    id("de.fayard.buildSrcVersions") version("0.6.1")
 }
 
 buildSrcVersions {
-    singleFileMode = true
-    rejectedVersionKeywords("")
-    indent = "    "
+    indent = "\t"
+    useFqdnFor("org_jetbrains_kotlin_kotlin_stdlib_jdk8")
 }
 
 buildScan {
@@ -60,17 +59,6 @@ allprojects {
         google()
         jcenter()
     }
-
-    // MockK workaround
-    configurations.all {
-        resolutionStrategy {
-            force("org.objenesis:objenesis:2.6")
-        }
-    }
-
-    // TODO figure a better time to run this
-//    tasks.matching { task -> task.name.startsWith('assemble') }
-//            .all { task -> task.finalizedBy quality  }
 
     tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
         kotlinOptions {
