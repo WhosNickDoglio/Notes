@@ -24,7 +24,7 @@
 
     <!--About-->
     <string name="dev">Developed by Nicholas Doglio</string>
-    <string name="dev_url">https://whosnickdoglio.github.io</string>
+    <string name="dev_url">https://whosnickdoglio.dev</string>
     <string name="source_code">Source Code</string>
     <string name="source_code_url">https://github.com/WhosNickDoglio/Notes</string>
     <string name="libs">Libraries</string>
