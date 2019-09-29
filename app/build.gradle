@@ -99,7 +99,7 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation Libs.kotlin_stdlib_jdk8
+    implementation Libs.org_jetbrains_kotlin_kotlin_stdlib_jdk8
     implementation Libs.kotlinx_coroutines_core
     implementation Libs.kotlinx_coroutines_android
 

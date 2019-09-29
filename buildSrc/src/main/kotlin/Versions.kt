@@ -17,6 +17,8 @@ object Versions {
 
     const val de_fayard_buildsrcversions_gradle_plugin: String = "0.6.1"
 
+    const val org_jetbrains_kotlin_kotlin_stdlib_jdk8: String = "1.3.50"
+
     const val kotlin_scripting_compiler_embeddable: String = "1.3.50"
 
     const val com_gradle_build_scan_gradle_plugin: String = "2.4.2"
@@ -39,7 +41,7 @@ object Versions {
 
     const val gradle_license_plugin: String = "0.8.5"
 
-    const val org_jetbrains_kotlinx: String = "1.3.1"
+    const val org_jetbrains_kotlinx: String = "1.3.2"
 
     const val androidx_databinding: String = "3.5.0"
 
@@ -54,8 +56,6 @@ object Versions {
     const val androidx_lifecycle: String = "2.2.0-alpha04"
 
     const val androidx_test_core: String = "1.2.1-alpha02"
-
-    const val kotlin_stdlib_jdk8: String = "1.3.50"
 
     const val leakcanary_android: String = "2.0-beta-3"
 

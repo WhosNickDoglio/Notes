@@ -20,6 +20,12 @@ object Libs {
     /**
      * https://kotlinlang.org/
      */
+    const val org_jetbrains_kotlin_kotlin_stdlib_jdk8: String =
+        "org.jetbrains.kotlin:kotlin-stdlib-jdk8:" + Versions.org_jetbrains_kotlin_kotlin_stdlib_jdk8
+
+    /**
+     * https://kotlinlang.org/
+     */
     const val kotlin_scripting_compiler_embeddable: String =
         "org.jetbrains.kotlin:kotlin-scripting-compiler-embeddable:" +
             Versions.kotlin_scripting_compiler_embeddable
@@ -180,12 +186,6 @@ object Libs {
      * https://developer.android.com/testing
      */
     const val androidx_test_core: String = "androidx.test:core:" + Versions.androidx_test_core
-
-    /**
-     * https://kotlinlang.org/
-     */
-    const val kotlin_stdlib_jdk8: String = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:" +
-        Versions.kotlin_stdlib_jdk8
 
     /**
      * http://github.com/square/leakcanary/
