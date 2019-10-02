@@ -27,7 +27,7 @@ object Versions {
 
     const val kotlin_android_extensions_runtime: String = "1.3.50"
 
-    const val com_android_tools_build_gradle: String = "3.5.0"
+    const val com_android_tools_build_gradle: String = "3.5.1"
 
     const val kotlin_android_extensions: String = "1.3.50"
 
@@ -43,7 +43,7 @@ object Versions {
 
     const val org_jetbrains_kotlinx: String = "1.3.2"
 
-    const val androidx_databinding: String = "3.5.0"
+    const val androidx_databinding: String = "3.5.1"
 
     const val androidx_test_runner: String = "1.3.0-alpha02"
 
@@ -83,7 +83,7 @@ object Versions {
 
     const val junit_junit: String = "4.12"
 
-    const val lint_gradle: String = "26.5.0"
+    const val lint_gradle: String = "26.5.1"
 
     const val appcompat: String = "1.1.0"
 
@@ -97,7 +97,7 @@ object Versions {
 
     const val timber: String = "4.7.1"
 
-    const val aapt2: String = "3.5.0-5435860"
+    const val aapt2: String = "3.5.1-5435860"
 
     const val mockk: String = "1.9.3"
 
