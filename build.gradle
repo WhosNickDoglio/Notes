@@ -40,7 +40,7 @@ buildscript {
 plugins {
     id('com.gradle.build-scan') version('2.4.2')
     id("io.gitlab.arturbosch.detekt") version("1.0.1")
-    id("de.fayard.buildSrcVersions") version("0.6.1")
+    id("de.fayard.buildSrcVersions") version("0.6.2")
 }
 
 buildSrcVersions {
