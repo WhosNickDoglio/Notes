@@ -91,7 +91,7 @@ object Versions {
 
     const val core_ktx: String = "1.2.0-alpha04"
 
-    const val material: String = "1.1.0-alpha10"
+    const val material: String = "1.1.0-beta01"
 
     const val ktlint: String = "0.34.2"
 
