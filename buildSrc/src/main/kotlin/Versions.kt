@@ -13,7 +13,7 @@ import org.gradle.plugin.use.PluginDependencySpec
 object Versions {
     const val org_gradle_kotlin_kotlin_dsl_gradle_plugin: String = "1.2.9"
 
-    const val io_gitlab_arturbosch_detekt_gradle_plugin: String = "1.0.1"
+    const val io_gitlab_arturbosch_detekt_gradle_plugin: String = "1.1.0"
 
     const val de_fayard_buildsrcversions_gradle_plugin: String = "0.6.4"
 
@@ -49,17 +49,17 @@ object Versions {
 
     const val kotlin_gradle_plugin: String = "1.3.50"
 
-    const val androidx_navigation: String = "2.2.0-alpha02"
+    const val androidx_navigation: String = "2.2.0-beta01"
 
     const val androidx_test_rules: String = "1.3.0-alpha02"
 
-    const val androidx_lifecycle: String = "2.2.0-alpha04"
+    const val androidx_lifecycle: String = "2.2.0-beta01"
 
     const val androidx_test_core: String = "1.2.1-alpha02"
 
     const val leakcanary_android: String = "2.0-beta-3"
 
-    const val androidx_fragment: String = "1.2.0-alpha03"
+    const val androidx_fragment: String = "1.2.0-beta01"
 
     const val com_google_dagger: String = "2.24"
 
@@ -69,17 +69,17 @@ object Versions {
 
     const val kotlin_reflect: String = "1.3.50"
 
-    const val androidx_room: String = "2.2.0-rc01"
+    const val androidx_room: String = "2.2.0"
 
     const val delect_plugin: String = "0.1.0"
 
     const val espresso_core: String = "3.3.0-alpha02"
 
-    const val activity_ktx: String = "1.1.0-alpha03"
+    const val activity_ktx: String = "1.1.0-beta01"
 
     const val core_testing: String = "2.1.0"
 
-    const val recyclerview: String = "1.1.0-beta04"
+    const val recyclerview: String = "1.1.0-beta05"
 
     const val junit_junit: String = "4.12"
 
@@ -89,7 +89,7 @@ object Versions {
 
     const val cardview: String = "1.0.0"
 
-    const val core_ktx: String = "1.2.0-alpha04"
+    const val core_ktx: String = "1.2.0-beta01"
 
     const val material: String = "1.1.0-beta01"
 

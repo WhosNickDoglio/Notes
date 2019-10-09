@@ -74,3 +74,4 @@ class NotesApplication : Application(), AppComponentProvider {
 //         - Fix weird colors
 //         - More debug tools
 //         - Splash screen using Nav component?
+//         - Fragment constructor injection?
