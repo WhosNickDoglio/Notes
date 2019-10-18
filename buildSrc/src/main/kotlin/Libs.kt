@@ -5,6 +5,174 @@
  *   `$ ./gradlew buildSrcVersions`
  */
 object Libs {
+    /**
+     * https://github.com/Kotlin/kotlinx.coroutines
+     */
+    const val kotlinx_coroutines_android: String =
+        "org.jetbrains.kotlinx:kotlinx-coroutines-android:" +
+            Versions.org_jetbrains_kotlinx_kotlinx_coroutines
+
+    /**
+     * https://github.com/Kotlin/kotlinx.coroutines
+     */
+    const val kotlinx_coroutines_core: String = "org.jetbrains.kotlinx:kotlinx-coroutines-core:" +
+        Versions.org_jetbrains_kotlinx_kotlinx_coroutines
+
+    /**
+     * https://github.com/Kotlin/kotlinx.coroutines
+     */
+    const val kotlinx_coroutines_test: String = "org.jetbrains.kotlinx:kotlinx-coroutines-test:" +
+        Versions.org_jetbrains_kotlinx_kotlinx_coroutines
+
+    const val databinding_adapters: String = "androidx.databinding:databinding-adapters:" +
+        Versions.androidx_databinding
+
+    /**
+     * https://developer.android.com/studio
+     */
+    const val databinding_common: String = "androidx.databinding:databinding-common:" +
+        Versions.androidx_databinding
+
+    /**
+     * https://developer.android.com/studio
+     */
+    const val databinding_compiler: String = "androidx.databinding:databinding-compiler:" +
+        Versions.androidx_databinding
+
+    const val databinding_runtime: String = "androidx.databinding:databinding-runtime:" +
+        Versions.androidx_databinding
+
+    /**
+     * https://developer.android.com/topic/libraries/architecture/index.html
+     */
+    const val navigation_fragment_ktx: String = "androidx.navigation:navigation-fragment-ktx:" +
+        Versions.androidx_navigation
+
+    /**
+     * https://developer.android.com/topic/libraries/architecture/index.html
+     */
+    const val navigation_safe_args_gradle_plugin: String =
+        "androidx.navigation:navigation-safe-args-gradle-plugin:" + Versions.androidx_navigation
+
+    /**
+     * https://developer.android.com/topic/libraries/architecture/index.html
+     */
+    const val navigation_ui_ktx: String = "androidx.navigation:navigation-ui-ktx:" +
+        Versions.androidx_navigation
+
+    /**
+     * https://developer.android.com/topic/libraries/architecture/index.html
+     */
+    const val lifecycle_common_java8: String = "androidx.lifecycle:lifecycle-common-java8:" +
+        Versions.androidx_lifecycle
+
+    /**
+     * http://developer.android.com/tools/extras/support-library.html
+     */
+    const val lifecycle_livedata_ktx: String = "androidx.lifecycle:lifecycle-livedata-ktx:" +
+        Versions.androidx_lifecycle
+
+    /**
+     * http://developer.android.com/tools/extras/support-library.html
+     */
+    const val lifecycle_viewmodel_ktx: String = "androidx.lifecycle:lifecycle-viewmodel-ktx:" +
+        Versions.androidx_lifecycle
+
+    const val lifecycle_runtime_ktx: String = "androidx.lifecycle:lifecycle-runtime-ktx:" +
+        Versions.androidx_lifecycle
+
+    /**
+     * https://developer.android.com/jetpack/androidx
+     */
+    const val fragment_ktx: String = "androidx.fragment:fragment-ktx:" + Versions.androidx_fragment
+
+    /**
+     * https://developer.android.com/jetpack/androidx
+     */
+    const val fragment_testing: String = "androidx.fragment:fragment-testing:" +
+        Versions.androidx_fragment
+
+    /**
+     * https://github.com/google/dagger
+     */
+    const val dagger: String = "com.google.dagger:dagger:" + Versions.com_google_dagger
+
+    /**
+     * https://github.com/google/dagger
+     */
+    const val dagger_compiler: String = "com.google.dagger:dagger-compiler:" +
+        Versions.com_google_dagger
+
+    /**
+     * https://developer.android.com/topic/libraries/architecture/index.html
+     */
+    const val room_compiler: String = "androidx.room:room-compiler:" + Versions.androidx_room
+
+    /**
+     * https://developer.android.com/topic/libraries/architecture/index.html
+     */
+    const val room_ktx: String = "androidx.room:room-ktx:" + Versions.androidx_room
+
+    /**
+     * https://developer.android.com/topic/libraries/architecture/index.html
+     */
+    const val room_runtime: String = "androidx.room:room-runtime:" + Versions.androidx_room
+
+    /**
+     * https://developer.android.com/topic/libraries/architecture/index.html
+     */
+    const val room_testing: String = "androidx.room:room-testing:" + Versions.androidx_room
+
+    /**
+     * https://kotlinlang.org/
+     */
+    const val org_jetbrains_kotlin_kotlin_stdlib_jdk8: String =
+        "org.jetbrains.kotlin:kotlin-stdlib-jdk8:" + Versions.org_jetbrains_kotlin_kotlin_stdlib_jdk8
+
+    /**
+     * https://developer.android.com/studio
+     */
+    const val com_android_tools_build_gradle: String = "com.android.tools.build:gradle:" +
+        Versions.com_android_tools_build_gradle
+
+    /**
+     * https://developer.android.com/testing
+     */
+    const val androidx_test_ext_junit: String = "androidx.test.ext:junit:" +
+        Versions.androidx_test_ext_junit
+
+    /**
+     * https://developer.android.com/testing
+     */
+    const val androidx_test_ext_truth: String = "androidx.test.ext:truth:" +
+        Versions.androidx_test_ext_truth
+
+    /**
+     * http://github.com/google/truth
+     */
+    const val com_google_truth_truth: String = "com.google.truth:truth:" +
+        Versions.com_google_truth_truth
+
+    /**
+     * https://developer.android.com/testing
+     */
+    const val androidx_test_runner: String = "androidx.test:runner:" + Versions.androidx_test_runner
+
+    /**
+     * https://developer.android.com/testing
+     */
+    const val androidx_test_rules: String = "androidx.test:rules:" + Versions.androidx_test_rules
+
+    /**
+     * https://developer.android.com/testing
+     */
+    const val androidx_test_core: String = "androidx.test:core:" + Versions.androidx_test_core
+
+    /**
+     * http://junit.org
+     */
+    const val junit_junit: String = "junit:junit:" + Versions.junit_junit
+
     const val org_gradle_kotlin_kotlin_dsl_gradle_plugin: String =
         "org.gradle.kotlin.kotlin-dsl:org.gradle.kotlin.kotlin-dsl.gradle.plugin:" +
             Versions.org_gradle_kotlin_kotlin_dsl_gradle_plugin
@@ -16,12 +184,6 @@ object Libs {
     const val de_fayard_buildsrcversions_gradle_plugin: String =
         "de.fayard.buildSrcVersions:de.fayard.buildSrcVersions.gradle.plugin:" +
             Versions.de_fayard_buildsrcversions_gradle_plugin
-
-    /**
-     * https://kotlinlang.org/
-     */
-    const val org_jetbrains_kotlin_kotlin_stdlib_jdk8: String =
-        "org.jetbrains.kotlin:kotlin-stdlib-jdk8:" + Versions.org_jetbrains_kotlin_kotlin_stdlib_jdk8
 
     /**
      * https://kotlinlang.org/
@@ -49,12 +211,6 @@ object Libs {
             Versions.kotlin_android_extensions_runtime
 
     /**
-     * https://developer.android.com/studio
-     */
-    const val com_android_tools_build_gradle: String = "com.android.tools.build:gradle:" +
-        Versions.com_android_tools_build_gradle
-
-    /**
      * https://kotlinlang.org/
      */
     const val kotlin_android_extensions: String =
@@ -68,69 +224,10 @@ object Libs {
         Versions.kotlin_sam_with_receiver
 
     /**
-     * https://developer.android.com/testing
-     */
-    const val androidx_test_ext_junit: String = "androidx.test.ext:junit:" +
-        Versions.androidx_test_ext_junit
-
-    /**
-     * https://developer.android.com/testing
-     */
-    const val androidx_test_ext_truth: String = "androidx.test.ext:truth:" +
-        Versions.androidx_test_ext_truth
-
-    /**
-     * http://github.com/google/truth
-     */
-    const val com_google_truth_truth: String = "com.google.truth:truth:" +
-        Versions.com_google_truth_truth
-
-    /**
      * https://github.com/jaredsburrows/gradle-license-plugin
      */
     const val gradle_license_plugin: String = "com.jaredsburrows:gradle-license-plugin:" +
         Versions.gradle_license_plugin
-
-    /**
-     * https://github.com/Kotlin/kotlinx.coroutines
-     */
-    const val kotlinx_coroutines_android: String =
-        "org.jetbrains.kotlinx:kotlinx-coroutines-android:" + Versions.org_jetbrains_kotlinx
-
-    /**
-     * https://github.com/Kotlin/kotlinx.coroutines
-     */
-    const val kotlinx_coroutines_core: String = "org.jetbrains.kotlinx:kotlinx-coroutines-core:" +
-        Versions.org_jetbrains_kotlinx
-
-    /**
-     * https://github.com/Kotlin/kotlinx.coroutines
-     */
-    const val kotlinx_coroutines_test: String = "org.jetbrains.kotlinx:kotlinx-coroutines-test:" +
-        Versions.org_jetbrains_kotlinx
-
-    const val databinding_adapters: String = "androidx.databinding:databinding-adapters:" +
-        Versions.androidx_databinding
-
-    /**
-     * https://developer.android.com/studio
-     */
-    const val databinding_common: String = "androidx.databinding:databinding-common:" +
-        Versions.androidx_databinding
-
-    /**
-     * https://developer.android.com/studio
-     */
-    const val databinding_compiler: String = "androidx.databinding:databinding-compiler:" +
-        Versions.androidx_databinding
-
-    const val databinding_runtime: String = "androidx.databinding:databinding-runtime:" +
-        Versions.androidx_databinding
-
-    /**
-     * https://developer.android.com/testing
-     */
-    const val androidx_test_runner: String = "androidx.test:runner:" + Versions.androidx_test_runner
 
     /**
      * https://kotlinlang.org/
@@ -139,81 +236,10 @@ object Libs {
         Versions.kotlin_gradle_plugin
 
     /**
-     * https://developer.android.com/topic/libraries/architecture/index.html
-     */
-    const val navigation_fragment_ktx: String = "androidx.navigation:navigation-fragment-ktx:" +
-        Versions.androidx_navigation
-
-    /**
-     * https://developer.android.com/topic/libraries/architecture/index.html
-     */
-    const val navigation_safe_args_gradle_plugin: String =
-        "androidx.navigation:navigation-safe-args-gradle-plugin:" + Versions.androidx_navigation
-
-    /**
-     * https://developer.android.com/topic/libraries/architecture/index.html
-     */
-    const val navigation_ui_ktx: String = "androidx.navigation:navigation-ui-ktx:" +
-        Versions.androidx_navigation
-
-    /**
-     * https://developer.android.com/testing
-     */
-    const val androidx_test_rules: String = "androidx.test:rules:" + Versions.androidx_test_rules
-
-    /**
-     * https://developer.android.com/topic/libraries/architecture/index.html
-     */
-    const val lifecycle_common_java8: String = "androidx.lifecycle:lifecycle-common-java8:" +
-        Versions.androidx_lifecycle
-
-    /**
-     * http://developer.android.com/tools/extras/support-library.html
-     */
-    const val lifecycle_livedata_ktx: String = "androidx.lifecycle:lifecycle-livedata-ktx:" +
-        Versions.androidx_lifecycle
-
-    /**
-     * http://developer.android.com/tools/extras/support-library.html
-     */
-    const val lifecycle_viewmodel_ktx: String = "androidx.lifecycle:lifecycle-viewmodel-ktx:" +
-        Versions.androidx_lifecycle
-
-    const val lifecycle_runtime_ktx: String = "androidx.lifecycle:lifecycle-runtime-ktx:" +
-        Versions.androidx_lifecycle
-
-    /**
-     * https://developer.android.com/testing
-     */
-    const val androidx_test_core: String = "androidx.test:core:" + Versions.androidx_test_core
-
-    /**
      * http://github.com/square/leakcanary/
      */
     const val leakcanary_android: String = "com.squareup.leakcanary:leakcanary-android:" +
         Versions.leakcanary_android
-
-    /**
-     * https://developer.android.com/jetpack/androidx
-     */
-    const val fragment_ktx: String = "androidx.fragment:fragment-ktx:" + Versions.androidx_fragment
-
-    /**
-     * https://developer.android.com/jetpack/androidx
-     */
-    const val fragment_testing: String = "androidx.fragment:fragment-testing:" +
-        Versions.androidx_fragment
-
-    /**
-     * https://github.com/google/dagger
-     */
-    const val dagger: String = "com.google.dagger:dagger:" + Versions.com_google_dagger
-
-    /**
-     * https://github.com/google/dagger
-     */
-    const val dagger_compiler: String = "com.google.dagger:dagger-compiler:" +
-        Versions.com_google_dagger
 
     /**
      * http://tools.android.com
@@ -229,26 +255,6 @@ object Libs {
      */
     const val kotlin_reflect: String =
         "org.jetbrains.kotlin:kotlin-reflect:" + Versions.kotlin_reflect
-
-    /**
-     * https://developer.android.com/topic/libraries/architecture/index.html
-     */
-    const val room_compiler: String = "androidx.room:room-compiler:" + Versions.androidx_room
-
-    /**
-     * https://developer.android.com/topic/libraries/architecture/index.html
-     */
-    const val room_ktx: String = "androidx.room:room-ktx:" + Versions.androidx_room
-
-    /**
-     * https://developer.android.com/topic/libraries/architecture/index.html
-     */
-    const val room_runtime: String = "androidx.room:room-runtime:" + Versions.androidx_room
-
-    /**
-     * https://developer.android.com/topic/libraries/architecture/index.html
-     */
-    const val room_testing: String = "androidx.room:room-testing:" + Versions.androidx_room
 
     /**
      * https://github.com/soundcloud/delect
@@ -276,11 +282,6 @@ object Libs {
      * http://developer.android.com/tools/extras/support-library.html
      */
     const val recyclerview: String = "androidx.recyclerview:recyclerview:" + Versions.recyclerview
-
-    /**
-     * http://junit.org
-     */
-    const val junit_junit: String = "junit:junit:" + Versions.junit_junit
 
     /**
      * https://developer.android.com/studio
