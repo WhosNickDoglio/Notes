@@ -29,6 +29,8 @@ import android.os.StrictMode
 import com.nicholasdoglio.notes.di.AppComponent
 import com.nicholasdoglio.notes.di.AppComponentProvider
 import com.nicholasdoglio.notes.di.DaggerAppComponent
+import com.uber.rxdogtag.RxDogTag
+import com.uber.rxdogtag.autodispose.AutoDisposeConfigurer
 import timber.log.Timber
 
 class NotesApplication : Application(), AppComponentProvider {
@@ -46,7 +48,14 @@ class NotesApplication : Application(), AppComponentProvider {
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
             initStrictMode()
+            initRxDogTag()
         }
+    }
+
+    private fun initRxDogTag() {
+        RxDogTag.builder()
+            .configureWith(AutoDisposeConfigurer::configure)
+            .install()
     }
 
     private fun initStrictMode() {

@@ -33,23 +33,28 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.observe
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.jakewharton.rxbinding3.recyclerview.scrollEvents
+import com.jakewharton.rxbinding3.view.clicks
 import com.nicholasdoglio.notes.R
-import com.nicholasdoglio.notes.di.injector
+import com.nicholasdoglio.notes.util.SchedulersProvider
 import com.nicholasdoglio.notes.util.hideIf
+import com.uber.autodispose.android.lifecycle.autoDispose
+import javax.inject.Inject
 import kotlinx.android.synthetic.main.fragment_note_list.*
 
-class NoteListFragment : Fragment(R.layout.fragment_note_list) {
+class NoteListFragment @Inject constructor(
+    private val viewModelFactory: ViewModelProvider.Factory,
+    private val schedulersProvider: SchedulersProvider
+) : Fragment(R.layout.fragment_note_list) {
 
-    private val viewModel by viewModels<NoteListViewModel> {
-        requireActivity().injector.viewModelFactory
-    }
+    private val viewModel by viewModels<NoteListViewModel> { viewModelFactory }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -73,19 +78,25 @@ class NoteListFragment : Fragment(R.layout.fragment_note_list) {
             addItemDecoration(DividerItemDecoration(context, RecyclerView.VERTICAL))
             adapter = notesListAdapter
             layoutManager = LinearLayoutManager(context)
-            addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                    createNoteFab.hideIf(0 > dy)
-                }
-            })
+            scrollEvents()
+                .autoDispose(viewLifecycleOwner)
+                .subscribe { createNoteFab.hideIf(0 > it.dy) }
         }
 
-        createNoteFab.setOnClickListener { findNavController().navigate(NoteListFragmentDirections.openNote()) }
+        createNoteFab
+            .clicks()
+            .autoDispose(viewLifecycleOwner)
+            .subscribe { findNavController().navigate(NoteListFragmentDirections.openNote()) }
 
-        viewModel.notesList.observe(viewLifecycleOwner) { notesListAdapter.submitList(it) }
+        viewModel.notesList
+            .observeOn(schedulersProvider.main)
+            .autoDispose(viewLifecycleOwner)
+            .subscribe { notesListAdapter.submitList(it) }
 
         viewModel.hasNotes
-            .observe(viewLifecycleOwner) {
+            .observeOn(schedulersProvider.main)
+            .autoDispose(viewLifecycleOwner)
+            .subscribe {
                 emptyStateView.isVisible = !it
                 notesRecyclerView.isVisible = it
             }

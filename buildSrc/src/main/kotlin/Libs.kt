@@ -6,43 +6,6 @@
  */
 object Libs {
     /**
-     * https://github.com/Kotlin/kotlinx.coroutines
-     */
-    const val kotlinx_coroutines_android: String =
-        "org.jetbrains.kotlinx:kotlinx-coroutines-android:" +
-            Versions.org_jetbrains_kotlinx_kotlinx_coroutines
-
-    /**
-     * https://github.com/Kotlin/kotlinx.coroutines
-     */
-    const val kotlinx_coroutines_core: String = "org.jetbrains.kotlinx:kotlinx-coroutines-core:" +
-        Versions.org_jetbrains_kotlinx_kotlinx_coroutines
-
-    /**
-     * https://github.com/Kotlin/kotlinx.coroutines
-     */
-    const val kotlinx_coroutines_test: String = "org.jetbrains.kotlinx:kotlinx-coroutines-test:" +
-        Versions.org_jetbrains_kotlinx_kotlinx_coroutines
-
-    const val databinding_adapters: String = "androidx.databinding:databinding-adapters:" +
-        Versions.androidx_databinding
-
-    /**
-     * https://developer.android.com/studio
-     */
-    const val databinding_common: String = "androidx.databinding:databinding-common:" +
-        Versions.androidx_databinding
-
-    /**
-     * https://developer.android.com/studio
-     */
-    const val databinding_compiler: String = "androidx.databinding:databinding-compiler:" +
-        Versions.androidx_databinding
-
-    const val databinding_runtime: String = "androidx.databinding:databinding-runtime:" +
-        Versions.androidx_databinding
-
-    /**
      * https://developer.android.com/topic/libraries/architecture/index.html
      */
     const val navigation_fragment_ktx: String = "androidx.navigation:navigation-fragment-ktx:" +
@@ -64,12 +27,6 @@ object Libs {
      * https://developer.android.com/topic/libraries/architecture/index.html
      */
     const val lifecycle_common_java8: String = "androidx.lifecycle:lifecycle-common-java8:" +
-        Versions.androidx_lifecycle
-
-    /**
-     * http://developer.android.com/tools/extras/support-library.html
-     */
-    const val lifecycle_livedata_ktx: String = "androidx.lifecycle:lifecycle-livedata-ktx:" +
         Versions.androidx_lifecycle
 
     /**
@@ -104,6 +61,17 @@ object Libs {
         Versions.com_google_dagger
 
     /**
+     * https://github.com/uber/RxDogTag/
+     */
+    const val rxdogtag: String = "com.uber.rxdogtag:rxdogtag:" + Versions.com_uber_rxdogtag
+
+    /**
+     * https://github.com/uber/RxDogTag/
+     */
+    const val rxdogtag_autodispose: String = "com.uber.rxdogtag:rxdogtag-autodispose:" +
+        Versions.com_uber_rxdogtag
+
+    /**
      * https://developer.android.com/topic/libraries/architecture/index.html
      */
     const val room_compiler: String = "androidx.room:room-compiler:" + Versions.androidx_room
@@ -111,12 +79,12 @@ object Libs {
     /**
      * https://developer.android.com/topic/libraries/architecture/index.html
      */
-    const val room_ktx: String = "androidx.room:room-ktx:" + Versions.androidx_room
+    const val room_runtime: String = "androidx.room:room-runtime:" + Versions.androidx_room
 
     /**
      * https://developer.android.com/topic/libraries/architecture/index.html
      */
-    const val room_runtime: String = "androidx.room:room-runtime:" + Versions.androidx_room
+    const val room_rxjava2: String = "androidx.room:room-rxjava2:" + Versions.androidx_room
 
     /**
      * https://developer.android.com/topic/libraries/architecture/index.html
@@ -202,6 +170,13 @@ object Libs {
     const val kotlin_annotation_processing_gradle: String =
         "org.jetbrains.kotlin:kotlin-annotation-processing-gradle:" +
             Versions.kotlin_annotation_processing_gradle
+
+    /**
+     * https://github.com/uber/AutoDispose/
+     */
+    const val autodispose_android_archcomponents: String =
+        "com.uber.autodispose:autodispose-android-archcomponents:" +
+            Versions.autodispose_android_archcomponents
 
     /**
      * https://kotlinlang.org/
@@ -294,6 +269,16 @@ object Libs {
     const val appcompat: String = "androidx.appcompat:appcompat:" + Versions.appcompat
 
     /**
+     * https://github.com/ReactiveX/RxAndroid
+     */
+    const val rxandroid: String = "io.reactivex.rxjava2:rxandroid:" + Versions.rxandroid
+
+    /**
+     * https://github.com/JakeWharton/RxBinding/
+     */
+    const val rxbinding: String = "com.jakewharton.rxbinding3:rxbinding:" + Versions.rxbinding
+
+    /**
      * http://developer.android.com/tools/extras/support-library.html
      */
     const val cardview: String = "androidx.cardview:cardview:" + Versions.cardview
@@ -309,9 +294,19 @@ object Libs {
     const val material: String = "com.google.android.material:material:" + Versions.material
 
     /**
+     * https://github.com/ReactiveX/RxKotlin
+     */
+    const val rxkotlin: String = "io.reactivex.rxjava2:rxkotlin:" + Versions.rxkotlin
+
+    /**
      * https://github.com/pinterest/ktlint
      */
     const val ktlint: String = "com.pinterest:ktlint:" + Versions.ktlint
+
+    /**
+     * https://github.com/ReactiveX/RxJava
+     */
+    const val rxjava: String = "io.reactivex.rxjava2:rxjava:" + Versions.rxjava
 
     /**
      * https://github.com/JakeWharton/timber

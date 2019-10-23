@@ -24,82 +24,39 @@
 
 package com.nicholasdoglio.notes.ui.note
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.distinctUntilChanged
-import androidx.lifecycle.map
-import androidx.lifecycle.viewModelScope
 import com.nicholasdoglio.notes.data.model.Note
 import com.nicholasdoglio.notes.data.repo.Repository
-import com.nicholasdoglio.notes.util.asFlow
+import io.reactivex.Observable
+import io.reactivex.subjects.PublishSubject
 import javax.inject.Inject
-import kotlinx.coroutines.channels.ConflatedBroadcastChannel
-import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.flatMapConcat
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
-import timber.log.Timber
+
+// https://www.reddit.com/r/androiddev/comments/976m70/a_functional_approach_to_mvvm_which_lets_you/
+// https://quickbirdstudios.com/blog/app-architecture-our-functional-mvvm-approach-with-rx/
+// https://www.slideshare.net/QuickBirdStudios/mvvm-with-kotlin-making-ios-and-android-apps-as-similar-as-possible
 
 class NoteViewModel @Inject constructor(private val repository: Repository<Note>) : ViewModel() {
 
-    init {
-        findNoteById()
-        upsert()
-        delete()
-    }
+    // INPUT
+    val triggerUpsert = PublishSubject.create<Unit>()
 
-    val note: MutableLiveData<Note> = MutableLiveData()
+    val triggerDelete = PublishSubject.create<Unit>()
 
-    // TODO think about some warning if Note is empty from here?
-    val isNoteEmpty: LiveData<Boolean> =
-        note.map { it.title.isBlank() && it.contents.isBlank() }.distinctUntilChanged()
+    val inputNoteId = PublishSubject.create<Long>()
 
-    val triggerUpsert = ConflatedBroadcastChannel<Unit?>()
+    // OUTPUT
+    private val _note: PublishSubject<Note> = PublishSubject.create()
 
-    val triggerDelete = ConflatedBroadcastChannel<Unit?>()
+    val note: Observable<Note> = _note.hide()
 
-    val inputNoteId: ConflatedBroadcastChannel<Long?> = ConflatedBroadcastChannel()
+    val input = inputNoteId
+        .flatMapMaybe { repository.findItemById(it) }
 
-    private fun findNoteById() {
-        viewModelScope.launch {
-            inputNoteId.asFlow()
-                .onEach { Timber.i("Input triggered") }
-                .filterNotNull()
-                .flatMapConcat { repository.findItemById(it) }
-                .collect {
-                    note.value = it
-                    Timber.i(it.toString())
-                }
-        }
-    }
+    val upsert = triggerUpsert
+        .flatMap { _note }
+        .flatMapCompletable { repository.upsert(it) }
 
-    private fun upsert() {
-        viewModelScope.launch {
-            triggerUpsert.asFlow()
-                .onEach { Timber.i("Upsert triggered") }
-                .flatMapConcat { note.asFlow() }
-                .filterNotNull()
-                .collect {
-                    Timber.i(it.toString())
-                    repository.upsert(it)
-                }
-        }
-    }
-
-    private fun delete() {
-        viewModelScope.launch {
-            triggerDelete.asFlow()
-                .onEach { Timber.i("Delete triggered") }
-                .flatMapConcat { note.asFlow() }
-                .filterNotNull()
-                .collect {
-                    Timber.i(it.toString())
-                    // TODO check if ID is above -1 here?
-                    repository.delete(it)
-                }
-        }
-    }
+    val delete = triggerDelete.flatMap { _note }
+        // TODO check if ID is above -1 here?
+        .flatMapCompletable { repository.delete(it) }
 }

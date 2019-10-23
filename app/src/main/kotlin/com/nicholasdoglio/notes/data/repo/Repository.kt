@@ -24,17 +24,19 @@
 
 package com.nicholasdoglio.notes.data.repo
 
-import kotlinx.coroutines.flow.Flow
+import io.reactivex.Completable
+import io.reactivex.Flowable
+import io.reactivex.Maybe
 
 interface Repository<T> {
 
-    val observeCountOfItems: Flow<Int>
+    val observeCountOfItems: Flowable<Int>
 
-    val observeItems: Flow<List<T>>
+    val observeItems: Flowable<List<T>>
 
-    fun findItemById(id: Long): Flow<T?>
+    fun findItemById(id: Long): Maybe<T>
 
-    suspend fun upsert(item: T)
+    fun upsert(item: T): Completable
 
-    suspend fun delete(item: T)
+    fun delete(item: T): Completable
 }

@@ -28,34 +28,24 @@ import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.nicholasdoglio.notes.R
-import com.nicholasdoglio.notes.di.injector
-import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class DiscardFragment : DialogFragment() {
+class DiscardFragment @Inject constructor(private val viewModelFactory: ViewModelProvider.Factory) :
+    DialogFragment() {
 
-    private val viewModel: NoteViewModel by viewModels {
-        requireActivity().injector.viewModelFactory
-    }
+    private val viewModel: NoteViewModel by viewModels { viewModelFactory }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog =
         MaterialAlertDialogBuilder(requireContext())
             .setMessage(R.string.discard_warning)
-            .setPositiveButton(R.string.save_button) { _, _ -> upsert() }
-            .setNegativeButton(R.string.discard_button) { _, _ -> delete() }
+            .setPositiveButton(R.string.save_button) { _, _ -> viewModel.triggerUpsert.onNext(Unit) }
+            .setNegativeButton(R.string.discard_button) { _, _ ->
+                viewModel.triggerDelete.onNext(
+                    Unit
+                )
+            }
             .create()
-
-    private fun upsert() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.triggerUpsert.offer(Unit)
-        }
-    }
-
-    private fun delete() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.triggerDelete.offer(Unit)
-        }
-    }
 }

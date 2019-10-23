@@ -27,19 +27,20 @@ package com.nicholasdoglio.notes.ui.list
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.ViewDataBinding
-import androidx.databinding.library.baseAdapters.BR
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.nicholasdoglio.notes.R
 import com.nicholasdoglio.notes.data.model.Note
-import com.nicholasdoglio.notes.databinding.ItemNoteBinding
+import kotlinx.android.extensions.LayoutContainer
+import kotlinx.android.synthetic.main.item_note.*
 
-class NoteViewHolder(private val binding: ViewDataBinding) : RecyclerView.ViewHolder(binding.root) {
+class NoteViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView),
+    LayoutContainer {
 
     fun bind(model: Note) {
-        binding.setVariable(BR.note, model)
-        binding.setVariable(BR.click, click(model.id))
-        binding.executePendingBindings()
+        note.setOnClickListener { click(model.id) }
+        titleListItem.text = model.title
+        contentsListItem.text = model.contents
     }
 
     private fun click(id: Long): View.OnClickListener = View.OnClickListener {
@@ -48,10 +49,13 @@ class NoteViewHolder(private val binding: ViewDataBinding) : RecyclerView.ViewHo
 
     companion object {
 
-        fun create(view: ViewGroup): NoteViewHolder {
-            val layoutInflater = LayoutInflater.from(view.context)
-            val binding = ItemNoteBinding.inflate(layoutInflater, view, false)
-            return NoteViewHolder(binding)
-        }
+        fun create(view: ViewGroup): NoteViewHolder =
+            NoteViewHolder(
+                LayoutInflater.from(view.context).inflate(
+                    R.layout.item_note,
+                    view,
+                    false
+                )
+            )
     }
 }

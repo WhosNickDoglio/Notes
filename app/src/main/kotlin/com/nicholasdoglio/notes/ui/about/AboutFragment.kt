@@ -30,17 +30,21 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.observe
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.nicholasdoglio.notes.R
-import com.nicholasdoglio.notes.di.injector
+import com.nicholasdoglio.notes.util.SchedulersProvider
+import com.uber.autodispose.android.lifecycle.autoDispose
+import io.reactivex.android.schedulers.AndroidSchedulers
+import javax.inject.Inject
 import kotlinx.android.synthetic.main.fragment_about.*
 
-class AboutFragment : DialogFragment() {
+class AboutFragment @Inject constructor(
+    private val viewModelFactory: ViewModelProvider.Factory,
+    private val schedulersProvider: SchedulersProvider
+) : DialogFragment() {
 
-    private val viewModel by viewModels<AboutViewModel> {
-        requireActivity().injector.viewModelFactory
-    }
+    private val viewModel by viewModels<AboutViewModel> { viewModelFactory }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -58,6 +62,9 @@ class AboutFragment : DialogFragment() {
             layoutManager = LinearLayoutManager(context)
         }
 
-        viewModel.aboutItems.observe(viewLifecycleOwner) { aboutAdapter.submitList(it) }
+        viewModel.aboutItems
+            .observeOn(AndroidSchedulers.mainThread())
+            .autoDispose(viewLifecycleOwner)
+            .subscribe { aboutAdapter.submitList(it) }
     }
 }

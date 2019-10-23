@@ -25,25 +25,32 @@
 package com.nicholasdoglio.notes.data.repo
 
 import com.nicholasdoglio.notes.data.model.Note
-import kotlinx.coroutines.flow.Flow
+import io.reactivex.BackpressureStrategy
+import io.reactivex.Completable
+import io.reactivex.Flowable
+import io.reactivex.Maybe
+import io.reactivex.subjects.BehaviorSubject
 
-// TODO implement this
 class FakeRepository : Repository<Note> {
 
-    override val observeCountOfItems: Flow<Int>
-        get() = TODO("not implemented") // To change initializer of created properties use File | Settings | File Templates.
-    override val observeItems: Flow<List<Note>>
-        get() = TODO("not implemented") // To change initializer of created properties use File | Settings | File Templates.
+    private val notes: MutableMap<Long, Note?> = mutableMapOf()
+    private val _notes: BehaviorSubject<List<Note>> =
+        BehaviorSubject.createDefault(notes.map { it.value }.filterNotNull())
+    private val _count: BehaviorSubject<Int> = BehaviorSubject.createDefault(0)
 
-    override fun findItemById(id: Long): Flow<Note?> {
-        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
-    }
+    override val observeCountOfItems: Flowable<Int> =
+        _count.hide().toFlowable(BackpressureStrategy.LATEST)
+    override val observeItems: Flowable<List<Note>> =
+        _notes.hide().map { it.toList() }.toFlowable(BackpressureStrategy.LATEST)
 
-    override suspend fun upsert(item: Note) {
-        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
-    }
+    override fun findItemById(id: Long): Maybe<Note> =
+        if (notes[id] == null) Maybe.never() else Maybe.just(notes[id])
 
-    override suspend fun delete(item: Note) {
-        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
+    override fun upsert(item: Note): Completable = Completable.fromAction { notes[item.id] = item }
+
+    override fun delete(item: Note): Completable = Completable.fromAction {
+        notes.remove(item.id)
+        _count.onNext(notes.size)
+        _notes.onNext(notes.map { it.value }.filterNotNull())
     }
 }

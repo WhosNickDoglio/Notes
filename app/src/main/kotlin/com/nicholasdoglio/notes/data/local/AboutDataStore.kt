@@ -27,13 +27,12 @@ package com.nicholasdoglio.notes.data.local
 import com.nicholasdoglio.notes.R
 import com.nicholasdoglio.notes.data.model.AboutAction
 import com.nicholasdoglio.notes.data.model.AboutItem
+import io.reactivex.Flowable
 import javax.inject.Inject
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
 
 class AboutDataStore @Inject constructor() {
 
-    val aboutItems: Flow<List<AboutItem>> = flowOf(
+    val aboutItems: Flowable<List<AboutItem>> = Flowable.just(
         listOf(
             AboutItem(R.string.dev, AboutAction.OpenWebsite(R.string.dev_url)),
             AboutItem(R.string.libs, AboutAction.OpenLibs),

@@ -26,41 +26,45 @@ package com.nicholasdoglio.notes.data.repo
 
 import com.nicholasdoglio.notes.data.local.NoteDao
 import com.nicholasdoglio.notes.data.model.Note
-import kotlinx.coroutines.channels.ConflatedBroadcastChannel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.flowOf
+import io.reactivex.BackpressureStrategy
+import io.reactivex.Completable
+import io.reactivex.Flowable
+import io.reactivex.Maybe
+import io.reactivex.Single
+import io.reactivex.subjects.BehaviorSubject
 
 class FakeDao : NoteDao {
 
     private val notes: MutableMap<Long, Note?> = mutableMapOf()
-    private val _notes: ConflatedBroadcastChannel<List<Note>> =
-        ConflatedBroadcastChannel(notes.map { it.value }.filterNotNull())
-    private val _count: ConflatedBroadcastChannel<Int> = ConflatedBroadcastChannel(notes.size)
+    private val _notes: BehaviorSubject<List<Note>> =
+        BehaviorSubject.createDefault(notes.map { it.value }.filterNotNull())
+    private val _count: BehaviorSubject<Int> = BehaviorSubject.createDefault(0)
 
-    override val observeNotes: Flow<List<Note>> = _notes.asFlow()
-    override val observeNumOfNotes: Flow<Int> = _count.asFlow()
+    override val observeNotes: Flowable<List<Note>> =
+        _notes.hide().map { it.toList() }.toFlowable(BackpressureStrategy.LATEST)
+    override val observeNumOfNotes: Flowable<Int> =
+        _count.hide().toFlowable(BackpressureStrategy.LATEST)
 
-    override fun findNoteById(id: Long): Flow<Note?> = flowOf(notes[id])
+    override fun findNoteById(id: Long): Maybe<Note> =
+        if (notes[id] == null) Maybe.never() else Maybe.just(notes[id])
 
-    override suspend fun insertNote(note: Note): Long {
+    override fun insertNote(note: Note): Single<Long> {
         if (notes[note.id] == null) {
             notes[note.id] = note
-            _count.send(notes.size)
-            _notes.send(notes.map { it.value }.filterNotNull())
-            return 0
+            _count.onNext(notes.size)
+            _notes.onNext(notes.map { it.value }.filterNotNull())
+            return Single.just(0)
         } else {
-            return -1L
+            return Single.just(-1L)
         }
     }
 
-    override suspend fun updateNote(note: Note) {
-        notes[note.id] = note
-    }
+    override fun updateNote(note: Note): Completable =
+        Completable.fromAction { notes[note.id] = note }
 
-    override suspend fun deleteNote(note: Note) {
+    override fun deleteNote(note: Note): Completable = Completable.fromAction {
         notes.remove(note.id)
-        _count.send(notes.size)
-        _notes.send(notes.map { it.value }.filterNotNull())
+        _count.onNext(notes.size)
+        _notes.onNext(notes.map { it.value }.filterNotNull())
     }
 }

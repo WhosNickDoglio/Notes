@@ -28,19 +28,9 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.view.LayoutInflater
-import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
-import androidx.annotation.LayoutRes
-import androidx.databinding.DataBindingUtil
-import androidx.databinding.ViewDataBinding
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.channelFlow
 
 inline var TextView.textEditable: String
     get() = this.text.toString() // TODO is the get necessary?
@@ -62,26 +52,5 @@ fun Context.openWebPage(url: String) {
     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
     if (intent.resolveActivity(this.packageManager) != null) {
         this.startActivity(intent)
-    }
-}
-
-// TODO do I like this?
-fun Fragment.initDataBinding(
-    inflater: LayoutInflater,
-    @LayoutRes layout: Int,
-    container: ViewGroup?
-): ViewDataBinding {
-    val binding: ViewDataBinding = DataBindingUtil.inflate(inflater, layout, container, false)
-    binding.lifecycleOwner = viewLifecycleOwner
-
-    return binding
-}
-
-fun <T> LiveData<T>.asFlow() = channelFlow {
-    offer(value)
-    val observer = Observer<T> { t -> offer(t) }
-    observeForever(observer)
-    awaitClose {
-        removeObserver(observer)
     }
 }

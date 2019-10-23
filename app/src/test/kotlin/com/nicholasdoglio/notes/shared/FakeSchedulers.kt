@@ -24,32 +24,12 @@
 
 package com.nicholasdoglio.notes.shared
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
-import java.util.concurrent.CountDownLatch
-import java.util.concurrent.TimeUnit
+import com.nicholasdoglio.notes.util.SchedulersProvider
+import io.reactivex.Scheduler
+import io.reactivex.schedulers.Schedulers
 
-/**
- *
- * Pulled from
- * https://github.com/android/plaid/blob/342a28e6b5/test_shared/src/main/java/io/plaidapp/test/shared/LiveDataTestUtil.kt
- *
- * Safely handles observables from LiveData for testing.
- */
-
-inline val <T> LiveData<T>.testValue: T?
-    get() {
-        var data: T? = null
-        val latch = CountDownLatch(1)
-        val observer = object : Observer<T> {
-            override fun onChanged(o: T?) {
-                data = o
-                latch.countDown()
-                this@testValue.removeObserver(this)
-            }
-        }
-        this@testValue.observeForever(observer)
-        latch.await(2, TimeUnit.SECONDS)
-
-        return data
-    }
+class FakeSchedulers : SchedulersProvider {
+    override val main: Scheduler = Schedulers.trampoline()
+    override val background: Scheduler = Schedulers.trampoline()
+    override val database: Scheduler = Schedulers.trampoline()
+}

@@ -26,28 +26,34 @@ package com.nicholasdoglio.notes.data.repo
 
 import com.nicholasdoglio.notes.data.local.NoteDao
 import com.nicholasdoglio.notes.data.model.Note
+import com.nicholasdoglio.notes.util.SchedulersProvider
+import io.reactivex.Completable
+import io.reactivex.Flowable
+import io.reactivex.Maybe
 import javax.inject.Inject
-import kotlinx.coroutines.flow.Flow
 
-class NoteRepository @Inject constructor(private val dao: NoteDao) : Repository<Note> {
+class NoteRepository @Inject constructor(
+    private val dao: NoteDao,
+    private val schedulersProvider: SchedulersProvider
+) : Repository<Note> {
 
-    override val observeCountOfItems: Flow<Int> = dao.observeNumOfNotes
+    override val observeCountOfItems: Flowable<Int> = dao.observeNumOfNotes
+        .observeOn(schedulersProvider.database)
 
-    override val observeItems: Flow<List<Note>> = dao.observeNotes
+    override val observeItems: Flowable<List<Note>> = dao.observeNotes
+        .observeOn(schedulersProvider.database)
 
-    override fun findItemById(id: Long): Flow<Note?> = dao.findNoteById(id)
+    override fun findItemById(id: Long): Maybe<Note> = dao.findNoteById(id)
+        .observeOn(schedulersProvider.database)
 
-    override suspend fun upsert(item: Note) {
-        val success = dao.insertNote(item)
+    // TODO check if this actually works?
+    override fun upsert(item: Note): Completable = dao.insertNote(item)
+        .filter { it == FAILED_INSERT }
+        .flatMapCompletable { dao.updateNote(item) }
+        .observeOn(schedulersProvider.database)
 
-        if (success == FAILED_INSERT) {
-            dao.updateNote(item)
-        }
-    }
-
-    override suspend fun delete(item: Note) {
-        dao.deleteNote(item)
-    }
+    override fun delete(item: Note): Completable =
+        dao.deleteNote(item).observeOn(schedulersProvider.database)
 
     private companion object {
         private const val FAILED_INSERT = -1L

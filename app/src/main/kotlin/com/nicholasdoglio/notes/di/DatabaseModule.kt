@@ -40,10 +40,10 @@ object DatabaseModule {
     @Singleton
     @Provides
     @JvmStatic
-    fun provideRoomDatabase(app: Application): NoteDatabase =
+    fun roomDatabase(app: Application): NoteDatabase =
         Room.databaseBuilder(app, NoteDatabase::class.java, NOTES_DB).build()
 
     @Provides
     @JvmStatic
-    fun provideNoteDao(roomDatabase: NoteDatabase): NoteDao = roomDatabase.noteDao
+    fun noteDao(roomDatabase: NoteDatabase): NoteDao = roomDatabase.noteDao
 }

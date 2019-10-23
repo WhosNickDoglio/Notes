@@ -24,25 +24,17 @@
 
 package com.nicholasdoglio.notes.ui.list
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
 import com.nicholasdoglio.notes.data.model.Note
 import com.nicholasdoglio.notes.data.repo.Repository
+import io.reactivex.Flowable
 import javax.inject.Inject
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.map
 
 class NoteListViewModel @Inject constructor(private val repository: Repository<Note>) :
     ViewModel() {
 
-    val notesList: LiveData<List<Note>> = liveData {
-        repository.observeItems.collect { emit(it) }
-    }
+    val notesList: Flowable<List<Note>> = repository.observeItems
 
-    val hasNotes: LiveData<Boolean> = liveData {
-        repository.observeCountOfItems
-            .map { it > 0 }
-            .collect { emit(it) }
-    }
+    val hasNotes: Flowable<Boolean> = repository.observeCountOfItems
+        .map { it > 0 }
 }

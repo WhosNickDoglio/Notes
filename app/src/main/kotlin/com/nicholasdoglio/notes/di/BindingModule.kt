@@ -32,12 +32,17 @@ import com.nicholasdoglio.notes.data.repo.Repository
 import com.nicholasdoglio.notes.ui.about.AboutViewModel
 import com.nicholasdoglio.notes.ui.list.NoteListViewModel
 import com.nicholasdoglio.notes.ui.note.NoteViewModel
+import com.nicholasdoglio.notes.util.AppSchedulers
+import com.nicholasdoglio.notes.util.SchedulersProvider
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
 
 @Module
 interface BindingModule {
+
+    @Binds
+    fun bindSchedulers(appSchedulers: AppSchedulers): SchedulersProvider
 
     @Binds
     fun bindViewModelFactory(factory: NotesViewModelFactory): ViewModelProvider.Factory

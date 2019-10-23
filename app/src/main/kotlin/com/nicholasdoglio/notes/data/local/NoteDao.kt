@@ -31,25 +31,28 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.nicholasdoglio.notes.data.model.Note
-import kotlinx.coroutines.flow.Flow
+import io.reactivex.Completable
+import io.reactivex.Flowable
+import io.reactivex.Maybe
+import io.reactivex.Single
 
 @Dao
 interface NoteDao {
     @get:Query("SELECT * FROM Note")
-    val observeNotes: Flow<List<Note>>
+    val observeNotes: Flowable<List<Note>>
 
     @get:Query("SELECT count(*) FROM Note")
-    val observeNumOfNotes: Flow<Int>
+    val observeNumOfNotes: Flowable<Int>
 
     @Query("SELECT * From Note WHERE id = :id")
-    fun findNoteById(id: Long): Flow<Note?>
+    fun findNoteById(id: Long): Maybe<Note>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertNote(note: Note): Long
+    fun insertNote(note: Note): Single<Long>
 
     @Update(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun updateNote(note: Note)
+    fun updateNote(note: Note): Completable
 
     @Delete
-    suspend fun deleteNote(note: Note)
+    fun deleteNote(note: Note): Completable
 }

@@ -27,23 +27,23 @@ package com.nicholasdoglio.notes.ui.about
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.ViewDataBinding
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import com.nicholasdoglio.notes.BR
 import com.nicholasdoglio.notes.R
 import com.nicholasdoglio.notes.data.model.AboutAction
 import com.nicholasdoglio.notes.data.model.AboutItem
-import com.nicholasdoglio.notes.databinding.ItemAboutBinding
 import com.nicholasdoglio.notes.util.openWebPage
+import kotlinx.android.extensions.LayoutContainer
+import kotlinx.android.synthetic.main.item_about.*
 
-class AboutItemViewHolder(private val binding: ViewDataBinding) :
-    RecyclerView.ViewHolder(binding.root) {
+class AboutItemViewHolder(override val containerView: View) :
+    RecyclerView.ViewHolder(containerView), LayoutContainer {
 
     fun bind(model: AboutItem) {
-        binding.setVariable(BR.item, model)
-        binding.setVariable(BR.click, click(model.action))
-        binding.executePendingBindings()
+        aboutItemName.apply {
+            setText(model.text)
+            setOnClickListener { click(model.action) }
+        }
     }
 
     private fun click(action: AboutAction): View.OnClickListener = View.OnClickListener {
@@ -54,10 +54,13 @@ class AboutItemViewHolder(private val binding: ViewDataBinding) :
     }
 
     companion object {
-        fun create(view: ViewGroup): AboutItemViewHolder {
-            val layoutInflater = LayoutInflater.from(view.context)
-            val binding = ItemAboutBinding.inflate(layoutInflater, view, false)
-            return AboutItemViewHolder(binding)
-        }
+        fun create(view: ViewGroup): AboutItemViewHolder =
+            AboutItemViewHolder(
+                LayoutInflater.from(view.context).inflate(
+                    R.layout.item_about,
+                    view,
+                    false
+                )
+            )
     }
 }

@@ -22,28 +22,21 @@
  * SOFTWARE.
  */
 
-package com.nicholasdoglio.notes.shared
+package com.nicholasdoglio.notes.util
 
-import kotlin.coroutines.ContinuationInterceptor
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.TestCoroutineScope
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.setMain
-import org.junit.rules.TestWatcher
-import org.junit.runner.Description
+import io.reactivex.Scheduler
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
 
-@ExperimentalCoroutinesApi
-class CoroutinesTestRule : TestWatcher(), TestCoroutineScope by TestCoroutineScope() {
+interface SchedulersProvider {
+    val main: Scheduler
+    val background: Scheduler
+    val database: Scheduler
+}
 
-    override fun starting(description: Description?) {
-        super.starting(description)
-        Dispatchers.setMain(this.coroutineContext[ContinuationInterceptor] as CoroutineDispatcher)
-    }
-
-    override fun finished(description: Description?) {
-        super.finished(description)
-        Dispatchers.resetMain()
-    }
+class AppSchedulers @Inject constructor() : SchedulersProvider {
+    override val main: Scheduler = AndroidSchedulers.mainThread()
+    override val background: Scheduler = Schedulers.io()
+    override val database: Scheduler = Schedulers.single()
 }

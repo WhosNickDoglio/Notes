@@ -25,9 +25,9 @@
 package com.nicholasdoglio.notes.ui.note
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.nicholasdoglio.notes.data.repo.FakeDao
-import com.nicholasdoglio.notes.data.repo.NoteRepository
-import com.nicholasdoglio.notes.shared.CoroutinesTestRule
+import com.nicholasdoglio.notes.data.model.Note
+import com.nicholasdoglio.notes.data.repo.FakeRepository
+import com.nicholasdoglio.notes.data.repo.Repository
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -37,15 +37,11 @@ class NoteViewModelTest {
     @get:Rule
     val instantRule = InstantTaskExecutorRule()
 
-    @get:Rule
-    val coroutinesRule = CoroutinesTestRule()
-
-    private lateinit var repository: NoteRepository
+    private val repository: Repository<Note> = FakeRepository()
     private lateinit var viewModel: NoteViewModel
 
     @Before
     fun setUp() {
-        repository = NoteRepository(FakeDao())
         viewModel = NoteViewModel(repository)
     }
 
