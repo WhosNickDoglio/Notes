@@ -6,6 +6,19 @@
  */
 object Libs {
     /**
+     * https://github.com/JakeWharton/RxBinding/
+     */
+    const val rxbinding: String = "com.jakewharton.rxbinding3:rxbinding:" +
+        Versions.com_jakewharton_rxbinding3
+
+    /**
+     * https://github.com/JakeWharton/RxBinding/
+     */
+    const val rxbinding_recyclerview: String =
+        "com.jakewharton.rxbinding3:rxbinding-recyclerview:" +
+            Versions.com_jakewharton_rxbinding3
+
+    /**
      * https://developer.android.com/topic/libraries/architecture/index.html
      */
     const val navigation_fragment_ktx: String = "androidx.navigation:navigation-fragment-ktx:" +
@@ -30,12 +43,15 @@ object Libs {
         Versions.androidx_lifecycle
 
     /**
-     * http://developer.android.com/tools/extras/support-library.html
+     * https://developer.android.com/jetpack/androidx
      */
-    const val lifecycle_viewmodel_ktx: String = "androidx.lifecycle:lifecycle-viewmodel-ktx:" +
+    const val lifecycle_runtime_ktx: String = "androidx.lifecycle:lifecycle-runtime-ktx:" +
         Versions.androidx_lifecycle
 
-    const val lifecycle_runtime_ktx: String = "androidx.lifecycle:lifecycle-runtime-ktx:" +
+    /**
+     * https://developer.android.com/jetpack/androidx
+     */
+    const val lifecycle_viewmodel_ktx: String = "androidx.lifecycle:lifecycle-viewmodel-ktx:" +
         Versions.androidx_lifecycle
 
     /**
@@ -254,7 +270,7 @@ object Libs {
     const val core_testing: String = "androidx.arch.core:core-testing:" + Versions.core_testing
 
     /**
-     * http://developer.android.com/tools/extras/support-library.html
+     * https://developer.android.com/jetpack/androidx
      */
     const val recyclerview: String = "androidx.recyclerview:recyclerview:" + Versions.recyclerview
 
@@ -274,17 +290,12 @@ object Libs {
     const val rxandroid: String = "io.reactivex.rxjava2:rxandroid:" + Versions.rxandroid
 
     /**
-     * https://github.com/JakeWharton/RxBinding/
-     */
-    const val rxbinding: String = "com.jakewharton.rxbinding3:rxbinding:" + Versions.rxbinding
-
-    /**
      * http://developer.android.com/tools/extras/support-library.html
      */
     const val cardview: String = "androidx.cardview:cardview:" + Versions.cardview
 
     /**
-     * http://developer.android.com/tools/extras/support-library.html
+     * https://developer.android.com/jetpack/androidx
      */
     const val core_ktx: String = "androidx.core:core-ktx:" + Versions.core_ktx
 

@@ -11,17 +11,19 @@ import org.gradle.plugin.use.PluginDependencySpec
  * YOU are responsible for updating manually the dependency version.
  */
 object Versions {
-    const val androidx_navigation: String = "2.2.0-beta01"
+    const val com_jakewharton_rxbinding3: String = "3.0.0"
 
-    const val androidx_lifecycle: String = "2.2.0-beta01"
+    const val androidx_navigation: String = "2.2.0-rc01"
 
-    const val androidx_fragment: String = "1.2.0-beta02"
+    const val androidx_lifecycle: String = "2.2.0-rc01"
 
-    const val com_google_dagger: String = "2.24"
+    const val androidx_fragment: String = "1.2.0-rc01"
+
+    const val com_google_dagger: String = "2.25.2"
 
     const val com_uber_rxdogtag: String = "0.3.0"
 
-    const val androidx_room: String = "2.2.0"
+    const val androidx_room: String = "2.2.1"
 
     const val org_jetbrains_kotlin_kotlin_stdlib_jdk8: String = "1.3.50"
 
@@ -41,7 +43,7 @@ object Versions {
 
     const val junit_junit: String = "4.12"
 
-    const val org_gradle_kotlin_kotlin_dsl_gradle_plugin: String = "1.2.9" // available: "1.3.1"
+    const val org_gradle_kotlin_kotlin_dsl_gradle_plugin: String = "1.2.9"
 
     const val io_gitlab_arturbosch_detekt_gradle_plugin: String = "1.1.1"
 
@@ -49,7 +51,7 @@ object Versions {
 
     const val kotlin_scripting_compiler_embeddable: String = "1.3.50"
 
-    const val com_gradle_build_scan_gradle_plugin: String = "2.4.2"
+    const val com_gradle_build_scan_gradle_plugin: String = "3.0"
 
     const val kotlin_annotation_processing_gradle: String = "1.3.50"
 
@@ -61,27 +63,27 @@ object Versions {
 
     const val kotlin_sam_with_receiver: String = "1.3.50"
 
-    const val gradle_license_plugin: String = "0.8.5" // available: "0.8.42"
+    const val gradle_license_plugin: String = "0.8.5"
 
     const val kotlin_gradle_plugin: String = "1.3.50"
 
     const val leakcanary_android: String = "2.0-beta-3"
 
-    const val constraintlayout: String = "2.0.0-beta2"
+    const val constraintlayout: String = "2.0.0-beta3"
 
     const val jacoco_android: String = "0.1.4"
 
-    const val kotlin_reflect: String = "1.3.41" // available: "1.3.50"
+    const val kotlin_reflect: String = "1.3.50"
 
     const val delect_plugin: String = "0.1.0"
 
     const val espresso_core: String = "3.3.0-alpha02"
 
-    const val activity_ktx: String = "1.1.0-beta01"
+    const val activity_ktx: String = "1.1.0-rc01"
 
     const val core_testing: String = "2.1.0"
 
-    const val recyclerview: String = "1.1.0-beta05"
+    const val recyclerview: String = "1.1.0-rc01"
 
     const val lint_gradle: String = "26.5.1"
 
@@ -89,13 +91,11 @@ object Versions {
 
     const val rxandroid: String = "2.1.1"
 
-    const val rxbinding: String = "3.0.0"
-
     const val cardview: String = "1.0.0"
 
     const val core_ktx: String = "1.2.0-beta01"
 
-    const val material: String = "1.1.0-beta01"
+    const val material: String = "1.2.0-alpha01"
 
     const val rxkotlin: String = "2.4.0"
 
