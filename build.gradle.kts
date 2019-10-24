@@ -64,16 +64,10 @@ allprojects {
     }
 }
 
-// task clean(type: Delete) {
-//     delete rootProject.buildDir
-// }
-//
-// task quality() {
-//     dependsOn "app:ktlintFormat"
-//     dependsOn "app:detekt"
-// }
+tasks.wrapper {
+    distributionType = Wrapper.DistributionType.ALL
+}
 
-// wrapper {
-//     gradleVersion = Versions.gradleLatestVersion
-//     distributionType = Wrapper.DistributionType.ALL
-// }
+tasks.register<Delete>("clean") {
+    delete("build")
+}
