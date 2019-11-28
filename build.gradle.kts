@@ -30,15 +30,11 @@ buildscript {
     dependencies {
         classpath("com.android.tools.build:gradle:${Versions.com_android_tools_build_gradle}")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin_gradle_plugin}")
-        classpath("com.dicedmelon.gradle:jacoco-android:${Versions.jacoco_android}")
         classpath("androidx.navigation:navigation-safe-args-gradle-plugin:${Versions.androidx_navigation}")
-        classpath("com.jaredsburrows:gradle-license-plugin:${Versions.gradle_license_plugin}")
-        classpath("com.soundcloud.delect:delect-plugin:${Versions.delect_plugin}")
     }
 }
 
 plugins {
-    id("com.gradle.build-scan") version("3.0")
     id("io.gitlab.arturbosch.detekt") version("1.1.1")
     id("de.fayard.buildSrcVersions") version("0.7.0")
 }
@@ -51,12 +47,6 @@ buildSrcVersions {
     useFqdnFor("org_jetbrains_kotlin_kotlin_stdlib_jdk8")
 }
 
-buildScan {
-    setTermsOfServiceUrl("https://gradle.com/terms-of-service")
-    setTermsOfServiceAgree("yes")
-    publishAlways()
-}
-
 allprojects {
     repositories {
         google()
@@ -66,6 +56,7 @@ allprojects {
 
 tasks.wrapper {
     distributionType = Wrapper.DistributionType.ALL
+    gradleVersion = Versions.gradleLatestVersion
 }
 
 tasks.register<Delete>("clean") {

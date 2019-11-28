@@ -28,9 +28,6 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: "androidx.navigation.safeargs.kotlin"
 apply plugin: 'io.gitlab.arturbosch.detekt'
-apply plugin: 'jacoco-android'
-apply plugin: 'com.jaredsburrows.license'
-//apply plugin: 'com.soundcloud.delect'
 apply from: "../ktlint.gradle"
 
 androidExtensions {
@@ -46,13 +43,6 @@ kapt {
     }
 }
 
-jacoco {
-    toolVersion = "0.8.4"
-}
-
-tasks.withType(Test) {
-    jacoco.includeNoLocationClasses = true
-}
 
 android {
     compileSdkVersion Config.compileSdk
@@ -95,7 +85,7 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation Libs.org_jetbrains_kotlin_kotlin_stdlib_jdk8
+    implementation Libs.kotlin_stdlib_jdk8
 
     implementation Libs.activity_ktx
     implementation Libs.fragment_ktx
@@ -120,7 +110,7 @@ dependencies {
     implementation Libs.rxkotlin
     implementation Libs.rxandroid
     implementation Libs.rxbinding // TODO think about other bindings?
-    implementation 'com.jakewharton.rxbinding3:rxbinding-recyclerview:3.0.0'
+    implementation 'com.jakewharton.rxbinding3:rxbinding-recyclerview:3.1.0'
     implementation Libs.autodispose_android_archcomponents
     implementation Libs.rxdogtag
     implementation Libs.rxdogtag_autodispose
