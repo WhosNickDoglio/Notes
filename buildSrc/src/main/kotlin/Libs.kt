@@ -108,12 +108,6 @@ object Libs {
     const val room_testing: String = "androidx.room:room-testing:" + Versions.androidx_room
 
     /**
-     * https://kotlinlang.org/
-     */
-    const val org_jetbrains_kotlin_kotlin_stdlib_jdk8: String =
-        "org.jetbrains.kotlin:kotlin-stdlib-jdk8:" + Versions.org_jetbrains_kotlin_kotlin_stdlib_jdk8
-
-    /**
      * https://developer.android.com/studio
      */
     const val com_android_tools_build_gradle: String = "com.android.tools.build:gradle:" +
@@ -176,10 +170,6 @@ object Libs {
         "org.jetbrains.kotlin:kotlin-scripting-compiler-embeddable:" +
             Versions.kotlin_scripting_compiler_embeddable
 
-    const val com_gradle_build_scan_gradle_plugin: String =
-        "com.gradle.build-scan:com.gradle.build-scan.gradle.plugin:" +
-            Versions.com_gradle_build_scan_gradle_plugin
-
     /**
      * https://kotlinlang.org/
      */
@@ -225,6 +215,12 @@ object Libs {
      */
     const val kotlin_gradle_plugin: String = "org.jetbrains.kotlin:kotlin-gradle-plugin:" +
         Versions.kotlin_gradle_plugin
+
+    /**
+     * https://kotlinlang.org/
+     */
+    const val kotlin_stdlib_jdk8: String = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:" +
+        Versions.kotlin_stdlib_jdk8
 
     /**
      * http://github.com/square/leakcanary/
