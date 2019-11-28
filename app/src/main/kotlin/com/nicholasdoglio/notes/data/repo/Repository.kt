@@ -28,6 +28,7 @@ import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Maybe
 
+// TODO think about moving this into UseCases
 interface Repository<T> {
 
     val observeCountOfItems: Flowable<Int>

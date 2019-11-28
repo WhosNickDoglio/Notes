@@ -24,8 +24,6 @@
 
 package com.nicholasdoglio.notes.di
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import com.nicholasdoglio.notes.data.model.Note
 import com.nicholasdoglio.notes.data.repo.NoteRepository
 import com.nicholasdoglio.notes.data.repo.Repository
