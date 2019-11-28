@@ -24,28 +24,44 @@
 
 package com.nicholasdoglio.notes.di
 
-import android.app.Activity
-import android.app.Application
-import com.nicholasdoglio.notes.ui.InjectableNavHostFragment
-import dagger.BindsInstance
-import dagger.Component
-import javax.inject.Singleton
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import com.nicholasdoglio.notes.ui.about.AboutViewModel
+import com.nicholasdoglio.notes.ui.list.NoteListViewModel
+import com.nicholasdoglio.notes.ui.note.NoteViewModel
+import dagger.Binds
+import dagger.MapKey
+import dagger.Module
+import dagger.multibindings.IntoMap
+import kotlin.reflect.KClass
 
-@Singleton
-@Component(modules = [DatabaseModule::class, FragmentBindingModule::class, BindingModule::class, ViewModelModule::class])
-interface AppComponent {
+@Target(
+    AnnotationTarget.FUNCTION,
+    AnnotationTarget.PROPERTY_GETTER,
+    AnnotationTarget.PROPERTY_SETTER
+)
+@MapKey
+@Retention(AnnotationRetention.RUNTIME)
+annotation class ViewModelKey(val value: KClass<out ViewModel>)
 
-    fun inject(host: InjectableNavHostFragment)
+@Module
+interface ViewModelModule {
 
-    @Component.Factory
-    interface Factory {
-        fun create(@BindsInstance application: Application): AppComponent
-    }
+    @Binds
+    fun bindViewModelFactory(factory: NotesViewModelFactory): ViewModelProvider.Factory
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(NoteViewModel::class)
+    fun bindNoteViewModel(noteViewModel: NoteViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(NoteListViewModel::class)
+    fun bindNoteListViewModel(noreListViewModel: NoteListViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(AboutViewModel::class)
+    fun bindAboutViewModel(noreListViewModel: AboutViewModel): ViewModel
 }
-
-interface AppComponentProvider {
-
-    val component: AppComponent
-}
-
-val Activity.injector get() = (application as AppComponentProvider).component

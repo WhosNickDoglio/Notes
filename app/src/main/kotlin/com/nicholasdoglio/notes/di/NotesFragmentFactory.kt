@@ -24,28 +24,30 @@
 
 package com.nicholasdoglio.notes.di
 
-import android.app.Activity
-import android.app.Application
-import com.nicholasdoglio.notes.ui.InjectableNavHostFragment
-import dagger.BindsInstance
-import dagger.Component
-import javax.inject.Singleton
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentFactory
+import javax.inject.Inject
+import javax.inject.Provider
+import timber.log.Timber
 
-@Singleton
-@Component(modules = [DatabaseModule::class, FragmentBindingModule::class, BindingModule::class, ViewModelModule::class])
-interface AppComponent {
+class NotesFragmentFactory @Inject constructor(
+    private val creators: Map<Class<out Fragment>, @JvmSuppressWildcards Provider<Fragment>>
+) : FragmentFactory() {
 
-    fun inject(host: InjectableNavHostFragment)
+    override fun instantiate(classLoader: ClassLoader, className: String): Fragment {
+        val fragmentClass = loadFragmentClass(classLoader, className)
+        val creator = creators[fragmentClass]
+            ?: return createFragmentAsFallback(classLoader, className)
 
-    @Component.Factory
-    interface Factory {
-        fun create(@BindsInstance application: Application): AppComponent
+        try {
+            return creator.get()
+        } catch (e: Exception) {
+            throw RuntimeException(e)
+        }
+    }
+
+    private fun createFragmentAsFallback(classLoader: ClassLoader, className: String): Fragment {
+        Timber.w("No creator found for class: $className. Using default constructor")
+        return super.instantiate(classLoader, className)
     }
 }
-
-interface AppComponentProvider {
-
-    val component: AppComponent
-}
-
-val Activity.injector get() = (application as AppComponentProvider).component

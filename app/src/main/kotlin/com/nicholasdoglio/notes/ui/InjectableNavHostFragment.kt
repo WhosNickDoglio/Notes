@@ -22,30 +22,27 @@
  * SOFTWARE.
  */
 
-package com.nicholasdoglio.notes.di
+package com.nicholasdoglio.notes.ui
 
-import android.app.Activity
-import android.app.Application
-import com.nicholasdoglio.notes.ui.InjectableNavHostFragment
-import dagger.BindsInstance
-import dagger.Component
-import javax.inject.Singleton
+import android.content.Context
+import android.os.Bundle
+import androidx.fragment.app.FragmentFactory
+import androidx.navigation.fragment.NavHostFragment
+import com.nicholasdoglio.notes.di.injector
+import javax.inject.Inject
 
-@Singleton
-@Component(modules = [DatabaseModule::class, FragmentBindingModule::class, BindingModule::class, ViewModelModule::class])
-interface AppComponent {
+class InjectableNavHostFragment : NavHostFragment() {
 
-    fun inject(host: InjectableNavHostFragment)
+    @Inject
+    lateinit var fragmentFactory: FragmentFactory
 
-    @Component.Factory
-    interface Factory {
-        fun create(@BindsInstance application: Application): AppComponent
+    override fun onAttach(context: Context) {
+        requireActivity().injector.inject(this)
+        super.onAttach(context)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        childFragmentManager.fragmentFactory = fragmentFactory
+        super.onCreate(savedInstanceState)
     }
 }
-
-interface AppComponentProvider {
-
-    val component: AppComponent
-}
-
-val Activity.injector get() = (application as AppComponentProvider).component

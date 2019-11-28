@@ -24,8 +24,16 @@
 
 package com.nicholasdoglio.notes.di
 
-import androidx.lifecycle.ViewModel
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentFactory
+import com.nicholasdoglio.notes.ui.about.AboutFragment
+import com.nicholasdoglio.notes.ui.list.NoteListFragment
+import com.nicholasdoglio.notes.ui.note.DiscardFragment
+import com.nicholasdoglio.notes.ui.note.NoteFragment
+import dagger.Binds
 import dagger.MapKey
+import dagger.Module
+import dagger.multibindings.IntoMap
 import kotlin.reflect.KClass
 
 @Target(
@@ -33,6 +41,33 @@ import kotlin.reflect.KClass
     AnnotationTarget.PROPERTY_GETTER,
     AnnotationTarget.PROPERTY_SETTER
 )
+@Retention(value = AnnotationRetention.RUNTIME)
 @MapKey
-@Retention(AnnotationRetention.RUNTIME)
-internal annotation class ViewModelKey(val value: KClass<out ViewModel>)
+annotation class FragmentKey(val value: KClass<out Fragment>)
+
+@Module
+interface FragmentBindingModule {
+
+    @Binds
+    fun bindFragmentFactory(factory: NotesFragmentFactory): FragmentFactory
+
+    @Binds
+    @IntoMap
+    @FragmentKey(NoteFragment::class)
+    fun bindNoteFragment(noteFragment: NoteFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(DiscardFragment::class)
+    fun bindDiscardFragment(discardFragment: DiscardFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(NoteListFragment::class)
+    fun bindListFragment(listFragment: NoteListFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(AboutFragment::class)
+    fun bindAboutFragment(aboutFragment: AboutFragment): Fragment
+}
