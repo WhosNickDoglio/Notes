@@ -25,18 +25,18 @@
 package com.nicholasdoglio.notes.data.local
 
 import com.nicholasdoglio.notes.R
-import com.nicholasdoglio.notes.data.model.AboutAction
 import com.nicholasdoglio.notes.data.model.AboutItem
+import com.nicholasdoglio.notes.util.SchedulersProvider
 import io.reactivex.Flowable
 import javax.inject.Inject
 
-class AboutDataStore @Inject constructor() {
+class AboutDataStore @Inject constructor(private val schedulersProvider: SchedulersProvider) {
 
     val aboutItems: Flowable<List<AboutItem>> = Flowable.just(
         listOf(
-            AboutItem(R.string.dev, AboutAction.OpenWebsite(R.string.dev_url)),
-            AboutItem(R.string.libs, AboutAction.OpenLibs),
-            AboutItem(R.string.source_code, AboutAction.OpenWebsite(R.string.source_code_url))
+            AboutItem(R.string.dev, AboutItem.Action.OpenWebsite(R.string.dev_url)),
+            AboutItem(R.string.libs, AboutItem.Action.OpenLibs),
+            AboutItem(R.string.source_code, AboutItem.Action.OpenWebsite(R.string.source_code_url))
         )
-    )
+    ).observeOn(schedulersProvider.background)
 }

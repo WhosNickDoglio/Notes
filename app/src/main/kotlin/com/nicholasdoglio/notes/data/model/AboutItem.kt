@@ -31,7 +31,7 @@ import androidx.recyclerview.widget.DiffUtil
  * @param text text description of each item
  * @param link website URL for better understanding each of item
  */
-data class AboutItem(@StringRes val text: Int, val action: AboutAction) {
+data class AboutItem(@StringRes val text: Int, val action: Action) {
     companion object {
         val diffCallback = object : DiffUtil.ItemCallback<AboutItem>() {
             override fun areItemsTheSame(oldItem: AboutItem, newItem: AboutItem): Boolean =
@@ -41,9 +41,9 @@ data class AboutItem(@StringRes val text: Int, val action: AboutAction) {
                 oldItem.text == newItem.text
         }
     }
-}
 
-sealed class AboutAction {
-    object OpenLibs : AboutAction()
-    data class OpenWebsite(@StringRes val url: Int) : AboutAction()
+    sealed class Action {
+        object OpenLibs : Action()
+        data class OpenWebsite(@StringRes val url: Int) : Action()
+    }
 }

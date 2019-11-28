@@ -30,8 +30,8 @@ import android.view.ViewGroup
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.nicholasdoglio.notes.R
-import com.nicholasdoglio.notes.data.model.AboutAction
 import com.nicholasdoglio.notes.data.model.AboutItem
+import com.nicholasdoglio.notes.data.model.AboutItem.Action
 import com.nicholasdoglio.notes.util.openWebPage
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_about.*
@@ -46,10 +46,10 @@ class AboutItemViewHolder(override val containerView: View) :
         }
     }
 
-    private fun click(action: AboutAction): View.OnClickListener = View.OnClickListener {
+    private fun click(action: Action): View.OnClickListener = View.OnClickListener {
         when (action) {
-            is AboutAction.OpenWebsite -> it.context.openWebPage(it.context.getString(action.url))
-            is AboutAction.OpenLibs -> it.findNavController().navigate(R.id.open_libs) // TODO fix this
+            is Action.OpenWebsite -> it.context.openWebPage(it.context.getString(action.url))
+            is Action.OpenLibs -> it.findNavController().navigate(R.id.open_libs) // TODO fix this
         }
     }
 
