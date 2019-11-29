@@ -19,6 +19,37 @@ object Libs {
             Versions.com_jakewharton_rxbinding3
 
     /**
+     * https://kotlinlang.org/
+     */
+    const val kotlin_android_extensions: String =
+        "org.jetbrains.kotlin:kotlin-android-extensions:" +
+            Versions.org_jetbrains_kotlin
+
+    /**
+     * https://kotlinlang.org/
+     */
+    const val kotlin_android_extensions_runtime: String =
+        "org.jetbrains.kotlin:kotlin-android-extensions-runtime:" + Versions.org_jetbrains_kotlin
+
+    /**
+     * https://kotlinlang.org/
+     */
+    const val kotlin_annotation_processing_gradle: String =
+        "org.jetbrains.kotlin:kotlin-annotation-processing-gradle:" + Versions.org_jetbrains_kotlin
+
+    /**
+     * https://kotlinlang.org/
+     */
+    const val kotlin_gradle_plugin: String = "org.jetbrains.kotlin:kotlin-gradle-plugin:" +
+        Versions.org_jetbrains_kotlin
+
+    /**
+     * https://kotlinlang.org/
+     */
+    const val kotlin_stdlib_jdk8: String = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:" +
+        Versions.org_jetbrains_kotlin
+
+    /**
      * https://developer.android.com/topic/libraries/architecture/index.html
      */
     const val navigation_fragment_ktx: String = "androidx.navigation:navigation-fragment-ktx:" +
@@ -151,10 +182,6 @@ object Libs {
      */
     const val junit_junit: String = "junit:junit:" + Versions.junit_junit
 
-    const val org_gradle_kotlin_kotlin_dsl_gradle_plugin: String =
-        "org.gradle.kotlin.kotlin-dsl:org.gradle.kotlin.kotlin-dsl.gradle.plugin:" +
-            Versions.org_gradle_kotlin_kotlin_dsl_gradle_plugin
-
     const val io_gitlab_arturbosch_detekt_gradle_plugin: String =
         "io.gitlab.arturbosch.detekt:io.gitlab.arturbosch.detekt.gradle.plugin:" +
             Versions.io_gitlab_arturbosch_detekt_gradle_plugin
@@ -164,63 +191,11 @@ object Libs {
             Versions.de_fayard_buildsrcversions_gradle_plugin
 
     /**
-     * https://kotlinlang.org/
-     */
-    const val kotlin_scripting_compiler_embeddable: String =
-        "org.jetbrains.kotlin:kotlin-scripting-compiler-embeddable:" +
-            Versions.kotlin_scripting_compiler_embeddable
-
-    /**
-     * https://kotlinlang.org/
-     */
-    const val kotlin_annotation_processing_gradle: String =
-        "org.jetbrains.kotlin:kotlin-annotation-processing-gradle:" +
-            Versions.kotlin_annotation_processing_gradle
-
-    /**
      * https://github.com/uber/AutoDispose/
      */
     const val autodispose_android_archcomponents: String =
         "com.uber.autodispose:autodispose-android-archcomponents:" +
             Versions.autodispose_android_archcomponents
-
-    /**
-     * https://kotlinlang.org/
-     */
-    const val kotlin_android_extensions_runtime: String =
-        "org.jetbrains.kotlin:kotlin-android-extensions-runtime:" +
-            Versions.kotlin_android_extensions_runtime
-
-    /**
-     * https://kotlinlang.org/
-     */
-    const val kotlin_android_extensions: String =
-        "org.jetbrains.kotlin:kotlin-android-extensions:" +
-            Versions.kotlin_android_extensions
-
-    /**
-     * https://kotlinlang.org/
-     */
-    const val kotlin_sam_with_receiver: String = "org.jetbrains.kotlin:kotlin-sam-with-receiver:" +
-        Versions.kotlin_sam_with_receiver
-
-    /**
-     * https://github.com/jaredsburrows/gradle-license-plugin
-     */
-    const val gradle_license_plugin: String = "com.jaredsburrows:gradle-license-plugin:" +
-        Versions.gradle_license_plugin
-
-    /**
-     * https://kotlinlang.org/
-     */
-    const val kotlin_gradle_plugin: String = "org.jetbrains.kotlin:kotlin-gradle-plugin:" +
-        Versions.kotlin_gradle_plugin
-
-    /**
-     * https://kotlinlang.org/
-     */
-    const val kotlin_stdlib_jdk8: String = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:" +
-        Versions.kotlin_stdlib_jdk8
 
     /**
      * http://github.com/square/leakcanary/
@@ -233,21 +208,6 @@ object Libs {
      */
     const val constraintlayout: String = "androidx.constraintlayout:constraintlayout:" +
         Versions.constraintlayout
-
-    const val jacoco_android: String = "com.dicedmelon.gradle:jacoco-android:" +
-        Versions.jacoco_android
-
-    /**
-     * https://kotlinlang.org/
-     */
-    const val kotlin_reflect: String =
-        "org.jetbrains.kotlin:kotlin-reflect:" + Versions.kotlin_reflect
-
-    /**
-     * https://github.com/soundcloud/delect
-     */
-    const val delect_plugin: String =
-        "com.soundcloud.delect:delect-plugin:" + Versions.delect_plugin
 
     /**
      * https://developer.android.com/testing
