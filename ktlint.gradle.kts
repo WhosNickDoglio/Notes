@@ -22,32 +22,28 @@
  * SOFTWARE.
  */
 
-package com.nicholasdoglio.notes.ui.note
+val ktlint: Configuration by configurations.creating
 
-import android.app.Dialog
-import android.os.Bundle
-import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.nicholasdoglio.notes.R
-import javax.inject.Inject
+dependencies {
+    ktlint(Libs.ktlint)
+}
 
-class DiscardFragment @Inject constructor(
-    private val viewModelFactory: ViewModelProvider.Factory
-) : DialogFragment() {
+tasks.register<JavaExec>("ktlint") {
+    group = "verification"
+    description = "Check Kotlin code style."
+    classpath = ktlint
+    main = "com.pinterest.ktlint.Main"
+    args("--android", "src/**/*.kt")
+}
 
-    private val viewModel: NoteViewModel by viewModels { viewModelFactory }
+tasks.named("check") {
+    dependsOn(ktlint)
+}
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog =
-        MaterialAlertDialogBuilder(requireContext())
-            .setMessage(R.string.discard_warning)
-            .setPositiveButton(R.string.save_button) { _, _ ->
-                viewModel.triggerUpsert.onNext(Unit) }
-            .setNegativeButton(R.string.discard_button) { _, _ ->
-                viewModel.triggerDelete.onNext(
-                    Unit
-                )
-            }
-            .create()
+tasks.register<JavaExec>("ktlintFormat") {
+    group = "formatting"
+    description = "Fix Kotlin code style deviations."
+    classpath = ktlint
+    main = "com.pinterest.ktlint.Main"
+    args("--android", "-F", "src/**/*.kt")
 }

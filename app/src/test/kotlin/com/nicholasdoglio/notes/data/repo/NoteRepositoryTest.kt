@@ -74,8 +74,10 @@ class NoteRepositoryTest {
         repository.findItemById(TestData.thirdNote.id).test().assertValue(TestData.thirdNote)
     }
 
+    // given a note ID that doesn't exist in the repository
+    // when finding a note then return null
     @Test
-    fun `given a note ID that doesn't exist in the repository when finding a note then return null`() {
+    fun `TODO Fix name`() {
         repository.findItemById(TestData.thirdNote.id).test()
             .assertNoValues()
     }

@@ -28,23 +28,20 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:${Versions.com_android_tools_build_gradle}")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin_gradle_plugin}")
-        classpath("androidx.navigation:navigation-safe-args-gradle-plugin:${Versions.androidx_navigation}")
+        classpath(Libs.com_android_tools_build_gradle)
+        classpath(Libs.kotlin_gradle_plugin)
+        classpath(Libs.navigation_safe_args_gradle_plugin)
     }
 }
 
 plugins {
-    id("io.gitlab.arturbosch.detekt") version("1.1.1")
-    id("de.fayard.buildSrcVersions") version("0.7.0")
+    detekt
+    buildSrcVersions
 }
 
 buildSrcVersions {
-    rejectVersionIf {
-        candidate.version.contains("EAP")
-    }
+    rejectVersionIf { candidate.version.contains("EAP") }
     indent = "\t"
-    useFqdnFor("org_jetbrains_kotlin_kotlin_stdlib_jdk8")
 }
 
 allprojects {

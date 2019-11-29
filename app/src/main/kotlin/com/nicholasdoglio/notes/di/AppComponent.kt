@@ -32,7 +32,14 @@ import dagger.Component
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [DatabaseModule::class, FragmentBindingModule::class, BindingModule::class, ViewModelModule::class])
+@Component(
+    modules = [
+        DatabaseModule::class,
+        FragmentBindingModule::class,
+        BindingModule::class,
+        ViewModelModule::class
+    ]
+)
 interface AppComponent {
 
     fun inject(host: InjectableNavHostFragment)

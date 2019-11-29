@@ -1,3 +1,6 @@
+import org.gradle.plugin.use.PluginDependenciesSpec
+import org.gradle.plugin.use.PluginDependencySpec
+
 /*
  * MIT License
  *
@@ -22,25 +25,6 @@
  * SOFTWARE.
  */
 
-configurations {
-    ktlint
-}
-
-dependencies {
-    ktlint Libs.ktlint
-}
-
-task ktlint(type: JavaExec, group: "verification") {
-    description = "Check Kotlin code style."
-    classpath = configurations.ktlint
-    main = "com.pinterest.ktlint.Main"
-    args "src/**/*.kt"
-}
-check.dependsOn ktlint
-
-task ktlintFormat(type: JavaExec, group: "formatting") {
-    description = "Fix Kotlin code style deviations."
-    classpath = configurations.ktlint
-    main = "com.pinterest.ktlint.Main"
-    args "-F", "src/**/*.kt"
-}
+val PluginDependenciesSpec.detekt: PluginDependencySpec
+    inline get() =
+        id("io.gitlab.arturbosch.detekt").version(Versions.io_gitlab_arturbosch_detekt_gradle_plugin)

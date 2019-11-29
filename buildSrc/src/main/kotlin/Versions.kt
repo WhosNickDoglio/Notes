@@ -41,7 +41,7 @@ object Versions {
 
     const val junit_junit: String = "4.12"
 
-    const val org_gradle_kotlin_kotlin_dsl_gradle_plugin: String = "1.2.9" // available: "1.3.2"
+    const val org_gradle_kotlin_kotlin_dsl_gradle_plugin: String = "1.2.9"
 
     const val io_gitlab_arturbosch_detekt_gradle_plugin: String = "1.2.0"
 
@@ -103,7 +103,7 @@ object Versions {
 
     const val timber: String = "4.7.1"
 
-    const val aapt2: String = "3.5.1-5435860" // available: "4.0.0-alpha04-5910961"
+    const val aapt2: String = "3.5.1-5435860"
 
     const val mockk: String = "1.9.3"
 
