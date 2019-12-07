@@ -35,7 +35,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.nicholasdoglio.notes.R
 import com.nicholasdoglio.notes.util.SchedulersProvider
 import com.uber.autodispose.android.lifecycle.autoDispose
-import io.reactivex.android.schedulers.AndroidSchedulers
 import javax.inject.Inject
 import kotlinx.android.synthetic.main.fragment_about.*
 
@@ -63,7 +62,7 @@ class AboutFragment @Inject constructor(
         }
 
         viewModel.aboutItems
-            .observeOn(AndroidSchedulers.mainThread())
+            .observeOn(schedulersProvider.main)
             .autoDispose(viewLifecycleOwner)
             .subscribe { aboutAdapter.submitList(it) }
     }

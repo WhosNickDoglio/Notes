@@ -15,11 +15,11 @@ object Versions {
 
     const val org_jetbrains_kotlin: String = "1.3.61"
 
-    const val androidx_navigation: String = "2.2.0-rc02"
+    const val androidx_navigation: String = "2.2.0-rc03"
 
-    const val androidx_lifecycle: String = "2.2.0-rc02"
+    const val androidx_lifecycle: String = "2.2.0-rc03"
 
-    const val androidx_fragment: String = "1.2.0-rc02"
+    const val androidx_fragment: String = "1.2.0-rc03"
 
     const val com_google_dagger: String = "2.25.2"
 
@@ -27,23 +27,19 @@ object Versions {
 
     const val androidx_room: String = "2.2.2"
 
-    const val com_android_tools_build_gradle: String = "3.5.2"
+    const val androidx_test: String = "1.3.0-alpha03"
 
-    const val androidx_test_ext_junit: String = "1.1.2-alpha02"
+    const val com_android_tools_build_gradle: String = "3.5.3"
 
-    const val androidx_test_ext_truth: String = "1.3.0-alpha02"
+    const val androidx_test_ext_junit: String = "1.1.2-alpha03"
+
+    const val androidx_test_ext_truth: String = "1.3.0-alpha03"
 
     const val com_google_truth_truth: String = "1.0"
 
-    const val androidx_test_runner: String = "1.3.0-alpha02"
-
-    const val androidx_test_rules: String = "1.3.0-alpha02"
-
-    const val androidx_test_core: String = "1.2.1-alpha02"
-
     const val junit_junit: String = "4.12"
 
-    const val io_gitlab_arturbosch_detekt_gradle_plugin: String = "1.2.0"
+    const val io_gitlab_arturbosch_detekt_gradle_plugin: String = "1.2.2"
 
     const val de_fayard_buildsrcversions_gradle_plugin: String = "0.7.0"
 
@@ -53,17 +49,19 @@ object Versions {
 
     const val constraintlayout: String = "2.0.0-beta3"
 
-    const val espresso_core: String = "3.3.0-alpha02"
+    const val espresso_core: String = "3.3.0-alpha03"
 
-    const val activity_ktx: String = "1.1.0-rc02"
+    const val activity_ktx: String = "1.1.0-rc03"
 
     const val core_testing: String = "2.1.0"
 
     const val recyclerview: String = "1.1.0"
 
-    const val lint_gradle: String = "26.5.2"
+    const val lint_gradle: String = "26.5.3"
 
-    const val appcompat: String = "1.1.0"
+    const val threetenabp: String = "1.2.1"
+
+    const val appcompat: String = "1.2.0-alpha01"
 
     const val rxandroid: String = "2.1.1"
 
@@ -75,7 +73,7 @@ object Versions {
 
     const val rxkotlin: String = "2.4.0"
 
-    const val ktlint: String = "0.35.0"
+    const val ktlint: String = "0.36.0"
 
     const val rxjava: String = "2.2.15"
 

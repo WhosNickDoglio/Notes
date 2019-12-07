@@ -26,6 +26,7 @@ package com.nicholasdoglio.notes
 
 import android.app.Application
 import android.os.StrictMode
+import com.jakewharton.threetenabp.AndroidThreeTen
 import com.nicholasdoglio.notes.di.AppComponent
 import com.nicholasdoglio.notes.di.AppComponentProvider
 import com.nicholasdoglio.notes.di.DaggerAppComponent
@@ -41,6 +42,7 @@ class NotesApplication : Application(), AppComponentProvider {
 
     override fun onCreate() {
         super.onCreate()
+        AndroidThreeTen.init(this)
         initDebugTools()
     }
 
@@ -83,3 +85,6 @@ class NotesApplication : Application(), AppComponentProvider {
 //         - Fix weird colors
 //         - More debug tools
 //         - Splash screen using Nav component?
+//         - Licenses?
+//         - JaCoCo?
+//         - Dagger reflect

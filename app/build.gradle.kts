@@ -112,6 +112,8 @@ dependencies {
     implementation(Libs.room_rxjava2)
     kapt(Libs.room_compiler)
 
+    implementation(Libs.threetenabp)
+
     implementation(Libs.rxjava)
     implementation(Libs.rxkotlin)
     implementation(Libs.rxandroid)
