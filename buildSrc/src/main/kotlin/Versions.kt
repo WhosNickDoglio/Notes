@@ -17,8 +17,6 @@ object Versions {
 
     const val androidx_navigation: String = "2.2.0-rc03"
 
-    const val androidx_lifecycle: String = "2.2.0-rc03"
-
     const val androidx_fragment: String = "1.2.0-rc03"
 
     const val com_google_dagger: String = "2.25.2"
@@ -45,13 +43,13 @@ object Versions {
 
     const val autodispose_android_archcomponents: String = "1.4.0"
 
+    const val dependency_analysis_gradle_plugin: String = "0.4"
+
     const val leakcanary_android: String = "2.0"
 
     const val constraintlayout: String = "2.0.0-beta3"
 
     const val espresso_core: String = "3.3.0-alpha03"
-
-    const val activity_ktx: String = "1.1.0-rc03"
 
     const val core_testing: String = "2.1.0"
 
@@ -65,10 +63,6 @@ object Versions {
 
     const val rxandroid: String = "2.1.1"
 
-    const val cardview: String = "1.0.0"
-
-    const val core_ktx: String = "1.2.0-rc01"
-
     const val material: String = "1.2.0-alpha02"
 
     const val rxkotlin: String = "2.4.0"
@@ -79,7 +73,7 @@ object Versions {
 
     const val timber: String = "4.7.1"
 
-    const val aapt2: String = "3.5.2-5435860"
+    const val aapt2: String = "3.5.3-5435860"
 
     const val mockk: String = "1.9.3"
 

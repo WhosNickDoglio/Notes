@@ -68,24 +68,6 @@ object Libs {
         Versions.androidx_navigation
 
     /**
-     * https://developer.android.com/topic/libraries/architecture/index.html
-     */
-    const val lifecycle_common_java8: String = "androidx.lifecycle:lifecycle-common-java8:" +
-        Versions.androidx_lifecycle
-
-    /**
-     * https://developer.android.com/jetpack/androidx
-     */
-    const val lifecycle_runtime_ktx: String = "androidx.lifecycle:lifecycle-runtime-ktx:" +
-        Versions.androidx_lifecycle
-
-    /**
-     * https://developer.android.com/jetpack/androidx
-     */
-    const val lifecycle_viewmodel_ktx: String = "androidx.lifecycle:lifecycle-viewmodel-ktx:" +
-        Versions.androidx_lifecycle
-
-    /**
      * https://developer.android.com/jetpack/androidx
      */
     const val fragment_ktx: String = "androidx.fragment:fragment-ktx:" + Versions.androidx_fragment
@@ -197,6 +179,10 @@ object Libs {
         "com.uber.autodispose:autodispose-android-archcomponents:" +
             Versions.autodispose_android_archcomponents
 
+    const val dependency_analysis_gradle_plugin: String =
+        "gradle.plugin.com.autonomousapps:dependency-analysis-gradle-plugin:" +
+            Versions.dependency_analysis_gradle_plugin
+
     /**
      * http://github.com/square/leakcanary/
      */
@@ -214,11 +200,6 @@ object Libs {
      */
     const val espresso_core: String =
         "androidx.test.espresso:espresso-core:" + Versions.espresso_core
-
-    /**
-     * https://developer.android.com/jetpack/androidx
-     */
-    const val activity_ktx: String = "androidx.activity:activity-ktx:" + Versions.activity_ktx
 
     /**
      * https://developer.android.com/topic/libraries/architecture/index.html
@@ -250,16 +231,6 @@ object Libs {
      * https://github.com/ReactiveX/RxAndroid
      */
     const val rxandroid: String = "io.reactivex.rxjava2:rxandroid:" + Versions.rxandroid
-
-    /**
-     * http://developer.android.com/tools/extras/support-library.html
-     */
-    const val cardview: String = "androidx.cardview:cardview:" + Versions.cardview
-
-    /**
-     * https://developer.android.com/jetpack/androidx
-     */
-    const val core_ktx: String = "androidx.core:core-ktx:" + Versions.core_ktx
 
     /**
      * http://developer.android.com/tools/extras/support-library.html

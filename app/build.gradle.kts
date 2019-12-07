@@ -93,20 +93,13 @@ android {
 dependencies {
     implementation(Libs.kotlin_stdlib_jdk8)
 
-    implementation(Libs.activity_ktx)
     implementation(Libs.fragment_ktx)
     implementation(Libs.appcompat)
     implementation(Libs.recyclerview)
-    implementation(Libs.cardview)
     implementation(Libs.material)
     implementation(Libs.constraintlayout)
-    implementation(Libs.core_ktx)
     implementation(Libs.navigation_fragment_ktx)
     implementation(Libs.navigation_ui_ktx)
-
-    implementation(Libs.lifecycle_viewmodel_ktx)
-    implementation(Libs.lifecycle_runtime_ktx)
-    implementation(Libs.lifecycle_common_java8)
 
     implementation(Libs.room_runtime)
     implementation(Libs.room_rxjava2)
