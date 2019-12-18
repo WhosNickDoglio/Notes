@@ -36,12 +36,7 @@ buildscript {
 
 plugins {
     detekt
-    buildSrcVersions
-}
-
-buildSrcVersions {
-    rejectVersionIf { candidate.version.contains("EAP") }
-    indent = "\t"
+    benManesVersions
 }
 
 allprojects {

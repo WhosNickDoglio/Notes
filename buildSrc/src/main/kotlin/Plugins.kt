@@ -28,3 +28,7 @@ import org.gradle.plugin.use.PluginDependencySpec
 val PluginDependenciesSpec.detekt: PluginDependencySpec
     inline get() =
         id("io.gitlab.arturbosch.detekt").version(Versions.io_gitlab_arturbosch_detekt_gradle_plugin)
+
+val PluginDependenciesSpec.benManesVersions: PluginDependencySpec
+    inline get() =
+        id("com.github.ben-manes.versions").version("0.27.0")
