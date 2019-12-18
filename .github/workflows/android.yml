@@ -28,6 +28,6 @@ jobs:
         with:
           arguments: testDebugUnitTest
       - name: Codecov
-      - uses: codecov/codecov-action@v1.0.5
+        uses: codecov/codecov-action@v1.0.5
         with:
           token: ${{ secrets.CODE_COV_TOKEN  }}
