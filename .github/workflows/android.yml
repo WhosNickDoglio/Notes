@@ -1,4 +1,4 @@
-name: Android CI
+name: Notes
 
 on: [push]
 
