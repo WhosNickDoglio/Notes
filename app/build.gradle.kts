@@ -1,5 +1,5 @@
-import org.gradle.api.tasks.testing.logging.TestExceptionFormat.*
-import org.gradle.api.tasks.testing.logging.TestLogEvent.*
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import org.gradle.api.tasks.testing.logging.TestLogEvent
 
 /*
  * MIT License
@@ -50,9 +50,14 @@ kapt {
 
 tasks.withType<Test> {
     testLogging {
-        exceptionFormat = FULL
-        events = setOf(STARTED, SKIPPED, PASSED, FAILED)
-        showStandardStreams =  true
+        exceptionFormat = TestExceptionFormat.FULL
+        events = setOf(
+            TestLogEvent.STARTED,
+            TestLogEvent.SKIPPED,
+            TestLogEvent.PASSED,
+            TestLogEvent.FAILED
+        )
+        showStandardStreams = true
     }
 }
 
@@ -75,7 +80,12 @@ android {
     buildTypes {
         named("release") {
             isMinifyEnabled = false
-            setProguardFiles(listOf(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"))
+            setProguardFiles(
+                listOf(
+                    getDefaultProguardFile("proguard-android.txt"),
+                    "proguard-rules.pro"
+                )
+            )
         }
     }
 
