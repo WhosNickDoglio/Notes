@@ -1,3 +1,6 @@
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat.*
+import org.gradle.api.tasks.testing.logging.TestLogEvent.*
+
 /*
  * MIT License
  *
@@ -42,6 +45,14 @@ kapt {
     javacOptions {
         option("-source", "8")
         option("-target", "8")
+    }
+}
+
+tasks.withType<Test> {
+    testLogging {
+        exceptionFormat = FULL
+        events = setOf(STARTED, SKIPPED, PASSED, FAILED)
+        showStandardStreams =  true
     }
 }
 

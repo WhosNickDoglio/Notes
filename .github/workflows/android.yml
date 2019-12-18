@@ -15,7 +15,19 @@ jobs:
           java-version: 1.8
       - name: Build with Gradle
         run: ./gradlew build
-      - name: Gradle Command
+      - name: ktlint
+        uses: eskatos/gradle-command-action@v1
+        with:
+          arguments: ktlint
+      - name: detekt
+        uses: eskatos/gradle-command-action@v1
+        with:
+          arguments: detekt
+      - name: Run Unit Tests
         uses: eskatos/gradle-command-action@v1
         with:
           arguments: testDebugUnitTest
+      - name: Codecov
+      - uses: codecov/codecov-action@v1.0.5
+        with:
+          token: ${{ secrets.CODE_COV_TOKEN  }}
