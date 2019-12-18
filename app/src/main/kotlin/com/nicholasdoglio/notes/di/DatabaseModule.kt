@@ -25,7 +25,7 @@
 package com.nicholasdoglio.notes.di
 
 import android.app.Application
-import com.nicholasdoglio.notes.MyDatabase
+import com.nicholasdoglio.notes.NoteDatabase
 import com.nicholasdoglio.notes.NoteQueries
 import com.squareup.sqldelight.android.AndroidSqliteDriver
 import dagger.Module
@@ -40,12 +40,12 @@ object DatabaseModule {
     @Provides
     @Singleton
     fun driver(app: Application): AndroidSqliteDriver =
-        AndroidSqliteDriver(MyDatabase.Schema, app, NOTES_DB)
+        AndroidSqliteDriver(NoteDatabase.Schema, app, NOTES_DB)
 
     @Provides
     @Singleton
-    fun database(driver: AndroidSqliteDriver): MyDatabase = MyDatabase(driver)
+    fun database(driver: AndroidSqliteDriver): NoteDatabase = NoteDatabase(driver)
 
     @Provides
-    fun noteQueries(database: MyDatabase): NoteQueries = database.noteQueries
+    fun noteQueries(database: NoteDatabase): NoteQueries = database.noteQueries
 }
