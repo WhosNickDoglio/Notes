@@ -31,7 +31,7 @@ import io.reactivex.Maybe
 // TODO think about moving this into UseCases
 interface Repository<T> {
 
-    val observeCountOfItems: Flowable<Int>
+    val observeCountOfItems: Flowable<Long>
 
     val observeItems: Flowable<List<T>>
 

@@ -25,10 +25,19 @@
 package com.nicholasdoglio.notes.ui.list
 
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.nicholasdoglio.notes.data.model.Note
+import com.nicholasdoglio.notes.Note
 
-class NoteListAdapter : ListAdapter<Note, NoteViewHolder>(Note.diffCallback) {
+class NoteListAdapter : ListAdapter<Note, NoteViewHolder>(object : DiffUtil.ItemCallback<Note>() {
+    override fun areItemsTheSame(oldItem: Note, newItem: Note): Boolean {
+        return oldItem.id == newItem.id // TODO FIX THIS
+    }
+
+    override fun areContentsTheSame(oldItem: Note, newItem: Note): Boolean {
+        return oldItem.id == newItem.id // TODO FIX THIS
+    }
+}) {
 
     override fun onBindViewHolder(holder: NoteViewHolder, position: Int) =
         holder.bind(getItem(position))

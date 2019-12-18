@@ -24,38 +24,53 @@
 
 package com.nicholasdoglio.notes.data.repo
 
-import com.nicholasdoglio.notes.data.local.NoteDao
-import com.nicholasdoglio.notes.data.model.Note
+import com.nicholasdoglio.notes.Note
+import com.nicholasdoglio.notes.NoteQueries
 import com.nicholasdoglio.notes.util.SchedulersProvider
+import com.squareup.sqldelight.runtime.rx.asObservable
+import com.squareup.sqldelight.runtime.rx.mapToList
+import com.squareup.sqldelight.runtime.rx.mapToOne
+import io.reactivex.BackpressureStrategy
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Maybe
+import io.reactivex.MaybeOnSubscribe
 import javax.inject.Inject
 
 class NoteRepository @Inject constructor(
-    private val dao: NoteDao,
+    private val noteQueries: NoteQueries,
     private val schedulersProvider: SchedulersProvider
 ) : Repository<Note> {
 
-    override val observeCountOfItems: Flowable<Int> = dao.observeNumOfNotes
-        .observeOn(schedulersProvider.database)
+    override val observeCountOfItems: Flowable<Long> =
+        noteQueries.count().asObservable(schedulersProvider.database).mapToOne()
+            .toFlowable(BackpressureStrategy.LATEST)
 
-    override val observeItems: Flowable<List<Note>> = dao.observeNotes
-        .observeOn(schedulersProvider.database)
+    override val observeItems: Flowable<List<Note>> =
+        noteQueries.allNotes().asObservable(schedulersProvider.database).mapToList()
+            .toFlowable(BackpressureStrategy.LATEST)
 
-    override fun findItemById(id: Long): Maybe<Note> = dao.findNoteById(id)
-        .observeOn(schedulersProvider.database)
+    override fun findItemById(id: Long): Maybe<Note> =
+        Maybe.create(MaybeOnSubscribe<Note> { emitter ->
+            val note = noteQueries.findNoteById(id).executeAsOneOrNull()
+
+            // TODO use Response sealed class
+            if (note == null) emitter.onSuccess(Note.Impl(1, "", "")) else emitter.onSuccess(note)
+        })
+
+            .observeOn(schedulersProvider.database)
 
     // TODO check if this actually works?
-    override fun upsert(item: Note): Completable = dao.insertNote(item)
-        .filter { it == FAILED_INSERT }
-        .flatMapCompletable { dao.updateNote(item) }
-        .observeOn(schedulersProvider.database)
+    override fun upsert(item: Note): Completable =
+        Completable.fromAction { noteQueries.insertOrReplace(item.title, item.contents) }
+            .observeOn(schedulersProvider.database)
 
     override fun delete(item: Note): Completable =
-        dao.deleteNote(item).observeOn(schedulersProvider.database)
+        Completable.fromAction { noteQueries.deleteById(item.id) }
+            .observeOn(schedulersProvider.database)
+}
 
-    private companion object {
-        private const val FAILED_INSERT = -1L
-    }
+sealed class DatabaseResponse {
+    data class Success(val value: String) : DatabaseResponse()
+    object Failure : DatabaseResponse()
 }

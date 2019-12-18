@@ -25,7 +25,7 @@
 package com.nicholasdoglio.notes.ui.note
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.nicholasdoglio.notes.data.model.Note
+import com.nicholasdoglio.notes.Note
 import com.nicholasdoglio.notes.data.repo.FakeRepository
 import com.nicholasdoglio.notes.data.repo.Repository
 import org.junit.Before

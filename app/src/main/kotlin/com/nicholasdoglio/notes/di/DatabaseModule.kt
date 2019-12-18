@@ -25,9 +25,9 @@
 package com.nicholasdoglio.notes.di
 
 import android.app.Application
-import androidx.room.Room
-import com.nicholasdoglio.notes.data.local.NoteDao
-import com.nicholasdoglio.notes.data.local.NoteDatabase
+import com.nicholasdoglio.notes.MyDatabase
+import com.nicholasdoglio.notes.NoteQueries
+import com.squareup.sqldelight.android.AndroidSqliteDriver
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -37,11 +37,15 @@ object DatabaseModule {
 
     private const val NOTES_DB = "notes_db"
 
-    @Singleton
     @Provides
-    fun roomDatabase(app: Application): NoteDatabase =
-        Room.databaseBuilder(app, NoteDatabase::class.java, NOTES_DB).build()
+    @Singleton
+    fun driver(app: Application): AndroidSqliteDriver =
+        AndroidSqliteDriver(MyDatabase.Schema, app, NOTES_DB)
 
     @Provides
-    fun noteDao(roomDatabase: NoteDatabase): NoteDao = roomDatabase.noteDao
+    @Singleton
+    fun database(driver: AndroidSqliteDriver): MyDatabase = MyDatabase(driver)
+
+    @Provides
+    fun noteQueries(database: MyDatabase): NoteQueries = database.noteQueries
 }

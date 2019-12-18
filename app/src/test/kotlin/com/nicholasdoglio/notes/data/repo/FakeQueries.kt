@@ -22,13 +22,49 @@
  * SOFTWARE.
  */
 
-package com.nicholasdoglio.notes.data.local
+package com.nicholasdoglio.notes.data.repo
 
-import androidx.room.Database
-import androidx.room.RoomDatabase
-import com.nicholasdoglio.notes.data.model.Note
+import com.nicholasdoglio.notes.Note
+import com.nicholasdoglio.notes.NoteQueries
+import com.squareup.sqldelight.Query
+import com.squareup.sqldelight.Transacter
 
-@Database(entities = [(Note::class)], version = 2, exportSchema = false)
-abstract class NoteDatabase : RoomDatabase() {
-    abstract val noteDao: NoteDao
+class FakeQueries : NoteQueries {
+
+    override fun <T : Any> allNotes(
+        mapper: (id: Long, title: String?, contents: String?) -> T
+    ): Query<T> {
+        return TODO()
+    }
+
+    override fun allNotes(): Query<Note> {
+        return TODO()
+    }
+
+    override fun count(): Query<Long> {
+        return TODO()
+    }
+
+    override fun <T : Any> findNoteById(
+        id: Long,
+        mapper: (id: Long, title: String?, contents: String?) -> T
+    ): Query<T> {
+        return TODO()
+    }
+
+    override fun findNoteById(id: Long): Query<Note> {
+        return TODO()
+    }
+
+    override fun insertOrReplace(title: String?, contents: String?) {
+        return TODO()
+    }
+
+    override fun deleteById(id: Long) {
+        return TODO()
+    }
+
+    override fun transaction(noEnclosing: Boolean, body: Transacter.Transaction.() -> Unit) {
+        return TODO()
+    }
 }

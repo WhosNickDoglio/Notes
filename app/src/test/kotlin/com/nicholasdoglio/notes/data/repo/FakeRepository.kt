@@ -24,7 +24,7 @@
 
 package com.nicholasdoglio.notes.data.repo
 
-import com.nicholasdoglio.notes.data.model.Note
+import com.nicholasdoglio.notes.Note
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Completable
 import io.reactivex.Flowable
@@ -36,9 +36,9 @@ class FakeRepository : Repository<Note> {
     private val notes: MutableMap<Long, Note?> = mutableMapOf()
     private val _notes: BehaviorSubject<List<Note>> =
         BehaviorSubject.createDefault(notes.map { it.value }.filterNotNull())
-    private val _count: BehaviorSubject<Int> = BehaviorSubject.createDefault(0)
+    private val _count: BehaviorSubject<Long> = BehaviorSubject.createDefault(0)
 
-    override val observeCountOfItems: Flowable<Int> =
+    override val observeCountOfItems: Flowable<Long> =
         _count.hide().toFlowable(BackpressureStrategy.LATEST)
     override val observeItems: Flowable<List<Note>> =
         _notes.hide().map { it.toList() }.toFlowable(BackpressureStrategy.LATEST)
@@ -50,7 +50,7 @@ class FakeRepository : Repository<Note> {
 
     override fun delete(item: Note): Completable = Completable.fromAction {
         notes.remove(item.id)
-        _count.onNext(notes.size)
+        _count.onNext(notes.size.toLong())
         _notes.onNext(notes.map { it.value }.filterNotNull())
     }
 }

@@ -32,6 +32,7 @@ plugins {
     kotlin("kapt")
     id("androidx.navigation.safeargs.kotlin")
     id("io.gitlab.arturbosch.detekt")
+    id("com.squareup.sqldelight")
 }
 
 apply(from = "$rootDir/ktlint.gradle.kts")
@@ -52,7 +53,6 @@ tasks.withType<Test> {
     testLogging {
         exceptionFormat = TestExceptionFormat.FULL
         events = setOf(
-            TestLogEvent.STARTED,
             TestLogEvent.SKIPPED,
             TestLogEvent.PASSED,
             TestLogEvent.FAILED
@@ -70,11 +70,6 @@ android {
         versionCode = Config.versionCode
         versionName = Config.versionName
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments = mapOf("room.incremental" to "true")
-            }
-        }
     }
 
     buildTypes {
@@ -111,6 +106,11 @@ android {
     }
 }
 
+sqldelight {
+    database("NoteDatabase") {
+    }
+}
+
 dependencies {
     implementation(Libs.kotlin_stdlib_jdk8)
 
@@ -122,9 +122,8 @@ dependencies {
     implementation(Libs.navigation_fragment_ktx)
     implementation(Libs.navigation_ui_ktx)
 
-    implementation(Libs.room_runtime)
-    implementation(Libs.room_rxjava2)
-    kapt(Libs.room_compiler)
+    implementation("com.squareup.sqldelight:android-driver:1.2.1")
+    implementation("com.squareup.sqldelight:rxjava2-extensions:1.2.1")
 
     implementation(Libs.threetenabp)
 
@@ -147,6 +146,7 @@ dependencies {
     testImplementation(Libs.com_google_truth_truth)
     testImplementation(Libs.core_testing)
     testImplementation(Libs.mockk)
+    testImplementation("com.squareup.sqldelight:sqlite-driver:1.2.1")
 
     androidTestImplementation(Libs.fragment_testing)
     androidTestImplementation(Libs.com_google_truth_truth)

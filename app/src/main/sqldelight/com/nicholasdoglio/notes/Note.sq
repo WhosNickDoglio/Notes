@@ -1,0 +1,27 @@
+CREATE TABLE Note (
+    id INTEGER NOT NULL UNIQUE PRIMARY KEY AUTOINCREMENT,
+    title TEXT,
+    contents TEXT
+);
+
+allNotes:
+SELECT * FROM Note;
+
+count:
+SELECT count(*) FROM Note;
+
+findNoteById:
+SELECT * FROM Note WHERE id = ?;
+
+insertOrReplace:
+INSERT OR REPLACE INTO Note(
+  title,
+  contents
+)
+VALUES (?, ?);
+
+
+deleteById:
+DELETE
+FROM Note
+WHERE id = ?;

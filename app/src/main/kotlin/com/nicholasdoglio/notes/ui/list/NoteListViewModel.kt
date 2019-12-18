@@ -25,7 +25,7 @@
 package com.nicholasdoglio.notes.ui.list
 
 import androidx.lifecycle.ViewModel
-import com.nicholasdoglio.notes.data.model.Note
+import com.nicholasdoglio.notes.Note
 import com.nicholasdoglio.notes.data.repo.Repository
 import io.reactivex.Flowable
 import javax.inject.Inject

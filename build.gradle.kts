@@ -31,6 +31,7 @@ buildscript {
         classpath(Libs.com_android_tools_build_gradle)
         classpath(Libs.kotlin_gradle_plugin)
         classpath(Libs.navigation_safe_args_gradle_plugin)
+        classpath("com.squareup.sqldelight:gradle-plugin:1.2.1")
     }
 }
 

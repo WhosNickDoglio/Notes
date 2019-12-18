@@ -29,8 +29,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.nicholasdoglio.notes.Note
 import com.nicholasdoglio.notes.R
-import com.nicholasdoglio.notes.data.model.Note
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_note.*
 

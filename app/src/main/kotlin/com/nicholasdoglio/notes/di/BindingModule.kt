@@ -24,7 +24,7 @@
 
 package com.nicholasdoglio.notes.di
 
-import com.nicholasdoglio.notes.data.model.Note
+import com.nicholasdoglio.notes.Note
 import com.nicholasdoglio.notes.data.repo.NoteRepository
 import com.nicholasdoglio.notes.data.repo.Repository
 import com.nicholasdoglio.notes.util.AppSchedulers

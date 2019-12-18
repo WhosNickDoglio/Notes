@@ -24,14 +24,14 @@
 
 package com.nicholasdoglio.notes.shared
 
-import com.nicholasdoglio.notes.data.model.Note
+import com.nicholasdoglio.notes.Note
 
 // TODO should this be an object?
 object TestData {
 
-    val firstNote = Note(1, "First note", "This is my first note")
-    val secondNote = Note(2, "Second note", "This is my second note")
-    val thirdNote = Note(3, "Third note", "This is my third note")
+    val firstNote = Note.Impl(1, "First note", "This is my first note")
+    val secondNote = Note.Impl(2, "Second note", "This is my second note")
+    val thirdNote = Note.Impl(3, "Third note", "This is my third note")
 
     val someNotes = listOf(
         firstNote,
