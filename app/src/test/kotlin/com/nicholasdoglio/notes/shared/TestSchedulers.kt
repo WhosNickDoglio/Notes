@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2019 Nicholas Doglio
+ * Copyright (c) 2020 Nicholas Doglio
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,32 +22,15 @@
  * SOFTWARE.
  */
 
-package com.nicholasdoglio.notes.ui.note
+package com.nicholasdoglio.notes.shared
 
-import android.app.Dialog
-import android.os.Bundle
-import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.nicholasdoglio.notes.R
-import javax.inject.Inject
+import com.nicholasdoglio.notes.util.SchedulersProvider
+import io.reactivex.Scheduler
+import io.reactivex.schedulers.Schedulers
 
-class DiscardFragment @Inject constructor(
-    private val viewModelFactory: ViewModelProvider.Factory
-) : DialogFragment() {
-
-    private val viewModel: NoteViewModel by viewModels { viewModelFactory }
-
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog =
-        MaterialAlertDialogBuilder(requireContext())
-            .setMessage(R.string.discard_warning)
-            .setPositiveButton(R.string.save_button) { _, _ ->
-                viewModel.triggerUpsert.onNext(Unit) }
-            .setNegativeButton(R.string.discard_button) { _, _ ->
-                viewModel.triggerDelete.onNext(
-                    Unit
-                )
-            }
-            .create()
+class TestSchedulers : SchedulersProvider {
+    override val main: Scheduler = Schedulers.trampoline()
+    override val background: Scheduler = Schedulers.trampoline()
+    override val database: Scheduler = Schedulers.trampoline()
+    override val computation: Scheduler = Schedulers.trampoline()
 }

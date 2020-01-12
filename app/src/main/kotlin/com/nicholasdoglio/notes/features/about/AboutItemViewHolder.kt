@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2019 Nicholas Doglio
+ * Copyright (c) 2020 Nicholas Doglio
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,37 +22,40 @@
  * SOFTWARE.
  */
 
-package com.nicholasdoglio.notes.ui.list
+package com.nicholasdoglio.notes.features.about
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.findNavController
+import android.widget.TextView
+import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
-import com.nicholasdoglio.notes.Note
 import com.nicholasdoglio.notes.R
-import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.item_note.*
+import com.nicholasdoglio.notes.data.model.AboutItem
+import com.nicholasdoglio.notes.data.model.AboutItem.Action
+import com.nicholasdoglio.notes.util.openWebPage
 
-class NoteViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView),
-    LayoutContainer {
+class AboutItemViewHolder(private val rootView: View) : RecyclerView.ViewHolder(rootView) {
+    private val aboutItemName: TextView = rootView.findViewById(R.id.about_item_name)
 
-    fun bind(model: Note) {
-        note.setOnClickListener { click(model.id) }
-        titleListItem.text = model.title
-        contentsListItem.text = model.contents
-    }
-
-    private fun click(id: Long): View.OnClickListener = View.OnClickListener {
-        it.findNavController().navigate(NoteListFragmentDirections.openNote(id))
+    fun bind(model: AboutItem, navController: NavController) {
+        aboutItemName.apply {
+            setText(model.text)
+            setOnClickListener {
+                when (model.action) {
+                    is Action.OpenWebsite ->
+                        context.openWebPage(context.getString(model.action.url))
+                    is Action.OpenLibs -> navController.navigate(R.id.open_libs)
+                }
+            }
+        }
     }
 
     companion object {
-
-        fun create(view: ViewGroup): NoteViewHolder =
-            NoteViewHolder(
+        fun create(view: ViewGroup): AboutItemViewHolder =
+            AboutItemViewHolder(
                 LayoutInflater.from(view.context).inflate(
-                    R.layout.item_note,
+                    R.layout.item_about,
                     view,
                     false
                 )

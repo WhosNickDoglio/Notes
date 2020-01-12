@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2019 Nicholas Doglio
+ * Copyright (c) 2020 Nicholas Doglio
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,28 +22,6 @@
  * SOFTWARE.
  */
 
-val ktlint: Configuration by configurations.creating
+package com.nicholasdoglio.notes.features.editnote
 
-dependencies {
-    ktlint(Libs.ktlint)
-}
-
-tasks.register<JavaExec>("ktlint") {
-    group = "verification"
-    description = "Check Kotlin code style."
-    classpath = ktlint
-    main = "com.pinterest.ktlint.Main"
-    args("--android", "src/**/*.kt")
-}
-
-tasks.named("check") {
-    dependsOn(ktlint)
-}
-
-tasks.register<JavaExec>("ktlintFormat") {
-    group = "formatting"
-    description = "Fix Kotlin code style deviations."
-    classpath = ktlint
-    main = "com.pinterest.ktlint.Main"
-    args("--android", "-F", "src/**/*.kt")
-}
+enum class NoteAction { SAVE, DELETE }

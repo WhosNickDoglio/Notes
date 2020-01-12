@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2019 Nicholas Doglio
+ * Copyright (c) 2020 Nicholas Doglio
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,10 +28,13 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath(Libs.com_android_tools_build_gradle)
-        classpath(Libs.kotlin_gradle_plugin)
-        classpath(Libs.navigation_safe_args_gradle_plugin)
-        classpath("com.squareup.sqldelight:gradle-plugin:1.2.1")
+        classpath(GradlePlugin.android)
+        classpath(GradlePlugin.kotlin)
+        classpath(GradlePlugin.navigationSafeArgs)
+        classpath(GradlePlugin.sqlDelight)
+        classpath(GradlePlugin.ktlint)
+        classpath(GradlePlugin.delect)
+        classpath(GradlePlugin.license)
     }
 }
 
@@ -49,7 +52,7 @@ allprojects {
 
 tasks.wrapper {
     distributionType = Wrapper.DistributionType.ALL
-    gradleVersion = Versions.gradleLatestVersion
+    gradleVersion = Versions.gradle
 }
 
 tasks.register<Delete>("clean") {

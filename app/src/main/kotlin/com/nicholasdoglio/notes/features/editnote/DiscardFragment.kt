@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2019 Nicholas Doglio
+ * Copyright (c) 2020 Nicholas Doglio
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,48 +22,32 @@
  * SOFTWARE.
  */
 
-package com.nicholasdoglio.notes.ui.about
+package com.nicholasdoglio.notes.features.editnote
 
+import android.app.Dialog
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.nicholasdoglio.notes.R
-import com.nicholasdoglio.notes.util.SchedulersProvider
-import com.uber.autodispose.android.lifecycle.autoDispose
 import javax.inject.Inject
-import kotlinx.android.synthetic.main.fragment_about.*
 
-class AboutFragment @Inject constructor(
-    private val viewModelFactory: ViewModelProvider.Factory,
-    private val schedulersProvider: SchedulersProvider
+class DiscardFragment @Inject constructor(
+    private val viewModelFactory: ViewModelProvider.Factory
 ) : DialogFragment() {
 
-    private val viewModel by viewModels<AboutViewModel> { viewModelFactory }
+    private val viewModel: NoteViewModel by viewModels { viewModelFactory }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.fragment_about, container)
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        val aboutAdapter = AboutAdapter()
-
-        aboutRecyclerView.apply {
-            adapter = aboutAdapter
-            layoutManager = LinearLayoutManager(context)
-        }
-
-        viewModel.aboutItems
-            .observeOn(schedulersProvider.main)
-            .autoDispose(viewLifecycleOwner)
-            .subscribe { aboutAdapter.submitList(it) }
-    }
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog =
+        MaterialAlertDialogBuilder(requireContext())
+            .setMessage(R.string.discard_warning)
+            .setPositiveButton(R.string.save_button) { _, _ ->
+                viewModel.triggerUpsert.onNext(Unit) }
+            .setNegativeButton(R.string.discard_button) { _, _ ->
+                viewModel.triggerDelete.onNext(
+                    Unit
+                )
+            }
+            .create()
 }

@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2019 Nicholas Doglio
+ * Copyright (c) 2020 Nicholas Doglio
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,42 +22,26 @@
  * SOFTWARE.
  */
 
-package com.nicholasdoglio.notes.ui.note
+package com.nicholasdoglio.notes.features.tile
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.nicholasdoglio.notes.Note
-import com.nicholasdoglio.notes.data.repo.FakeRepository
-import com.nicholasdoglio.notes.data.repo.Repository
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
+import android.content.Intent
+import android.net.Uri
+import android.os.Build
+import android.service.quicksettings.TileService
+import androidx.annotation.RequiresApi
+import com.nicholasdoglio.notes.features.MainActivity
 
-class NoteViewModelTest {
+private const val CREATE_NOTE_DEEP_LINK_URL = "com.nicholasdoglio.notes://create_new_note"
 
-    @get:Rule
-    val instantRule = InstantTaskExecutorRule()
+@RequiresApi(Build.VERSION_CODES.N)
+class CreateNoteTile : TileService() {
 
-    private val repository: Repository<Note> = FakeRepository()
-    private lateinit var viewModel: NoteViewModel
-
-    @Before
-    fun setUp() {
-        viewModel = NoteViewModel(repository)
-    }
-
-    @Test
-    fun `given note ID exists when find note is called then return a note`() {
-    }
-
-    @Test
-    fun `given note ID doesn't exist in DB when find note is called then return null`() {
-    }
-
-    @Test
-    fun `given note upserted when upserted triggered then verify upserted called`() {
-    }
-
-    @Test
-    fun `given note deleted when delete triggered then verify delete called`() {
+    override fun onClick() {
+        super.onClick()
+        startActivityAndCollapse(Intent(applicationContext, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            data = Uri.parse(CREATE_NOTE_DEEP_LINK_URL)
+        }
+        )
     }
 }

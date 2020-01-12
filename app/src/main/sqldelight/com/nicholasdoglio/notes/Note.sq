@@ -1,11 +1,17 @@
+import org.threeten.bp.LocalDateTime;
+
+
+
 CREATE TABLE Note (
     id INTEGER NOT NULL UNIQUE PRIMARY KEY AUTOINCREMENT,
     title TEXT,
-    contents TEXT
+    contents TEXT,
+    timestamp TEXT AS LocalDateTime NOT NULL
 );
 
 allNotes:
-SELECT * FROM Note;
+SELECT * FROM Note
+ORDER BY timestamp;
 
 count:
 SELECT count(*) FROM Note;
@@ -14,14 +20,16 @@ findNoteById:
 SELECT * FROM Note WHERE id = ?;
 
 insertOrReplace:
-INSERT OR REPLACE INTO Note(
-  title,
-  contents
-)
-VALUES (?, ?);
+INSERT OR REPLACE INTO Note(id, title, contents, timestamp)
+VALUES (?, ?, ?, ?);
 
 
 deleteById:
 DELETE
 FROM Note
 WHERE id = ?;
+
+-- Just for testing
+dropTable:
+DELETE
+FROM Note;

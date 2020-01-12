@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2019 Nicholas Doglio
+ * Copyright (c) 2020 Nicholas Doglio
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,27 +22,25 @@
  * SOFTWARE.
  */
 
-package com.nicholasdoglio.notes.ui
+package com.nicholasdoglio.notes.features.about
 
-import android.content.Context
+import android.app.Dialog
 import android.os.Bundle
-import androidx.fragment.app.FragmentFactory
-import androidx.navigation.fragment.NavHostFragment
-import com.nicholasdoglio.notes.di.injector
-import javax.inject.Inject
+import android.webkit.WebView
+import androidx.fragment.app.DialogFragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
-class InjectableNavHostFragment : NavHostFragment() {
+class LibsFragment : DialogFragment() {
 
-    @Inject
-    lateinit var fragmentFactory: FragmentFactory
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val libsWebView = WebView(requireActivity())
 
-    override fun onAttach(context: Context) {
-        requireActivity().injector.inject(this)
-        super.onAttach(context)
-    }
+        libsWebView.loadUrl("file:///android_asset/open_source_licenses.html")
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        childFragmentManager.fragmentFactory = fragmentFactory
-        super.onCreate(savedInstanceState)
+        return MaterialAlertDialogBuilder(requireActivity())
+            .setTitle("Open Source Licenses")
+            .setView(libsWebView)
+            .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
+            .create()
     }
 }

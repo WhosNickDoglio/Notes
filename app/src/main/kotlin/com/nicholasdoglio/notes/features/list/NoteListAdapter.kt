@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2019 Nicholas Doglio
+ * Copyright (c) 2020 Nicholas Doglio
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,18 +22,28 @@
  * SOFTWARE.
  */
 
-package com.nicholasdoglio.notes.ui.about
+package com.nicholasdoglio.notes.features.list
 
 import android.view.ViewGroup
+import androidx.navigation.NavController
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.nicholasdoglio.notes.data.model.AboutItem
+import com.nicholasdoglio.notes.Note
 
-class AboutAdapter : ListAdapter<AboutItem, AboutItemViewHolder>(AboutItem.diffCallback) {
+class NoteListAdapter(private val navController: NavController) :
+    ListAdapter<Note, NoteViewHolder>(object : DiffUtil.ItemCallback<Note>() {
+        override fun areItemsTheSame(oldItem: Note, newItem: Note): Boolean {
+            return oldItem.id == newItem.id // TODO FIX THIS
+        }
 
-    override fun onBindViewHolder(holder: AboutItemViewHolder, position: Int) {
-        holder.bind(getItem(position))
-    }
+        override fun areContentsTheSame(oldItem: Note, newItem: Note): Boolean {
+            return oldItem.id == newItem.id // TODO FIX THIS
+        }
+    }) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AboutItemViewHolder =
-        AboutItemViewHolder.create(parent)
+    override fun onBindViewHolder(holder: NoteViewHolder, position: Int) =
+        holder.bind(getItem(position), navController)
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder =
+        NoteViewHolder.create(parent)
 }

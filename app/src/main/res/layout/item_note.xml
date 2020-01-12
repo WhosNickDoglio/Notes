@@ -1,7 +1,7 @@
 <!--
   ~ MIT License
   ~
-  ~ Copyright (c) 2019 Nicholas Doglio
+  ~ Copyright (c) 2020 Nicholas Doglio
   ~
   ~ Permission is hereby granted, free of charge, to any person obtaining a copy
   ~ of this software and associated documentation files (the "Software"), to deal
@@ -30,7 +30,7 @@
     android:background="@android:color/white">
 
     <TextView
-        android:id="@+id/titleListItem"
+        android:id="@+id/title_list_item"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -41,14 +41,14 @@
         android:maxLines="1"
         android:text="@{note.title}"
         android:textAppearance="@style/TextAppearance.AppCompat.Menu"
-        app:layout_constraintBottom_toTopOf="@+id/contentsListItem"
+        app:layout_constraintBottom_toTopOf="@+id/contents_list_item"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Title" />
+        tools:text="@sample/notes.json/notes/title" />
 
     <TextView
-        android:id="@+id/contentsListItem"
+        android:id="@+id/contents_list_item"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -62,6 +62,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:text="Content" />
+        tools:text="@sample/notes.json/notes/contents" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

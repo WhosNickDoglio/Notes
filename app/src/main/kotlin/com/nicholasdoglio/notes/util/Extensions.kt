@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2019 Nicholas Doglio
+ * Copyright (c) 2020 Nicholas Doglio
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,15 +29,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.view.inputmethod.InputMethodManager
-import android.widget.TextView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-
-inline var TextView.textEditable: String
-    get() = this.text.toString() // TODO is the get necessary?
-    set(value) {
-        this.text = value
-        TextView.BufferType.EDITABLE
-    }
 
 fun Activity.hideKeyboard() {
     val input = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager

@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2019 Nicholas Doglio
+ * Copyright (c) 2020 Nicholas Doglio
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,19 +22,41 @@
  * SOFTWARE.
  */
 
-package com.nicholasdoglio.notes.ui.list
+package com.nicholasdoglio.notes.features.editnote
 
 import androidx.lifecycle.ViewModel
 import com.nicholasdoglio.notes.Note
 import com.nicholasdoglio.notes.data.repo.Repository
-import io.reactivex.Flowable
+import io.reactivex.Observable
+import io.reactivex.subjects.PublishSubject
 import javax.inject.Inject
 
-class NoteListViewModel @Inject constructor(private val repository: Repository<Note>) :
-    ViewModel() {
+// https://www.reddit.com/r/androiddev/comments/976m70/a_functional_approach_to_mvvm_which_lets_you/
+// https://quickbirdstudios.com/blog/app-architecture-our-functional-mvvm-approach-with-rx/
+// https://www.slideshare.net/QuickBirdStudios/mvvm-with-kotlin-making-ios-and-android-apps-as-similar-as-possible
 
-    val notesList: Flowable<List<Note>> = repository.observeItems
+class NoteViewModel @Inject constructor(private val repository: Repository<Note>) : ViewModel() {
 
-    val hasNotes: Flowable<Boolean> = repository.observeCountOfItems
-        .map { it > 0 }
+    // INPUT
+    val triggerUpsert = PublishSubject.create<Unit>()
+
+    val triggerDelete = PublishSubject.create<Unit>()
+
+    val inputNoteId = PublishSubject.create<Long>()
+
+    // OUTPUT
+    private val _note: PublishSubject<Note> = PublishSubject.create()
+
+    val note: Observable<Note> = _note.hide()
+
+    val input = inputNoteId
+        .flatMapMaybe { repository.findItemById(it) }
+        .map { _note.onNext(it) }
+
+    val upsert = triggerUpsert
+        .flatMap { _note }
+        .flatMapCompletable { repository.upsert(it) }
+
+    val delete = triggerDelete.flatMap { _note }
+        .flatMapCompletable { repository.delete(it) }
 }

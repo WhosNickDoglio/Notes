@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2019 Nicholas Doglio
+ * Copyright (c) 2020 Nicholas Doglio
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,15 +25,17 @@
 package com.nicholasdoglio.notes.shared
 
 import com.nicholasdoglio.notes.Note
+import org.threeten.bp.LocalDateTime
 
 // TODO should this be an object?
 object TestData {
 
-    val firstNote = Note.Impl(1, "First note", "This is my first note")
-    val secondNote = Note.Impl(2, "Second note", "This is my second note")
-    val thirdNote = Note.Impl(3, "Third note", "This is my third note")
+    val firstNote: Note = Note.Impl(1, "First note", "This is my first note", LocalDateTime.now())
+    val secondNote: Note =
+        Note.Impl(2, "Second note", "This is my second note", LocalDateTime.now())
+    val thirdNote: Note = Note.Impl(3, "Third note", "This is my third note", LocalDateTime.now())
 
-    val someNotes = listOf(
+    val someNotes: List<Note> = listOf(
         firstNote,
         secondNote,
         thirdNote

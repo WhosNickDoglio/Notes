@@ -22,28 +22,53 @@
  * SOFTWARE.
  */
 
-package com.nicholasdoglio.notes.di
+package com.nicholasdoglio.notes.features.editnote
 
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.nicholasdoglio.notes.Note
+import com.nicholasdoglio.notes.NoteDatabase
 import com.nicholasdoglio.notes.data.local.TimestampColumnAdapter
 import com.nicholasdoglio.notes.data.repo.NoteRepository
 import com.nicholasdoglio.notes.data.repo.Repository
-import com.nicholasdoglio.notes.util.AppSchedulers
-import com.nicholasdoglio.notes.util.SchedulersProvider
-import com.squareup.sqldelight.ColumnAdapter
-import dagger.Binds
-import dagger.Module
-import org.threeten.bp.LocalDateTime
+import com.nicholasdoglio.notes.shared.TestSchedulers
+import com.squareup.sqldelight.sqlite.driver.JdbcSqliteDriver
+import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
 
-@Module
-interface BindingModule {
+class NoteViewModelTest {
 
-    @Binds
-    fun bindSchedulers(appSchedulers: AppSchedulers): SchedulersProvider
+    @get:Rule
+    val instantRule = InstantTaskExecutorRule()
 
-    @Binds
-    fun bindRepository(repository: NoteRepository): Repository<Note>
+    private val inMemorySqlDriver = JdbcSqliteDriver(JdbcSqliteDriver.IN_MEMORY).apply {
+        NoteDatabase.Schema.create(this)
+    }
 
-    @Binds
-    fun bindTimestampAdapter(adapter: TimestampColumnAdapter): ColumnAdapter<LocalDateTime, String>
+    private val queries =
+        NoteDatabase(inMemorySqlDriver, Note.Adapter(TimestampColumnAdapter())).noteQueries
+
+    private val repository: Repository<Note> = NoteRepository(queries, TestSchedulers())
+    private lateinit var viewModel: NoteViewModel
+
+    @Before
+    fun setUp() {
+        viewModel = NoteViewModel(repository)
+    }
+
+    @Test
+    fun `given note ID exists when find note is called then return a note`() {
+    }
+
+    @Test
+    fun `given note ID doesn't exist in DB when find note is called then return null`() {
+    }
+
+    @Test
+    fun `given note upserted when upserted triggered then verify upserted called`() {
+    }
+
+    @Test
+    fun `given note deleted when delete triggered then verify delete called`() {
+    }
 }

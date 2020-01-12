@@ -4,7 +4,7 @@ import org.gradle.plugin.use.PluginDependencySpec
 /*
  * MIT License
  *
- * Copyright (c) 2019 Nicholas Doglio
+ * Copyright (c) 2020 Nicholas Doglio
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,8 +27,40 @@ import org.gradle.plugin.use.PluginDependencySpec
 
 val PluginDependenciesSpec.detekt: PluginDependencySpec
     inline get() =
-        id("io.gitlab.arturbosch.detekt").version(Versions.io_gitlab_arturbosch_detekt_gradle_plugin)
+        id("io.gitlab.arturbosch.detekt").version(Versions.detekt)
 
 val PluginDependenciesSpec.benManesVersions: PluginDependencySpec
     inline get() =
-        id("com.github.ben-manes.versions").version("0.27.0")
+        id("com.github.ben-manes.versions").version(Versions.benManesVersions)
+
+
+
+object GradlePlugin {
+    const val sqlDelight = "com.squareup.sqldelight:gradle-plugin:${Versions.sqlDelight}"
+    const val ktlint = "org.jlleitschuh.gradle:ktlint-gradle:${Versions.ktlintGradlePlugin}"
+    const val navigationSafeArgs = "androidx.navigation:navigation-safe-args-gradle-plugin:${Versions.navigation}"
+    const val kotlin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}"
+    const val android = "com.android.tools.build:gradle:${Versions.androidBuildTools}"
+    const val delect = "com.soundcloud.delect:delect-plugin:${Versions.delect}"
+    const val license = "com.jaredsburrows:gradle-license-plugin:${Versions.licence}"
+}
+
+
+object Plugins {
+    object Android {
+        const val application = "com.android.application"
+        const val safeArgs = "androidx.navigation.safeargs.kotlin"
+    }
+
+    object Kotlin {
+        const val android = "android"
+        const val kapt = "kapt"
+    }
+
+    const val detekt = "io.gitlab.arturbosch.detekt"
+    const val ktlint = "org.jlleitschuh.gradle.ktlint"
+    const val sqlDelight = "com.squareup.sqldelight"
+    const val delect = "com.soundcloud.delect"
+    const val scabbard = "scabbard.gradle"
+    const val license = "com.jaredsburrows.license"
+}

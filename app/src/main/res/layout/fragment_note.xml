@@ -1,7 +1,7 @@
 <!--
   ~ MIT License
   ~
-  ~ Copyright (c) 2019 Nicholas Doglio
+  ~ Copyright (c) 2020 Nicholas Doglio
   ~
   ~ Permission is hereby granted, free of charge, to any person obtaining a copy
   ~ of this software and associated documentation files (the "Software"), to deal
@@ -27,45 +27,45 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.nicholasdoglio.notes.ui.note.NoteFragment">
+    tools:context="com.nicholasdoglio.notes.features.editnote.NoteFragment">
 
     <Button
-        android:id="@+id/deleteButton"
+        android:id="@+id/delete_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="DELETE"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/rightGuide" />
+        app:layout_constraintEnd_toStartOf="@id/right_guideline" />
 
     <Button
-        android:id="@+id/upsertButton"
+        android:id="@+id/upsert_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="SAVE"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/leftGuide" />
+        app:layout_constraintStart_toEndOf="@id/left_guideline" />
 
     <EditText
-        android:id="@+id/noteTitle"
+        android:id="@+id/note_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="@string/title_hint"
         android:inputType="textCapSentences"
-        app:layout_constraintEnd_toStartOf="@+id/rightGuide"
-        app:layout_constraintStart_toStartOf="@+id/leftGuide"
+        app:layout_constraintEnd_toStartOf="@+id/right_guideline"
+        app:layout_constraintStart_toStartOf="@+id/left_guideline"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ScrollView
-        android:id="@+id/noteContentScroll"
+        android:id="@+id/note_contents_scroll"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/noteTitle">
+        app:layout_constraintTop_toBottomOf="@+id/note_title">
 
         <EditText
-            android:id="@+id/noteContent"
+            android:id="@+id/note_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -78,7 +78,7 @@
     </ScrollView>
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/leftGuide"
+        android:id="@+id/left_guideline"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -87,7 +87,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/rightGuide"
+        android:id="@+id/right_guideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"

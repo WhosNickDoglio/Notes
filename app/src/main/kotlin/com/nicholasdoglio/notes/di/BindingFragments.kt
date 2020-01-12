@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2019 Nicholas Doglio
+ * Copyright (c) 2020 Nicholas Doglio
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,11 +24,12 @@
 
 package com.nicholasdoglio.notes.di
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import com.nicholasdoglio.notes.ui.about.AboutViewModel
-import com.nicholasdoglio.notes.ui.list.NoteListViewModel
-import com.nicholasdoglio.notes.ui.note.NoteViewModel
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentFactory
+import com.nicholasdoglio.notes.features.about.AboutFragment
+import com.nicholasdoglio.notes.features.list.NoteListFragment
+import com.nicholasdoglio.notes.features.editnote.DiscardFragment
+import com.nicholasdoglio.notes.features.editnote.NoteFragment
 import dagger.Binds
 import dagger.MapKey
 import dagger.Module
@@ -40,28 +41,33 @@ import kotlin.reflect.KClass
     AnnotationTarget.PROPERTY_GETTER,
     AnnotationTarget.PROPERTY_SETTER
 )
+@Retention(value = AnnotationRetention.RUNTIME)
 @MapKey
-@Retention(AnnotationRetention.RUNTIME)
-annotation class ViewModelKey(val value: KClass<out ViewModel>)
+annotation class FragmentKey(val value: KClass<out Fragment>)
 
 @Module
-interface ViewModelModule {
+interface FragmentBindingModule {
 
     @Binds
-    fun bindViewModelFactory(factory: NotesViewModelFactory): ViewModelProvider.Factory
-
-    @Binds
-    @IntoMap
-    @ViewModelKey(NoteViewModel::class)
-    fun bindNoteViewModel(noteViewModel: NoteViewModel): ViewModel
+    fun bindFragmentFactory(factory: NotesFragmentFactory): FragmentFactory
 
     @Binds
     @IntoMap
-    @ViewModelKey(NoteListViewModel::class)
-    fun bindNoteListViewModel(noreListViewModel: NoteListViewModel): ViewModel
+    @FragmentKey(NoteFragment::class)
+    fun bindNoteFragment(noteFragment: NoteFragment): Fragment
 
     @Binds
     @IntoMap
-    @ViewModelKey(AboutViewModel::class)
-    fun bindAboutViewModel(noreListViewModel: AboutViewModel): ViewModel
+    @FragmentKey(DiscardFragment::class)
+    fun bindDiscardFragment(discardFragment: DiscardFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(NoteListFragment::class)
+    fun bindListFragment(listFragment: NoteListFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(AboutFragment::class)
+    fun bindAboutFragment(aboutFragment: AboutFragment): Fragment
 }

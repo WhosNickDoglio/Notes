@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2019 Nicholas Doglio
+ * Copyright (c) 2020 Nicholas Doglio
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,16 +25,18 @@
 package com.nicholasdoglio.notes.di
 
 import android.app.Application
+import com.nicholasdoglio.notes.Note
 import com.nicholasdoglio.notes.NoteDatabase
 import com.nicholasdoglio.notes.NoteQueries
+import com.squareup.sqldelight.ColumnAdapter
 import com.squareup.sqldelight.android.AndroidSqliteDriver
 import dagger.Module
 import dagger.Provides
+import org.threeten.bp.LocalDateTime
 import javax.inject.Singleton
 
 @Module
 object DatabaseModule {
-
     private const val NOTES_DB = "notes_db"
 
     @Provides
@@ -44,7 +46,10 @@ object DatabaseModule {
 
     @Provides
     @Singleton
-    fun database(driver: AndroidSqliteDriver): NoteDatabase = NoteDatabase(driver)
+    fun database(
+        driver: AndroidSqliteDriver,
+        adapter: ColumnAdapter<LocalDateTime, String>
+    ): NoteDatabase = NoteDatabase(driver, NoteAdapter = Note.Adapter(timestampAdapter = adapter))
 
     @Provides
     fun noteQueries(database: NoteDatabase): NoteQueries = database.noteQueries

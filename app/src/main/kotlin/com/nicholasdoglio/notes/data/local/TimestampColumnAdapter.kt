@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2019 Nicholas Doglio
+ * Copyright (c) 2020 Nicholas Doglio
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,25 +22,18 @@
  * SOFTWARE.
  */
 
-package com.nicholasdoglio.notes.ui.about
+package com.nicholasdoglio.notes.data.local
 
-import android.app.Dialog
-import android.os.Bundle
-import android.webkit.WebView
-import androidx.fragment.app.DialogFragment
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.squareup.sqldelight.ColumnAdapter
+import org.threeten.bp.LocalDateTime
+import org.threeten.bp.format.DateTimeFormatter
+import javax.inject.Inject
 
-class LibsFragment : DialogFragment() {
+class TimestampColumnAdapter @Inject constructor() : ColumnAdapter<LocalDateTime, String> {
+    private val formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val libsWebView = WebView(requireActivity())
+    override fun decode(databaseValue: String): LocalDateTime =
+        formatter.parse(databaseValue, LocalDateTime::from)
 
-        libsWebView.loadUrl("file:///android_asset/open_source_licenses.html")
-
-        return MaterialAlertDialogBuilder(requireActivity())
-            .setTitle("Open Source Licenses")
-            .setView(libsWebView)
-            .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
-            .create()
-    }
+    override fun encode(value: LocalDateTime): String = value.format(formatter)
 }

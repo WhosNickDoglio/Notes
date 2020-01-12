@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2019 Nicholas Doglio
+ * Copyright (c) 2020 Nicholas Doglio
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,24 +22,21 @@
  * SOFTWARE.
  */
 
-package com.nicholasdoglio.notes.ui.list
+package com.nicholasdoglio.notes.features.list
 
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
+import android.widget.LinearLayout
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomappbar.BottomAppBar
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.jakewharton.rxbinding3.recyclerview.scrollEvents
 import com.jakewharton.rxbinding3.view.clicks
 import com.nicholasdoglio.notes.R
@@ -47,31 +44,40 @@ import com.nicholasdoglio.notes.util.SchedulersProvider
 import com.nicholasdoglio.notes.util.hideIf
 import com.uber.autodispose.android.lifecycle.autoDispose
 import javax.inject.Inject
-import kotlinx.android.synthetic.main.fragment_note_list.*
 
 class NoteListFragment @Inject constructor(
     private val viewModelFactory: ViewModelProvider.Factory,
     private val schedulersProvider: SchedulersProvider
 ) : Fragment(R.layout.fragment_note_list) {
 
-    private val viewModel by viewModels<NoteListViewModel> { viewModelFactory }
+    private val viewModel: NoteListViewModel by viewModels { viewModelFactory }
+
+    private lateinit var appBar: BottomAppBar
+    private lateinit var notesRecyclerView: RecyclerView
+    private lateinit var createNoteFab: FloatingActionButton
+    private lateinit var emptyStateView: LinearLayout
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val notesListAdapter = NoteListAdapter()
+        appBar = view.findViewById(R.id.app_bar)
+        notesRecyclerView = view.findViewById(R.id.notes_recyclerview)
+        createNoteFab = view.findViewById(R.id.create_note_fab)
+        emptyStateView = view.findViewById(R.id.empty_state_view)
 
-        (activity as AppCompatActivity).setSupportActionBar(toolbar)
+        val notesListAdapter = NoteListAdapter(findNavController())
 
-        toolbar.setupWithNavController(
-            findNavController(),
-            AppBarConfiguration(findNavController().graph)
-        )
-
-        (activity as AppCompatActivity).supportActionBar?.apply {
-            setDisplayShowTitleEnabled(true)
-            title = "Notes"
-            setHasOptionsMenu(true)
+        appBar.apply {
+            inflateMenu(R.menu.list_menu)
+            setOnMenuItemClickListener {
+                when (it.itemId) {
+                    R.id.about_item -> {
+                        findNavController().navigate(R.id.open_about)
+                        true
+                    }
+                    else -> false
+                }
+            }
         }
 
         notesRecyclerView.apply {
@@ -80,7 +86,7 @@ class NoteListFragment @Inject constructor(
             layoutManager = LinearLayoutManager(context)
             scrollEvents()
                 .autoDispose(viewLifecycleOwner)
-                .subscribe { createNoteFab.hideIf(0 > it.dy) }
+                .subscribe { createNoteFab.hideIf(0 < it.dy) }
         }
 
         createNoteFab
@@ -100,18 +106,5 @@ class NoteListFragment @Inject constructor(
                 emptyStateView.isVisible = !it
                 notesRecyclerView.isVisible = it
             }
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.list_menu, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
-        R.id.about_item -> {
-            findNavController().navigate(R.id.open_about)
-            true
-        }
-        else -> super.onOptionsItemSelected(item)
     }
 }

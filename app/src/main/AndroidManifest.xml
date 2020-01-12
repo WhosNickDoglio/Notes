@@ -2,7 +2,7 @@
 <!--
   ~ MIT License
   ~
-  ~ Copyright (c) 2019 Nicholas Doglio
+  ~ Copyright (c) 2020 Nicholas Doglio
   ~
   ~ Permission is hereby granted, free of charge, to any person obtaining a copy
   ~ of this software and associated documentation files (the "Software"), to deal
@@ -35,7 +35,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ui.MainActivity"
+            android:name=".features.MainActivity"
             android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -47,7 +47,7 @@
                 android:resource="@xml/shortcuts"/>
         </activity>
         <service
-            android:name=".ui.tile.CreateNoteTile"
+            android:name=".features.tile.CreateNoteTile"
             android:icon="@drawable/ic_edit"
             android:label="Create note"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">

@@ -1,7 +1,10 @@
+import org.gradle.api.Plugin
+import org.gradle.api.Project
+
 /*
  * MIT License
  *
- * Copyright (c) 2019 Nicholas Doglio
+ * Copyright (c) 2020 Nicholas Doglio
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,6 +25,9 @@
  * SOFTWARE.
  */
 
-package com.nicholasdoglio.notes.ui.note
 
-enum class NoteAction { SAVE, DELETE }
+open class LibraryPlugin : Plugin<Project> {
+    override fun apply(target: Project) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+}

@@ -1,10 +1,11 @@
+import dev.arunkumar.scabbard.gradle.ScabbardSpec
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 
 /*
  * MIT License
  *
- * Copyright (c) 2019 Nicholas Doglio
+ * Copyright (c) 2020 Nicholas Doglio
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,19 +27,16 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent
  */
 
 plugins {
-    id("com.android.application")
-    kotlin("android")
-    kotlin("android.extensions")
-    kotlin("kapt")
-    id("androidx.navigation.safeargs.kotlin")
-    id("io.gitlab.arturbosch.detekt")
-    id("com.squareup.sqldelight")
-}
-
-apply(from = "$rootDir/ktlint.gradle.kts")
-
-androidExtensions {
-    isExperimental = true
+    id(Plugins.Android.application)
+    kotlin(Plugins.Kotlin.android)
+    kotlin(Plugins.Kotlin.kapt)
+    id(Plugins.Android.safeArgs)
+    id(Plugins.detekt)
+    id(Plugins.ktlint)
+    id(Plugins.sqlDelight)
+    id(Plugins.delect)
+    id(Plugins.license)
+    id(Plugins.scabbard) version Versions.scabbard
 }
 
 kapt {
@@ -61,15 +59,30 @@ tasks.withType<Test> {
     }
 }
 
+scabbard.configure(closureOf<ScabbardSpec> {
+    enabled(true)
+})
+
+delect {
+    daggerReflectVersion = Versions.daggerReflect
+}
+
+ktlint {
+    version.set(Versions.ktlint)
+    android.set(true)
+    outputColorName.set("RED")
+    disabledRules.set(setOf("import-ordering"))
+}
+
 android {
     compileSdkVersion(Config.compileSdk)
     defaultConfig {
-        applicationId = "com.nicholasdoglio.notes"
+        applicationId = Config.applicationId
         minSdkVersion(Config.minSdk)
         targetSdkVersion(Config.targetSdk)
         versionCode = Config.versionCode
         versionName = Config.versionName
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = Config.testRunner
     }
 
     buildTypes {
@@ -112,50 +125,53 @@ sqldelight {
 }
 
 dependencies {
-    implementation(Libs.kotlin_stdlib_jdk8)
+    implementation(Libs.Kotlin.Stdlib)
 
-    implementation(Libs.fragment_ktx)
-    implementation(Libs.appcompat)
-    implementation(Libs.recyclerview)
-    implementation(Libs.material)
-    implementation(Libs.constraintlayout)
-    implementation(Libs.navigation_fragment_ktx)
-    implementation(Libs.navigation_ui_ktx)
+    implementation(Libs.Android.fragmentKtx)
+    implementation(Libs.Android.appcompat)
+    implementation(Libs.Android.recyclerview)
+    implementation(Libs.Android.material)
+    implementation(Libs.Android.constraintLayout)
+    implementation(Libs.Android.navigationFragmentKtx)
+    implementation(Libs.Android.navigationUiKtx)
+    implementation("androidx.coordinatorlayout:coordinatorlayout:1.1.0")
 
-    implementation("com.squareup.sqldelight:android-driver:1.2.1")
-    implementation("com.squareup.sqldelight:rxjava2-extensions:1.2.1")
+    implementation(Libs.Square.sqlDelightAndroidDriver)
+    implementation(Libs.Square.sqlDelightRxExt)
 
     implementation(Libs.threetenabp)
+    implementation(Libs.Rx.rxjava)
+    implementation(Libs.Rx.rxkotlin)
+    implementation(Libs.Rx.rxandroid)
+    implementation(Libs.Rx.Binding) // TODO think about other bindings?)
+    implementation(Libs.Rx.BindingRecyclerView)
+    implementation(Libs.Rx.autodisposeAndroidArchcomponents)
+    implementation(Libs.Rx.rxdogtag)
+    implementation(Libs.Rx.rxdogtagAutodispose)
 
-    implementation(Libs.rxjava)
-    implementation(Libs.rxkotlin)
-    implementation(Libs.rxandroid)
-    implementation(Libs.rxbinding) // TODO think about other bindings?)
-    implementation(Libs.rxbinding_recyclerview)
-    implementation(Libs.autodispose_android_archcomponents)
-    implementation(Libs.rxdogtag)
-    implementation(Libs.rxdogtag_autodispose)
-
-    implementation(Libs.dagger)
-    kapt(Libs.dagger_compiler)
+    implementation(Libs.Dagger.dagger)
+    kapt(Libs.Dagger.daggerCompiler)
 
     implementation(Libs.timber)
-    debugImplementation(Libs.leakcanary_android)
+    debugImplementation(Libs.Square.leakCanary)
 
-    testImplementation(Libs.junit_junit)
-    testImplementation(Libs.com_google_truth_truth)
-    testImplementation(Libs.core_testing)
-    testImplementation(Libs.mockk)
-    testImplementation("com.squareup.sqldelight:sqlite-driver:1.2.1")
+    testImplementation(Libs.Test.junit)
+    testImplementation(Libs.Test.truth)
+    testImplementation(Libs.Test.coreTesting)
+    testImplementation(Libs.Test.mockk)
+    testImplementation(Libs.Square.sqlDelightJvm)
 
-    androidTestImplementation(Libs.fragment_testing)
-    androidTestImplementation(Libs.com_google_truth_truth)
-    androidTestImplementation(Libs.core_testing)
-    androidTestImplementation(Libs.room_testing)
-    androidTestImplementation(Libs.androidx_test_core)
-    androidTestImplementation(Libs.androidx_test_ext_junit)
-    androidTestImplementation(Libs.androidx_test_ext_truth)
-    androidTestImplementation(Libs.androidx_test_runner)
-    androidTestImplementation(Libs.androidx_test_rules)
-    androidTestImplementation(Libs.espresso_core)
+    testImplementation("org.threeten:threetenbp:1.4.0") {
+        exclude(group = "com.jakewharton.threetenabp", module = "threetenabp")
+    }
+
+    androidTestImplementation(Libs.Android.fragmentTesting)
+    androidTestImplementation(Libs.Test.truth)
+    androidTestImplementation(Libs.Test.coreTesting)
+    androidTestImplementation(Libs.Test.androidxTestCore)
+    androidTestImplementation(Libs.Test.androidxTestExtJunit)
+    androidTestImplementation(Libs.Test.androidxTestExtTruth)
+    androidTestImplementation(Libs.Test.androidxTestRunner)
+    androidTestImplementation(Libs.Test.androidxTestRules)
+    androidTestImplementation(Libs.Test.espressoCore)
 }

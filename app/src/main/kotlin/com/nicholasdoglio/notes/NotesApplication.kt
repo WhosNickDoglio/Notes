@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2019 Nicholas Doglio
+ * Copyright (c) 2020 Nicholas Doglio
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -77,14 +77,3 @@ class NotesApplication : Application(), AppComponentProvider {
         )
     }
 }
-
-//    TODO
-//         - Sample JSON
-//         - Mock flavor with mock notes in DB
-//         - Write lots of tests
-//         - Fix weird colors
-//         - More debug tools
-//         - Splash screen using Nav component?
-//         - Licenses?
-//         - JaCoCo?
-//         - Dagger reflect

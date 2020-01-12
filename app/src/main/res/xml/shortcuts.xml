@@ -10,7 +10,7 @@
         android:shortcutShortLabel="@string/create_note_shortcut">
         <intent
             android:action="createNote"
-            android:targetClass="com.nicholasdoglio.notes.ui.MainActivity"
+            android:targetClass="com.nicholasdoglio.notes.features.MainActivity"
             android:data="com.nicholasdoglio.notes://create_new_note"
             android:targetPackage="com.nicholasdoglio.notes"/>
 

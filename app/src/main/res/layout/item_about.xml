@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   ~ MIT License
   ~
-  ~ Copyright (c) 2019 Nicholas Doglio
+  ~ Copyright (c) 2020 Nicholas Doglio
   ~
   ~ Permission is hereby granted, free of charge, to any person obtaining a copy
   ~ of this software and associated documentation files (the "Software"), to deal
@@ -28,7 +28,7 @@
     android:layout_height="32dp">
 
     <TextView
-        android:id="@+id/aboutItemName"
+        android:id="@+id/about_item_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -38,6 +38,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="DEVELOPER" />
+        tools:text="@sample/about.json/about/text" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

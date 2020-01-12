@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2019 Nicholas Doglio
+ * Copyright (c) 2020 Nicholas Doglio
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,7 +26,7 @@ package com.nicholasdoglio.notes.di
 
 import android.app.Activity
 import android.app.Application
-import com.nicholasdoglio.notes.ui.InjectableNavHostFragment
+import com.nicholasdoglio.notes.features.InjectableNavHostFragment
 import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton
@@ -42,7 +42,7 @@ import javax.inject.Singleton
 )
 interface AppComponent {
 
-    fun inject(host: InjectableNavHostFragment)
+    fun inject(target: InjectableNavHostFragment)
 
     @Component.Factory
     interface Factory {
@@ -51,7 +51,6 @@ interface AppComponent {
 }
 
 interface AppComponentProvider {
-
     val component: AppComponent
 }
 

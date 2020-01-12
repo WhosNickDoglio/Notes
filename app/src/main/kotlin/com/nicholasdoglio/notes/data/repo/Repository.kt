@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2019 Nicholas Doglio
+ * Copyright (c) 2020 Nicholas Doglio
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,7 +28,6 @@ import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Maybe
 
-// TODO think about moving this into UseCases
 interface Repository<T> {
 
     val observeCountOfItems: Flowable<Long>

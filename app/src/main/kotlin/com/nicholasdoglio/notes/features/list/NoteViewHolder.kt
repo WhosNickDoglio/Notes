@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2019 Nicholas Doglio
+ * Copyright (c) 2020 Nicholas Doglio
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,42 +22,37 @@
  * SOFTWARE.
  */
 
-package com.nicholasdoglio.notes.ui.about
+package com.nicholasdoglio.notes.features.list
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.findNavController
+import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
+import com.nicholasdoglio.notes.Note
 import com.nicholasdoglio.notes.R
-import com.nicholasdoglio.notes.data.model.AboutItem
-import com.nicholasdoglio.notes.data.model.AboutItem.Action
-import com.nicholasdoglio.notes.util.openWebPage
-import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.item_about.*
 
-class AboutItemViewHolder(override val containerView: View) :
-    RecyclerView.ViewHolder(containerView), LayoutContainer {
+class NoteViewHolder(private val rootView: View) : RecyclerView.ViewHolder(rootView) {
+    private val note: ConstraintLayout = rootView.findViewById(R.id.note)
+    private val titleListItem: TextView = rootView.findViewById(R.id.title_list_item)
+    private val contentsListItem: TextView = rootView.findViewById(R.id.contents_list_item)
 
-    fun bind(model: AboutItem) {
-        aboutItemName.apply {
-            setText(model.text)
-            setOnClickListener { click(model.action) }
+    fun bind(model: Note, navController: NavController) {
+        note.setOnClickListener {
+            navController.navigate(NoteListFragmentDirections.openNote(model.id))
         }
-    }
-
-    private fun click(action: Action): View.OnClickListener = View.OnClickListener {
-        when (action) {
-            is Action.OpenWebsite -> it.context.openWebPage(it.context.getString(action.url))
-            is Action.OpenLibs -> it.findNavController().navigate(R.id.open_libs) // TODO fix this
-        }
+        titleListItem.text = model.title
+        contentsListItem.text = model.contents
     }
 
     companion object {
-        fun create(view: ViewGroup): AboutItemViewHolder =
-            AboutItemViewHolder(
+
+        fun create(view: ViewGroup): NoteViewHolder =
+            NoteViewHolder(
                 LayoutInflater.from(view.context).inflate(
-                    R.layout.item_about,
+                    R.layout.item_note,
                     view,
                     false
                 )

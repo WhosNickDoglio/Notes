@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2019 Nicholas Doglio
+ * Copyright (c) 2020 Nicholas Doglio
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,49 +22,20 @@
  * SOFTWARE.
  */
 
-package com.nicholasdoglio.notes.data.repo
+package com.nicholasdoglio.notes.features.about
 
-import com.nicholasdoglio.notes.Note
-import com.nicholasdoglio.notes.NoteQueries
-import com.squareup.sqldelight.Query
-import com.squareup.sqldelight.Transacter
+import android.view.ViewGroup
+import androidx.navigation.NavController
+import androidx.recyclerview.widget.ListAdapter
+import com.nicholasdoglio.notes.data.model.AboutItem
 
-class FakeQueries : NoteQueries {
+class AboutAdapter(private val navController: NavController) :
+    ListAdapter<AboutItem, AboutItemViewHolder>(AboutItem.diffCallback) {
 
-    override fun <T : Any> allNotes(
-        mapper: (id: Long, title: String?, contents: String?) -> T
-    ): Query<T> {
-        return TODO()
+    override fun onBindViewHolder(holder: AboutItemViewHolder, position: Int) {
+        holder.bind(getItem(position), navController)
     }
 
-    override fun allNotes(): Query<Note> {
-        return TODO()
-    }
-
-    override fun count(): Query<Long> {
-        return TODO()
-    }
-
-    override fun <T : Any> findNoteById(
-        id: Long,
-        mapper: (id: Long, title: String?, contents: String?) -> T
-    ): Query<T> {
-        return TODO()
-    }
-
-    override fun findNoteById(id: Long): Query<Note> {
-        return TODO()
-    }
-
-    override fun insertOrReplace(title: String?, contents: String?) {
-        return TODO()
-    }
-
-    override fun deleteById(id: Long) {
-        return TODO()
-    }
-
-    override fun transaction(noEnclosing: Boolean, body: Transacter.Transaction.() -> Unit) {
-        return TODO()
-    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AboutItemViewHolder =
+        AboutItemViewHolder.create(parent)
 }

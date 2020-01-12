@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2019 Nicholas Doglio
+ * Copyright (c) 2020 Nicholas Doglio
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,4 +28,17 @@ object Config {
     const val minSdk = 21
     const val versionCode = 5
     const val versionName = "1.1.1"
+    const val applicationId = "com.nicholasdoglio.notes"
+    const val testRunner = "androidx.test.runner.AndroidJUnitRunner"
 }
+
+
+// TODO maybe app versioning?
+// object Versions {
+//     private const val versionMajor = 1
+//     private const val versionMinor = 0
+//     private const val buildNum = 0
+//
+//     const val versionCode: Int = ((versionMajor * 1000000) + (versionMinor * 1000) + buildNum)
+//     const val versionName: String = "$versionMajor.$versionMinor.$buildNum"
+// }

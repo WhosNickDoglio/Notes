@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2019 Nicholas Doglio
+ * Copyright (c) 2020 Nicholas Doglio
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,26 +22,15 @@
  * SOFTWARE.
  */
 
-package com.nicholasdoglio.notes.ui.list
+package com.nicholasdoglio.notes.features.about
 
-import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
-import com.nicholasdoglio.notes.Note
+import androidx.lifecycle.ViewModel
+import com.nicholasdoglio.notes.data.local.AboutDataStore
+import com.nicholasdoglio.notes.data.model.AboutItem
+import io.reactivex.Single
+import javax.inject.Inject
 
-class NoteListAdapter : ListAdapter<Note, NoteViewHolder>(object : DiffUtil.ItemCallback<Note>() {
-    override fun areItemsTheSame(oldItem: Note, newItem: Note): Boolean {
-        return oldItem.id == newItem.id // TODO FIX THIS
-    }
+class AboutViewModel @Inject constructor(aboutDataStore: AboutDataStore) : ViewModel() {
 
-    override fun areContentsTheSame(oldItem: Note, newItem: Note): Boolean {
-        return oldItem.id == newItem.id // TODO FIX THIS
-    }
-}) {
-
-    override fun onBindViewHolder(holder: NoteViewHolder, position: Int) =
-        holder.bind(getItem(position))
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder =
-        NoteViewHolder.create(parent)
+    val aboutItems: Single<List<AboutItem>> = aboutDataStore.aboutItems
 }

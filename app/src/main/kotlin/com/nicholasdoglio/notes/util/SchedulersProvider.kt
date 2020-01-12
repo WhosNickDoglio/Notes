@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2019 Nicholas Doglio
+ * Copyright (c) 2020 Nicholas Doglio
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -33,10 +33,12 @@ interface SchedulersProvider {
     val main: Scheduler
     val background: Scheduler
     val database: Scheduler
+    val computation: Scheduler
 }
 
 class AppSchedulers @Inject constructor() : SchedulersProvider {
     override val main: Scheduler = AndroidSchedulers.mainThread()
-    override val background: Scheduler = Schedulers.io()
+    override val background: Scheduler = Schedulers.computation()
     override val database: Scheduler = Schedulers.single()
+    override val computation: Scheduler = Schedulers.computation()
 }

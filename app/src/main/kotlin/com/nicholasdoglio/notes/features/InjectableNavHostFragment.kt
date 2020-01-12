@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2019 Nicholas Doglio
+ * Copyright (c) 2020 Nicholas Doglio
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,15 +22,27 @@
  * SOFTWARE.
  */
 
-package com.nicholasdoglio.notes.ui.about
+package com.nicholasdoglio.notes.features
 
-import androidx.lifecycle.ViewModel
-import com.nicholasdoglio.notes.data.local.AboutDataStore
-import com.nicholasdoglio.notes.data.model.AboutItem
-import io.reactivex.Flowable
+import android.content.Context
+import android.os.Bundle
+import androidx.fragment.app.FragmentFactory
+import androidx.navigation.fragment.NavHostFragment
+import com.nicholasdoglio.notes.di.injector
 import javax.inject.Inject
 
-class AboutViewModel @Inject constructor(aboutDataStore: AboutDataStore) : ViewModel() {
+class InjectableNavHostFragment : NavHostFragment() {
 
-    val aboutItems: Flowable<List<AboutItem>> = aboutDataStore.aboutItems
+    @Inject
+    lateinit var fragmentFactory: FragmentFactory
+
+    override fun onAttach(context: Context) {
+        requireActivity().injector.inject(this)
+        super.onAttach(context)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        childFragmentManager.fragmentFactory = fragmentFactory
+        super.onCreate(savedInstanceState)
+    }
 }

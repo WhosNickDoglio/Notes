@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2019 Nicholas Doglio
+ * Copyright (c) 2020 Nicholas Doglio
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,26 +22,9 @@
  * SOFTWARE.
  */
 
-package com.nicholasdoglio.notes.ui.tile
+package com.nicholasdoglio.notes.features
 
-import android.content.Intent
-import android.net.Uri
-import android.os.Build
-import android.service.quicksettings.TileService
-import androidx.annotation.RequiresApi
-import com.nicholasdoglio.notes.ui.MainActivity
+import androidx.appcompat.app.AppCompatActivity
+import com.nicholasdoglio.notes.R
 
-private const val CREATE_NOTE_DEEP_LINK_URL = "com.nicholasdoglio.notes://create_new_note"
-
-@RequiresApi(Build.VERSION_CODES.N)
-class CreateNoteTile : TileService() {
-
-    override fun onClick() {
-        super.onClick()
-        startActivityAndCollapse(Intent(applicationContext, MainActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK
-            data = Uri.parse(CREATE_NOTE_DEEP_LINK_URL)
-        }
-        )
-    }
-}
+class MainActivity : AppCompatActivity(R.layout.activity_main)

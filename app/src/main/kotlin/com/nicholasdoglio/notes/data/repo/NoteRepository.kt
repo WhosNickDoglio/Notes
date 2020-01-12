@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2019 Nicholas Doglio
+ * Copyright (c) 2020 Nicholas Doglio
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -34,7 +34,8 @@ import io.reactivex.BackpressureStrategy
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Maybe
-import io.reactivex.MaybeOnSubscribe
+import io.reactivex.MaybeEmitter
+import org.threeten.bp.LocalDateTime
 import javax.inject.Inject
 
 class NoteRepository @Inject constructor(
@@ -51,26 +52,26 @@ class NoteRepository @Inject constructor(
             .toFlowable(BackpressureStrategy.LATEST)
 
     override fun findItemById(id: Long): Maybe<Note> =
-        Maybe.create(MaybeOnSubscribe<Note> { emitter ->
+        Maybe.create { emitter: MaybeEmitter<Note> ->
             val note = noteQueries.findNoteById(id).executeAsOneOrNull()
-
-            // TODO use Response sealed class
-            if (note == null) emitter.onSuccess(Note.Impl(1, "", "")) else emitter.onSuccess(note)
-        })
-
+            if (note != null) {
+                emitter.onSuccess(note)
+            }
+        }
             .observeOn(schedulersProvider.database)
 
-    // TODO check if this actually works?
     override fun upsert(item: Note): Completable =
-        Completable.fromAction { noteQueries.insertOrReplace(item.title, item.contents) }
+        Completable.fromAction {
+            noteQueries.insertOrReplace(
+                id = item.id,
+                title = item.title,
+                contents = item.contents,
+                timestamp = LocalDateTime.now()
+            )
+        }
             .observeOn(schedulersProvider.database)
 
     override fun delete(item: Note): Completable =
         Completable.fromAction { noteQueries.deleteById(item.id) }
             .observeOn(schedulersProvider.database)
-}
-
-sealed class DatabaseResponse {
-    data class Success(val value: String) : DatabaseResponse()
-    object Failure : DatabaseResponse()
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   ~ MIT License
   ~
-  ~ Copyright (c) 2019 Nicholas Doglio
+  ~ Copyright (c) 2020 Nicholas Doglio
   ~
   ~ Permission is hereby granted, free of charge, to any person obtaining a copy
   ~ of this software and associated documentation files (the "Software"), to deal
@@ -30,7 +30,7 @@
 
     <fragment
         android:id="@+id/noteListFragment"
-        android:name="com.nicholasdoglio.notes.ui.list.NoteListFragment"
+        android:name="com.nicholasdoglio.notes.features.list.NoteListFragment"
         android:label="fragment_note_list"
         tools:layout="@layout/fragment_note_list">
 
@@ -53,7 +53,7 @@
     </fragment>
     <fragment
         android:id="@+id/noteFragment"
-        android:name="com.nicholasdoglio.notes.ui.note.NoteFragment"
+        android:name="com.nicholasdoglio.notes.features.editnote.NoteFragment"
         android:label="fragment_note"
         tools:layout="@layout/fragment_note">
         <deepLink app:uri="com.nicholasdoglio.notes://create_new_note"/>
@@ -67,20 +67,20 @@
     </fragment>
     <dialog
         android:id="@+id/libsFragment"
-        android:name="com.nicholasdoglio.notes.ui.about.LibsFragment"
+        android:name="com.nicholasdoglio.notes.features.about.LibsFragment"
         android:label="LibsFragment"/>
     <dialog
         android:id="@+id/aboutFragment"
-        android:name="com.nicholasdoglio.notes.ui.about.AboutFragment"
-        android:label="fragment_note_list"
-        tools:layout="@layout/fragment_note_list">
+        android:name="com.nicholasdoglio.notes.features.about.AboutFragment"
+        android:label="fragment_about"
+        tools:layout="@layout/fragment_about">
         <action
             android:id="@+id/open_libs"
-            app:destination="@id/libsFragment"/>
+            app:destination="@id/libsFragment" />
     </dialog>
     <fragment
         android:id="@+id/discardFragment"
-        android:name="com.nicholasdoglio.notes.ui.note.DiscardFragment"
+        android:name="com.nicholasdoglio.notes.features.editnote.DiscardFragment"
         android:label="DiscardFragment">
         <action
             android:id="@+id/open_list"
