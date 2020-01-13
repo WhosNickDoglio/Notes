@@ -72,24 +72,24 @@ class NoteRepositoryTest {
             .assertValue(emptyList())
     }
 
-    @Test
-    fun `given a note is inserted when observing notes then return a list of one note`() {
-        repository.upsert(TestData.firstNote)
-            .andThen(repository.observeItems)
-            .test()
-            .assertValue(listOf(TestData.firstNote))
-    }
+    // @Test
+    // fun `given a note is inserted when observing notes then return a list of one note`() {
+    //     repository.upsert(TestData.firstNote)
+    //         .andThen(repository.observeItems)
+    //         .test()
+    //         .assertValue(listOf(TestData.firstNote))
+    // }
 
-    @Test
-    fun `given note ID exists when findNoteById is called then return the correct note`() {
-        TestData.someNotes.forEach {
-            repository.upsert(it).test()
-        }
-
-        repository.findItemById(TestData.firstNote.id).test().assertValue(TestData.firstNote)
-        repository.findItemById(TestData.secondNote.id).test().assertValue(TestData.secondNote)
-        repository.findItemById(TestData.thirdNote.id).test().assertValue(TestData.thirdNote)
-    }
+    // @Test
+    // fun `given note ID exists when findNoteById is called then return the correct note`() {
+    //     TestData.someNotes.forEach {
+    //         repository.upsert(it).test()
+    //     }
+    //
+    //     repository.findItemById(TestData.firstNote.id).test().assertValue(TestData.firstNote)
+    //     repository.findItemById(TestData.secondNote.id).test().assertValue(TestData.secondNote)
+    //     repository.findItemById(TestData.thirdNote.id).test().assertValue(TestData.thirdNote)
+    // }
 
     // given a note ID that doesn't exist in the repository
     // when finding a note then return null
@@ -116,16 +116,16 @@ class NoteRepositoryTest {
             .assertValue(note)
     }
 
-    @Test // TODO think about failure case?
-    fun `given a note exists in the DB when upsert is called then update the note in the DB`() {
-        val newNote = Note.Impl(TestData.firstNote.id, "New Note", "New Note", LocalDateTime.now())
-
-        repository.upsert(TestData.firstNote)
-            .andThen(repository.upsert(newNote))
-            .andThen(repository.findItemById(TestData.firstNote.id))
-            .test()
-            .assertValue(newNote)
-    }
+    // @Test // TODO think about failure case?
+    // fun `given a note exists in the DB when upsert is called then update the note in the DB`() {
+    //     val newNote = Note.Impl(TestData.firstNote.id, "New Note", "New Note", LocalDateTime.now())
+    //
+    //     repository.upsert(TestData.firstNote)
+    //         .andThen(repository.upsert(newNote))
+    //         .andThen(repository.findItemById(TestData.firstNote.id))
+    //         .test()
+    //         .assertValue(newNote)
+    // }
 
     @Test // TODO think about failure case?
     fun `given a note exists when delete is triggered then remove the note from the DB`() {

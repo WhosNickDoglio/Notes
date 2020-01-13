@@ -37,6 +37,11 @@ plugins {
     id(Plugins.delect)
     id(Plugins.license)
     id(Plugins.scabbard) version Versions.scabbard
+    jacoco
+}
+
+jacoco {
+    toolVersion = "0.8.5"
 }
 
 kapt {
