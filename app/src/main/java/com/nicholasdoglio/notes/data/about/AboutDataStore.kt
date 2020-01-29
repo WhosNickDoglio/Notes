@@ -22,12 +22,35 @@
  * SOFTWARE.
  */
 
-object Config {
-    const val compileSdk = 29
-    const val targetSdk = 29
-    const val minSdk = 23
-    const val versionCode = 5
-    const val versionName = "1.1.1"
-    const val applicationId = "com.nicholasdoglio.notes"
-    const val testRunner = "androidx.test.runner.AndroidJUnitRunner"
+package com.nicholasdoglio.notes.data.about
+
+import com.nicholasdoglio.notes.R
+import com.nicholasdoglio.notes.util.SchedulersProvider
+import io.reactivex.Single
+import javax.inject.Inject
+
+class AboutDataStore @Inject constructor(private val schedulersProvider: SchedulersProvider) {
+
+    val aboutItems: Single<List<AboutItem>> = Single.defer {
+        Single.just(
+            listOf(
+                AboutItem(
+                    R.string.dev,
+                    AboutItem.Action.OpenWebsite(
+                        R.string.dev_url
+                    )
+                ),
+                AboutItem(
+                    R.string.libs,
+                    AboutItem.Action.OpenLibs
+                ),
+                AboutItem(
+                    R.string.source_code,
+                    AboutItem.Action.OpenWebsite(
+                        R.string.source_code_url
+                    )
+                )
+            )
+        )
+    }.observeOn(schedulersProvider.background)
 }

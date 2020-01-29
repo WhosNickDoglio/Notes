@@ -22,12 +22,25 @@
  * SOFTWARE.
  */
 
-object Config {
-    const val compileSdk = 29
-    const val targetSdk = 29
-    const val minSdk = 23
-    const val versionCode = 5
-    const val versionName = "1.1.1"
-    const val applicationId = "com.nicholasdoglio.notes"
-    const val testRunner = "androidx.test.runner.AndroidJUnitRunner"
+package com.nicholasdoglio.notes.di
+
+import android.app.Application
+import android.content.SharedPreferences
+import androidx.preference.PreferenceManager
+import com.f2prateek.rx.preferences2.RxSharedPreferences
+import dagger.Module
+import dagger.Provides
+import javax.inject.Singleton
+
+@Module
+object PreferencesModule {
+
+    @Provides
+    fun sharedPreferences(app: Application): SharedPreferences =
+        PreferenceManager.getDefaultSharedPreferences(app)
+
+    @Singleton
+    @Provides
+    fun rxSharedPreferences(sharedPreferences: SharedPreferences): RxSharedPreferences =
+        RxSharedPreferences.create(sharedPreferences)
 }

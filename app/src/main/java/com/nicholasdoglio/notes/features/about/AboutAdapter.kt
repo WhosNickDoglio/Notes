@@ -22,12 +22,21 @@
  * SOFTWARE.
  */
 
-object Config {
-    const val compileSdk = 29
-    const val targetSdk = 29
-    const val minSdk = 23
-    const val versionCode = 5
-    const val versionName = "1.1.1"
-    const val applicationId = "com.nicholasdoglio.notes"
-    const val testRunner = "androidx.test.runner.AndroidJUnitRunner"
+package com.nicholasdoglio.notes.features.about
+
+import android.view.ViewGroup
+import androidx.navigation.NavController
+import androidx.recyclerview.widget.ListAdapter
+import com.nicholasdoglio.notes.data.about.AboutItem
+
+class AboutAdapter(private val navController: NavController) :
+    ListAdapter<AboutItem, AboutItemViewHolder>(
+        AboutItem.diffCallback) {
+
+    override fun onBindViewHolder(holder: AboutItemViewHolder, position: Int) {
+        holder.bind(getItem(position), navController)
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AboutItemViewHolder =
+        AboutItemViewHolder.create(parent)
 }

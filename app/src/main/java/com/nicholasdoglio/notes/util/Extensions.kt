@@ -22,12 +22,22 @@
  * SOFTWARE.
  */
 
-object Config {
-    const val compileSdk = 29
-    const val targetSdk = 29
-    const val minSdk = 23
-    const val versionCode = 5
-    const val versionName = "1.1.1"
-    const val applicationId = "com.nicholasdoglio.notes"
-    const val testRunner = "androidx.test.runner.AndroidJUnitRunner"
+package com.nicholasdoglio.notes.util
+
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.view.inputmethod.InputMethodManager
+
+fun Activity.hideKeyboard() {
+    val input = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+    input.hideSoftInputFromWindow(this.currentFocus?.windowToken, 0)
+}
+
+fun Context.openWebPage(url: String) {
+    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+    if (intent.resolveActivity(this.packageManager) != null) {
+        this.startActivity(intent)
+    }
 }

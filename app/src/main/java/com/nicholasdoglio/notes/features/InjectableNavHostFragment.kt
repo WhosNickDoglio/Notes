@@ -22,12 +22,32 @@
  * SOFTWARE.
  */
 
-object Config {
-    const val compileSdk = 29
-    const val targetSdk = 29
-    const val minSdk = 23
-    const val versionCode = 5
-    const val versionName = "1.1.1"
-    const val applicationId = "com.nicholasdoglio.notes"
-    const val testRunner = "androidx.test.runner.AndroidJUnitRunner"
+package com.nicholasdoglio.notes.features
+
+import android.content.Context
+import android.os.Bundle
+import androidx.fragment.app.FragmentFactory
+import androidx.navigation.fragment.NavHostFragment
+import com.nicholasdoglio.notes.di.AppComponent
+import com.nicholasdoglio.notes.di.injector
+import javax.inject.Inject
+
+class InjectableNavHostFragment : NavHostFragment() {
+
+    @Inject
+    lateinit var fragmentFactory: FragmentFactory
+
+    private val component: AppComponent by lazy {
+        requireActivity().injector
+    }
+
+    override fun onAttach(context: Context) {
+        component.inject(this)
+        super.onAttach(context)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        childFragmentManager.fragmentFactory = fragmentFactory
+        super.onCreate(savedInstanceState)
+    }
 }

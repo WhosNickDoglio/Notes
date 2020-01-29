@@ -37,11 +37,6 @@ plugins {
     id(Plugins.delect)
     id(Plugins.license)
     id(Plugins.scabbard) version Versions.scabbard
-    jacoco
-}
-
-jacoco {
-    toolVersion = "0.8.5"
 }
 
 kapt {
@@ -102,18 +97,6 @@ android {
         }
     }
 
-    sourceSets {
-        named("main") {
-            java.setSrcDirs(arrayListOf("src/main/kotlin"))
-        }
-        named("test") {
-            java.setSrcDirs(arrayListOf("src/test/kotlin"))
-        }
-        named("androidTest") {
-            java.setSrcDirs(arrayListOf("src/androidTest/kotlin"))
-        }
-    }
-
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -139,20 +122,23 @@ dependencies {
     implementation(Libs.Android.constraintLayout)
     implementation(Libs.Android.navigationFragmentKtx)
     implementation(Libs.Android.navigationUiKtx)
-    implementation("androidx.coordinatorlayout:coordinatorlayout:1.1.0")
+    implementation(Libs.Android.coordinatorLayout)
+    implementation(Libs.Android.preferences)
 
     implementation(Libs.Square.sqlDelightAndroidDriver)
     implementation(Libs.Square.sqlDelightRxExt)
 
     implementation(Libs.threetenabp)
-    implementation(Libs.Rx.rxjava)
-    implementation(Libs.Rx.rxkotlin)
-    implementation(Libs.Rx.rxandroid)
-    implementation(Libs.Rx.Binding) // TODO think about other bindings?)
-    implementation(Libs.Rx.BindingRecyclerView)
-    implementation(Libs.Rx.autodisposeAndroidArchcomponents)
-    implementation(Libs.Rx.rxdogtag)
-    implementation(Libs.Rx.rxdogtagAutodispose)
+    implementation(Libs.Rx.java)
+    implementation(Libs.Rx.kotlin)
+    implementation(Libs.Rx.android)
+    implementation(Libs.Rx.binding) // TODO think about other bindings?)
+    implementation(Libs.Rx.bindingRecyclerView)
+    implementation(Libs.Rx.autoDispose)
+    implementation(Libs.Rx.dogTag)
+    implementation(Libs.Rx.preferences)
+    implementation(Libs.Rx.relay)
+    implementation(Libs.Rx.dogTagAutoDispose)
 
     implementation(Libs.Dagger.dagger)
     kapt(Libs.Dagger.daggerCompiler)
@@ -166,8 +152,8 @@ dependencies {
     testImplementation(Libs.Test.mockk)
     testImplementation(Libs.Square.sqlDelightJvm)
 
-    testImplementation("org.threeten:threetenbp:1.4.0") {
-        exclude(group = "com.jakewharton.threetenabp", module = "threetenabp")
+    testImplementation(Libs.Test.threeten) {
+        exclude(group = Libs.Test.threeTenGroup, module = Libs.Test.threeTenModule)
     }
 
     androidTestImplementation(Libs.Android.fragmentTesting)

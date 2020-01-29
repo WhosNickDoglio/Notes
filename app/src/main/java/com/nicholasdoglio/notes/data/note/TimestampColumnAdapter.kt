@@ -22,12 +22,18 @@
  * SOFTWARE.
  */
 
-object Config {
-    const val compileSdk = 29
-    const val targetSdk = 29
-    const val minSdk = 23
-    const val versionCode = 5
-    const val versionName = "1.1.1"
-    const val applicationId = "com.nicholasdoglio.notes"
-    const val testRunner = "androidx.test.runner.AndroidJUnitRunner"
+package com.nicholasdoglio.notes.data.note
+
+import com.squareup.sqldelight.ColumnAdapter
+import org.threeten.bp.LocalDateTime
+import org.threeten.bp.format.DateTimeFormatter
+import javax.inject.Inject
+
+class TimestampColumnAdapter @Inject constructor() : ColumnAdapter<LocalDateTime, String> {
+    private val formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME
+
+    override fun decode(databaseValue: String): LocalDateTime =
+        formatter.parse(databaseValue, LocalDateTime::from)
+
+    override fun encode(value: LocalDateTime): String = value.format(formatter)
 }

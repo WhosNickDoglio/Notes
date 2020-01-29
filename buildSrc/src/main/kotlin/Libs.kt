@@ -7,48 +7,46 @@ object Libs {
         const val leakCanary: String = "com.squareup.leakcanary:leakcanary-android:${Versions.leakCanary}"
     }
 
-
     object Rx {
-        const val Binding: String = "com.jakewharton.rxbinding3:rxbinding:${Versions.rxBinding}"
+        const val binding: String = "com.jakewharton.rxbinding3:rxbinding:${Versions.rxBinding}"
 
-        const val BindingRecyclerView: String =
+        const val bindingRecyclerView: String =
             "com.jakewharton.rxbinding3:rxbinding-recyclerview:${Versions.rxBinding}"
 
+        const val dogTag: String = "com.uber.rxdogtag:rxdogtag:${Versions.dogTag}"
 
-        const val rxdogtag: String = "com.uber.rxdogtag:rxdogtag:${Versions.dogTag}"
-
-        const val rxdogtagAutodispose: String =
+        const val dogTagAutoDispose: String =
             "com.uber.rxdogtag:rxdogtag-autodispose:${Versions.dogTag}"
 
-        const val autodisposeAndroidArchcomponents: String =
+        const val autoDispose: String =
             "com.uber.autodispose:autodispose-android-archcomponents:${Versions.autoDispose}"
 
+        const val android: String = "io.reactivex.rxjava2:rxandroid:${Versions.rxandroid}"
 
-        const val rxandroid: String = "io.reactivex.rxjava2:rxandroid:${Versions.rxandroid}"
+        const val kotlin: String = "io.reactivex.rxjava2:rxkotlin:${Versions.rxkotlin}"
 
+        const val java: String = "io.reactivex.rxjava2:rxjava:${Versions.rxjava}"
 
-        const val rxkotlin: String = "io.reactivex.rxjava2:rxkotlin:${Versions.rxkotlin}"
+        const val preferences: String = "com.f2prateek.rx.preferences2:rx-preferences:${Versions.rx_preferences}"
 
-        const val rxjava: String = "io.reactivex.rxjava2:rxjava:${Versions.rxjava}"
-
+        const val relay: String = "com.jakewharton.rxrelay2:rxrelay:${Versions.relay}"
     }
 
     object Dagger {
-        
+
         const val dagger: String = "com.google.dagger:dagger:${Versions.dagger}"
 
         const val daggerCompiler: String = "com.google.dagger:dagger-compiler:${Versions.dagger}"
-
     }
 
     object Kotlin {
 
         const val Stdlib: String = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${Versions.kotlin}"
-
     }
 
-
     object Android {
+
+        const val coordinatorLayout: String = "androidx.coordinatorlayout:coordinatorlayout:${Versions.coordinator}"
 
         const val navigationFragmentKtx: String =
             "androidx.navigation:navigation-fragment-ktx:${Versions.navigation}"
@@ -61,22 +59,20 @@ object Libs {
         const val fragmentTesting: String =
             "androidx.fragment:fragment-testing:${Versions.fragment}"
 
-
         const val material: String = "com.google.android.material:material:${Versions.material}"
 
         const val constraintLayout: String =
             "androidx.constraintlayout:constraintlayout:${Versions.constraintLayout}"
-
 
         const val recyclerview: String =
             "androidx.recyclerview:recyclerview:${Versions.recyclerview}"
 
         const val appcompat: String = "androidx.appcompat:appcompat:${Versions.appcompat}"
 
+        const val preferences: String = "androidx.preference:preference-ktx:${Versions.preferences}"
     }
 
     object Test {
-
 
         const val junit: String = "junit:junit:${Versions.junit}"
 
@@ -101,13 +97,15 @@ object Libs {
 
         const val mockk: String = "io.mockk:mockk:${Versions.mockk}"
 
-    }
+        const val threeten: String = "org.threeten:threetenbp:${Versions.threeten}"
 
+        const val threeTenGroup: String = "com.jakewharton.threetenabp"
+
+        const val threeTenModule: String = "threetenabp"
+    }
 
     const val threetenabp: String =
         "com.jakewharton.threetenabp:threetenabp:${Versions.threetenabp}"
 
-
     const val timber: String = "com.jakewharton.timber:timber:${Versions.timber}"
-
 }

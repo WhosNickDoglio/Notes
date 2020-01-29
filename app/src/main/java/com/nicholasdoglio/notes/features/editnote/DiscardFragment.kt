@@ -22,12 +22,30 @@
  * SOFTWARE.
  */
 
-object Config {
-    const val compileSdk = 29
-    const val targetSdk = 29
-    const val minSdk = 23
-    const val versionCode = 5
-    const val versionName = "1.1.1"
-    const val applicationId = "com.nicholasdoglio.notes"
-    const val testRunner = "androidx.test.runner.AndroidJUnitRunner"
+package com.nicholasdoglio.notes.features.editnote
+
+import android.app.Dialog
+import android.os.Bundle
+import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.nicholasdoglio.notes.R
+import javax.inject.Inject
+
+class DiscardFragment @Inject constructor(
+    private val viewModelFactory: ViewModelProvider.Factory
+) : DialogFragment() {
+
+    private val viewModelEdit: EditNoteViewModel by viewModels { viewModelFactory }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog =
+        MaterialAlertDialogBuilder(requireContext())
+            .setMessage(R.string.discard_warning)
+            .setPositiveButton(R.string.save_button) { _, _ ->
+                viewModelEdit.triggerInsert() }
+            .setNegativeButton(R.string.discard_button) { _, _ ->
+                viewModelEdit.triggerDelete()
+            }
+            .create()
 }

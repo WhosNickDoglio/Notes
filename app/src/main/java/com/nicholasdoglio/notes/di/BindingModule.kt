@@ -22,12 +22,22 @@
  * SOFTWARE.
  */
 
-object Config {
-    const val compileSdk = 29
-    const val targetSdk = 29
-    const val minSdk = 23
-    const val versionCode = 5
-    const val versionName = "1.1.1"
-    const val applicationId = "com.nicholasdoglio.notes"
-    const val testRunner = "androidx.test.runner.AndroidJUnitRunner"
+package com.nicholasdoglio.notes.di
+
+import com.nicholasdoglio.notes.data.note.TimestampColumnAdapter
+import com.nicholasdoglio.notes.util.AppSchedulers
+import com.nicholasdoglio.notes.util.SchedulersProvider
+import com.squareup.sqldelight.ColumnAdapter
+import dagger.Binds
+import dagger.Module
+import org.threeten.bp.LocalDateTime
+
+@Module
+interface BindingModule {
+
+    @Binds
+    fun bindSchedulers(appSchedulers: AppSchedulers): SchedulersProvider
+
+    @Binds
+    fun bindTimestampAdapter(adapter: TimestampColumnAdapter): ColumnAdapter<LocalDateTime, String>
 }

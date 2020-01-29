@@ -22,12 +22,28 @@
  * SOFTWARE.
  */
 
-object Config {
-    const val compileSdk = 29
-    const val targetSdk = 29
-    const val minSdk = 23
-    const val versionCode = 5
-    const val versionName = "1.1.1"
-    const val applicationId = "com.nicholasdoglio.notes"
-    const val testRunner = "androidx.test.runner.AndroidJUnitRunner"
+package com.nicholasdoglio.notes.data.about
+
+import androidx.annotation.StringRes
+import androidx.recyclerview.widget.DiffUtil
+
+/**
+ * @param text text description of each item
+ * @param link website URL for better understanding each of item
+ */
+data class AboutItem(@StringRes val text: Int, val action: Action) {
+    companion object {
+        val diffCallback = object : DiffUtil.ItemCallback<AboutItem>() {
+            override fun areItemsTheSame(oldItem: AboutItem, newItem: AboutItem): Boolean =
+                oldItem == newItem
+
+            override fun areContentsTheSame(oldItem: AboutItem, newItem: AboutItem): Boolean =
+                oldItem.text == newItem.text
+        }
+    }
+
+    sealed class Action {
+        object OpenLibs : Action()
+        data class OpenWebsite(@StringRes val url: Int) : Action()
+    }
 }

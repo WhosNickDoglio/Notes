@@ -2,7 +2,7 @@
 
 object Versions {
 
-    const val sqlDelight = "1.2.1"
+    const val sqlDelight = "1.2.2"
 
     const val ktlintGradlePlugin = "9.1.1"
 
@@ -18,9 +18,9 @@ object Versions {
 
     const val kotlin: String = "1.3.61"
 
-    const val navigation: String = "2.2.0-rc04"
+    const val navigation: String = "2.2.0"
 
-    const val fragment: String = "1.2.0-rc05"
+    const val fragment: String = "1.2.0"
 
     const val dagger: String = "2.25.4"
 
@@ -34,7 +34,7 @@ object Versions {
 
     const val truthTestExtensions: String = "1.3.0-alpha03"
 
-    const val truth: String = "1.0"
+    const val truth: String = "1.0.1"
 
     const val junit: String = "4.12"
 
@@ -52,13 +52,13 @@ object Versions {
 
     const val recyclerview: String = "1.2.0-alpha01"
 
-    const val threetenabp: String = "1.2.1"
+    const val threetenabp: String = "1.2.2"
 
     const val appcompat: String = "1.2.0-alpha01"
 
     const val rxandroid: String = "2.1.1"
 
-    const val material: String = "1.2.0-alpha03"
+    const val material: String = "1.2.0-alpha04"
 
     const val rxkotlin: String = "2.4.0"
 
@@ -70,7 +70,17 @@ object Versions {
 
     const val mockk: String = "1.9.3"
 
-    const val gradle: String = "6.1-rc-2"
+    const val gradle: String = "6.1.1"
 
     const val licence: String = "0.8.6"
+
+    const val rx_preferences: String = "2.0.0"
+
+    const val coordinator: String = "1.1.0"
+
+    const val relay: String = "2.1.1"
+
+    const val threeten: String = "1.4.1"
+
+    const val preferences: String = "1.1.0"
 }

@@ -22,12 +22,15 @@
  * SOFTWARE.
  */
 
-object Config {
-    const val compileSdk = 29
-    const val targetSdk = 29
-    const val minSdk = 23
-    const val versionCode = 5
-    const val versionName = "1.1.1"
-    const val applicationId = "com.nicholasdoglio.notes"
-    const val testRunner = "androidx.test.runner.AndroidJUnitRunner"
+package com.nicholasdoglio.notes.features.about
+
+import androidx.lifecycle.ViewModel
+import com.nicholasdoglio.notes.data.about.AboutDataStore
+import com.nicholasdoglio.notes.data.about.AboutItem
+import io.reactivex.Single
+import javax.inject.Inject
+
+class AboutViewModel @Inject constructor(aboutDataStore: AboutDataStore) : ViewModel() {
+
+    val aboutItems: Single<List<AboutItem>> = aboutDataStore.aboutItems
 }

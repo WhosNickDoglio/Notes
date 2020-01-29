@@ -22,12 +22,36 @@
  * SOFTWARE.
  */
 
-object Config {
-    const val compileSdk = 29
-    const val targetSdk = 29
-    const val minSdk = 23
-    const val versionCode = 5
-    const val versionName = "1.1.1"
-    const val applicationId = "com.nicholasdoglio.notes"
-    const val testRunner = "androidx.test.runner.AndroidJUnitRunner"
+package com.nicholasdoglio.notes.di
+
+import android.app.Application
+import android.content.Context
+import com.nicholasdoglio.notes.features.InjectableNavHostFragment
+import dagger.BindsInstance
+import dagger.Component
+import javax.inject.Singleton
+
+@Singleton
+@Component(
+    modules = [
+        DatabaseModule::class,
+        FragmentBindingModule::class,
+        BindingModule::class,
+        PreferencesModule::class,
+        ViewModelModule::class
+    ]
+)
+interface AppComponent {
+    @Component.Factory
+    interface Factory {
+        fun create(@BindsInstance application: Application): AppComponent
+    }
+
+    fun inject(target: InjectableNavHostFragment)
 }
+
+interface AppComponentProvider {
+    val component: AppComponent
+}
+
+val Context.injector: AppComponent get() = (applicationContext as AppComponentProvider).component

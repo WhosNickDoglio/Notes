@@ -53,9 +53,9 @@
     </fragment>
     <fragment
         android:id="@+id/noteFragment"
-        android:name="com.nicholasdoglio.notes.features.editnote.NoteFragment"
+        android:name="com.nicholasdoglio.notes.features.editnote.EditNoteFragment"
         android:label="fragment_note"
-        tools:layout="@layout/fragment_note">
+        tools:layout="@layout/fragment_edit_note">
         <deepLink app:uri="com.nicholasdoglio.notes://create_new_note"/>
         <argument
             android:name="noteId"

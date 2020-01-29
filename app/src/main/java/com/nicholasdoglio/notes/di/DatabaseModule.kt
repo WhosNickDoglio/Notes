@@ -22,12 +22,35 @@
  * SOFTWARE.
  */
 
-object Config {
-    const val compileSdk = 29
-    const val targetSdk = 29
-    const val minSdk = 23
-    const val versionCode = 5
-    const val versionName = "1.1.1"
-    const val applicationId = "com.nicholasdoglio.notes"
-    const val testRunner = "androidx.test.runner.AndroidJUnitRunner"
+package com.nicholasdoglio.notes.di
+
+import android.app.Application
+import com.nicholasdoglio.notes.Note
+import com.nicholasdoglio.notes.NoteDatabase
+import com.nicholasdoglio.notes.NoteQueries
+import com.squareup.sqldelight.ColumnAdapter
+import com.squareup.sqldelight.android.AndroidSqliteDriver
+import dagger.Module
+import dagger.Provides
+import org.threeten.bp.LocalDateTime
+import javax.inject.Singleton
+
+@Module
+object DatabaseModule {
+    private const val NOTES_DB = "notes_db"
+
+    @Provides
+    @Singleton
+    fun driver(app: Application): AndroidSqliteDriver =
+        AndroidSqliteDriver(NoteDatabase.Schema, app, NOTES_DB)
+
+    @Provides
+    @Singleton
+    fun database(
+        driver: AndroidSqliteDriver,
+        adapter: ColumnAdapter<LocalDateTime, String>
+    ): NoteDatabase = NoteDatabase(driver, Note.Adapter(timestampAdapter = adapter))
+
+    @Provides
+    fun noteQueries(database: NoteDatabase): NoteQueries = database.noteQueries
 }

@@ -22,12 +22,31 @@
  * SOFTWARE.
  */
 
-object Config {
-    const val compileSdk = 29
-    const val targetSdk = 29
-    const val minSdk = 23
-    const val versionCode = 5
-    const val versionName = "1.1.1"
-    const val applicationId = "com.nicholasdoglio.notes"
-    const val testRunner = "androidx.test.runner.AndroidJUnitRunner"
+package com.nicholasdoglio.notes.shared
+
+import com.google.common.truth.Truth
+import com.nicholasdoglio.notes.Note
+import org.threeten.bp.LocalDateTime
+
+// TODO should this be an object?
+object TestData {
+
+    val firstNote: Note = Note.Impl(1, "First note", "This is my first note", LocalDateTime.now())
+    val secondNote: Note =
+        Note.Impl(2, "Second note", "This is my second note", LocalDateTime.now())
+    val thirdNote: Note = Note.Impl(3, "Third note", "This is my third note", LocalDateTime.now())
+
+    val someNotes: List<Note> = listOf(
+        firstNote,
+        secondNote,
+        thirdNote
+    )
+}
+
+fun Note.compareNote(otherNote: Note) {
+    otherNote.apply {
+        Truth.assertThat(this.id).isEqualTo(otherNote.id)
+        Truth.assertThat(this.title).isEqualTo(otherNote.title)
+        Truth.assertThat(this.contents).isEqualTo(otherNote.contents)
+    }
 }

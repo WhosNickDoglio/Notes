@@ -22,12 +22,19 @@
  * SOFTWARE.
  */
 
-object Config {
-    const val compileSdk = 29
-    const val targetSdk = 29
-    const val minSdk = 23
-    const val versionCode = 5
-    const val versionName = "1.1.1"
-    const val applicationId = "com.nicholasdoglio.notes"
-    const val testRunner = "androidx.test.runner.AndroidJUnitRunner"
+package com.nicholasdoglio.notes.features.list
+
+import androidx.lifecycle.ViewModel
+import com.nicholasdoglio.notes.Note
+import com.nicholasdoglio.notes.data.note.NoteRepository
+import io.reactivex.Flowable
+import javax.inject.Inject
+
+class NoteListViewModel @Inject constructor(private val repository: NoteRepository) :
+    ViewModel() {
+
+    val notesList: Flowable<List<Note>> = repository.observeItems
+
+    val hasNotes: Flowable<Boolean> = repository.observeCountOfItems
+        .map { it > 0 }
 }

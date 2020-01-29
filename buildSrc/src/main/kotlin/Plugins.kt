@@ -33,8 +33,6 @@ val PluginDependenciesSpec.benManesVersions: PluginDependencySpec
     inline get() =
         id("com.github.ben-manes.versions").version(Versions.benManesVersions)
 
-
-
 object GradlePlugin {
     const val sqlDelight = "com.squareup.sqldelight:gradle-plugin:${Versions.sqlDelight}"
     const val ktlint = "org.jlleitschuh.gradle:ktlint-gradle:${Versions.ktlintGradlePlugin}"
@@ -44,7 +42,6 @@ object GradlePlugin {
     const val delect = "com.soundcloud.delect:delect-plugin:${Versions.delect}"
     const val license = "com.jaredsburrows:gradle-license-plugin:${Versions.licence}"
 }
-
 
 object Plugins {
     object Android {
