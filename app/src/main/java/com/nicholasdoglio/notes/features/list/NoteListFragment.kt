@@ -31,21 +31,29 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.jakewharton.rxbinding3.view.clicks
+import com.mikepenz.aboutlibraries.Libs
+import com.mikepenz.aboutlibraries.LibsBuilder
 import com.nicholasdoglio.notes.R
-import com.nicholasdoglio.notes.util.SchedulersProvider
-import com.uber.autodispose.android.lifecycle.autoDispose
+import com.nicholasdoglio.notes.util.DispatcherProvider
+import com.nicholasdoglio.notes.util.openWebPage
+import com.nicholasdoglio.notes.util.withListener
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import reactivecircus.flowbinding.android.view.clicks
+import timber.log.Timber
 import javax.inject.Inject
 
 class NoteListFragment @Inject constructor(
     private val viewModelFactory: ViewModelProvider.Factory,
-    private val schedulersProvider: SchedulersProvider
+    private val dispatcherProvider: DispatcherProvider
 ) : Fragment(R.layout.fragment_note_list) {
 
     private val viewModel: NoteListViewModel by viewModels { viewModelFactory }
@@ -70,7 +78,32 @@ class NoteListFragment @Inject constructor(
             setOnMenuItemClickListener {
                 when (it.itemId) {
                     R.id.about_item -> {
-                        findNavController().navigate(R.id.open_about)
+                        findNavController().navigate(
+                            NoteListFragmentDirections.openLibs(
+                                LibsBuilder()
+                                    .withAboutVersionShownCode(false)
+                                    .withEdgeToEdge(true)
+                                    .withLicenseShown(true)
+                                    .withAboutSpecial1("Nicholas Doglio")
+                                    .withAboutSpecial2("Source Code")
+                                    .withListener(onExtraClicked = { v, specialButton ->
+                                        when (specialButton) {
+                                            Libs.SpecialButton.SPECIAL1 ->
+                                                v.context.openWebPage("https://whosnickdoglio.dev")
+                                            Libs.SpecialButton.SPECIAL2 ->
+                                                v.context.openWebPage(
+                                                    "https://github.com/WhosNickDoglio/Notes"
+                                                )
+                                            else -> Timber.i("This shouldn't have been clicked 🤷‍")
+                                        }
+                                        true
+                                    })
+                            )
+                        )
+                        true
+                    }
+                    R.id.night_mode_toggle_item -> {
+                        findNavController().navigate(R.id.open_night_toggle)
                         true
                     }
                     else -> false
@@ -86,20 +119,23 @@ class NoteListFragment @Inject constructor(
 
         createNoteFab
             .clicks()
-            .autoDispose(viewLifecycleOwner)
-            .subscribe { findNavController().navigate(NoteListFragmentDirections.openNote()) }
+            .flowOn(dispatcherProvider.main)
+            .onEach { findNavController().navigate(NoteListFragmentDirections.openNote()) }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
 
         viewModel.notesList
-            .observeOn(schedulersProvider.main)
-            .autoDispose(viewLifecycleOwner)
-            .subscribe { notesListAdapter.submitList(it) }
+            .flowOn(dispatcherProvider.main)
+            .onEach { notesListAdapter.submitList(it) }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
 
         viewModel.hasNotes
-            .observeOn(schedulersProvider.main)
-            .autoDispose(viewLifecycleOwner)
-            .subscribe {
+            .flowOn(dispatcherProvider.main)
+            .onEach {
                 emptyStateView.isVisible = !it
                 notesRecyclerView.isVisible = it
             }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 }
+
+data class NoteUi(val id: Long, val title: String?, val contents: String?)

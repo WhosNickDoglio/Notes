@@ -20,33 +20,47 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
- */
 
+ */
 package com.nicholasdoglio.notes.features.editnote
 
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.jakewharton.rxbinding3.view.clicks
-import com.jakewharton.rxbinding3.widget.textChanges
+import androidx.navigation.navGraphViewModels
+import androidx.navigation.ui.setupWithNavController
 import com.nicholasdoglio.notes.R
-import com.nicholasdoglio.notes.util.SchedulersProvider
-import com.uber.autodispose.android.lifecycle.autoDispose
+import com.nicholasdoglio.notes.util.DispatcherProvider
+import com.nicholasdoglio.notes.util.hideKeyboard
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
+import reactivecircus.flowbinding.activity.backPresses
+import reactivecircus.flowbinding.android.view.clicks
+import reactivecircus.flowbinding.android.widget.textChanges
 import javax.inject.Inject
 
+// BUG Shortcut doesn't seem to actually save the notes?
 class EditNoteFragment @Inject constructor(
     private val viewModelFactory: ViewModelProvider.Factory,
-    private val schedulersProvider: SchedulersProvider
+    private val dispatcherProvider: DispatcherProvider
 ) : Fragment(R.layout.fragment_edit_note) {
 
     private val args: EditNoteFragmentArgs by navArgs()
-    private val viewModel: EditNoteViewModel by viewModels { viewModelFactory }
+    private val viewModel: EditNoteViewModel
+        by navGraphViewModels(R.id.edit_navigation) { viewModelFactory }
 
+    private lateinit var toolbar: Toolbar
     private lateinit var deleteButton: Button
     private lateinit var insertButton: Button
     private lateinit var title: EditText
@@ -55,55 +69,49 @@ class EditNoteFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        toolbar = view.findViewById(R.id.toolbar)
         deleteButton = view.findViewById(R.id.delete_button)
         insertButton = view.findViewById(R.id.insert_button)
         title = view.findViewById(R.id.note_title)
         content = view.findViewById(R.id.note_content)
 
-        viewModel
-            .input
-            .autoDispose(viewLifecycleOwner)
-            .subscribe()
+        toolbar.setupWithNavController(findNavController())
 
-        viewModel
-            .insert
-            .autoDispose(viewLifecycleOwner)
-            .subscribe()
+        viewModel.inputNoteId.offer(args.noteId)
 
-        viewModel
-            .delete
-            .autoDispose(viewLifecycleOwner)
-            .subscribe()
+        viewLifecycleOwner.lifecycleScope.launch {
+            title.setText(viewModel.title.first())
+            content.setText(viewModel.contents.first())
+        }
 
-        viewModel.inputId(args.noteId)
-
-        // activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner) {
-        //     findNavController().navigate(EditNoteFragmentDirections.openDiscard())
-        // }
+        activity?.onBackPressedDispatcher?.backPresses(viewLifecycleOwner)
+            ?.map { viewModel.isEmpty }
+            ?.onEach { findNavController().navigate(EditNoteFragmentDirections.openDiscard()) }
+            ?.launchIn(viewLifecycleOwner.lifecycleScope)
 
         title.textChanges()
-            .autoDispose(viewLifecycleOwner)
-            .subscribe { viewModel.inputTitle(it.toString()) }
+            .flowOn(dispatcherProvider.main)
+            .onEach { viewModel.titleChannel.offer(it.toString()) }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
 
         content.textChanges()
-            .autoDispose(viewLifecycleOwner)
-            .subscribe { viewModel.inputContents(it.toString()) }
+            .flowOn(dispatcherProvider.main)
+            .onEach { viewModel.contentChannel.offer(it.toString()) }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
 
-        viewModel.title
-            .autoDispose(viewLifecycleOwner)
-            .subscribe { title.setText(it) }
-
-        viewModel.contents
-            .autoDispose(viewLifecycleOwner)
-            .subscribe { content.setText(it) }
-
-        // TODO on unsaved notes remember to just go back to list here
+        // // TODO on unsaved notes remember to just go back to list here
         deleteButton.clicks()
-            .autoDispose(viewLifecycleOwner)
-            .subscribe { viewModel.triggerDelete() }
+            .flowOn(dispatcherProvider.main)
+            .onEach { viewModel.inputDelete.offer(Unit) }
+            .onEach { findNavController().popBackStack() }
+            .onEach { activity?.hideKeyboard() }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
 
         insertButton.clicks()
-            .autoDispose(viewLifecycleOwner)
-            .subscribe { viewModel.triggerInsert() }
+            .flowOn(dispatcherProvider.main)
+            .onEach { viewModel.inputInsert.offer(Unit) }
+            .onEach { findNavController().popBackStack() }
+            .onEach { activity?.hideKeyboard() }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 }

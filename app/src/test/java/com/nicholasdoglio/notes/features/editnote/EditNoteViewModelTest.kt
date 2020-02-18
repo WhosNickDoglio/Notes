@@ -24,15 +24,16 @@
 
 package com.nicholasdoglio.notes.features.editnote
 
+import com.google.common.truth.Truth.assertThat
 import com.nicholasdoglio.notes.Note
 import com.nicholasdoglio.notes.NoteDatabase
-import com.nicholasdoglio.notes.data.note.TimestampColumnAdapter
-import com.nicholasdoglio.notes.data.note.NoteRepository
+import com.nicholasdoglio.notes.data.NoteRepository
+import com.nicholasdoglio.notes.data.TimestampColumnAdapter
 import com.nicholasdoglio.notes.shared.TestData
-import com.nicholasdoglio.notes.shared.TestSchedulers
+import com.nicholasdoglio.notes.shared.TestDispatchers
+import com.nicholasdoglio.notes.shared.test
 import com.squareup.sqldelight.sqlite.driver.JdbcSqliteDriver
-import io.reactivex.observers.TestObserver
-import org.junit.Before
+import kotlinx.coroutines.runBlocking
 import org.junit.Test
 
 class EditNoteViewModelTest {
@@ -44,84 +45,93 @@ class EditNoteViewModelTest {
     private val queries =
         NoteDatabase(inMemorySqlDriver, Note.Adapter(TimestampColumnAdapter())).noteQueries
 
+    private val dispatcher = TestDispatchers()
+
     private val repository: NoteRepository =
         NoteRepository(
             queries,
-            TestSchedulers()
+            dispatcher
         )
 
-    private val viewModel = EditNoteViewModel(repository, TestSchedulers())
-
-    @Before
-    fun setUp() {
-        viewModel.input.subscribe()
-        viewModel.insert.subscribe()
-        viewModel.delete.subscribe()
-    }
+    private val viewModel = EditNoteViewModel(repository, dispatcher)
 
     @Test
     fun `given note ID exist when inputted then return note title`() {
-        repository.insert(TestData.firstNote).subscribe()
+        runBlocking {
+            repository.upsert(
+                title = TestData.firstNote.title!!,
+                content = TestData.firstNote.contents!!
+            )
 
-        val titleObserver = TestObserver<String>()
+            viewModel.inputNoteId.offer(1)
 
-        viewModel.title.subscribe(titleObserver)
-        viewModel.inputId(1)
-
-        titleObserver.assertValue(TestData.firstNote.title)
+            viewModel.title.test {
+                assertThat(expectItem()).isEqualTo(TestData.firstNote.title)
+                cancel()
+            }
+        }
     }
 
     @Test
     fun `given note ID exist when inputted then return note content`() {
-        repository.insert(TestData.firstNote).subscribe()
+        runBlocking {
+            repository.upsert(
+                title = TestData.firstNote.title!!,
+                content = TestData.firstNote.contents!!
+            )
 
-        val contentsObserver = TestObserver<String>()
+            viewModel.inputNoteId.offer(1)
 
-        viewModel.contents.subscribe(contentsObserver)
-
-        viewModel.inputId(1)
-
-        contentsObserver.assertValue(TestData.firstNote.contents)
+            viewModel.contents.test {
+                assertThat(expectItem()).isEqualTo(TestData.firstNote.contents)
+                cancel()
+            }
+        }
     }
 
     @Test
     fun `given note ID exist when inputted then return no values for title`() {
-        val titleObserver = TestObserver<String>()
+        runBlocking {
+            viewModel.inputNoteId.offer(1)
 
-        viewModel.title.subscribe(titleObserver)
-
-        viewModel.inputId(1)
-
-        titleObserver.assertNoValues()
+            viewModel.title.test {
+                assertThat(expectItem()).isEmpty()
+                cancel()
+            }
+        }
     }
 
     @Test
     fun `given note ID exist when inputted then return no values for contents`() {
-        val contentsObserver = TestObserver<String>()
+        runBlocking {
+            viewModel.inputNoteId.offer(1)
 
-        viewModel.contents.subscribe(contentsObserver)
-
-        viewModel.inputId(1)
-
-        contentsObserver.assertNoValues()
+            viewModel.contents.test {
+                assertThat(expectItem()).isEmpty()
+                cancel()
+            }
+        }
     }
 
     @Test
-    fun `given a note is inserted when inserted is called`() {
+    fun `given a note is inserted when inserted is called then a note should exist in DB`() {
+        viewModel.inputNoteId.offer(-1L)
         val title = "This is my note"
-        viewModel.inputTitle(title)
+        viewModel.titleChannel.offer(title)
         val contents = "This is my note contents"
-        viewModel.inputContents(contents)
+        viewModel.contentChannel.offer(contents)
 
-        viewModel.triggerInsert()
+        viewModel.inputInsert.offer(Unit)
 
-        repository.observeCountOfItems
-            .test()
-            .assertValue { it > 0 }
+        runBlocking {
+            repository.observeNumOfNotes.test {
+                assertThat(expectItem()).isGreaterThan(0)
+                cancel()
+            }
+        }
     }
-    //
-    // @Test
-    // fun `given note deleted when delete triggered then verify delete called`() {
-    //
-    // }
+
+    @Test
+    fun `given note deleted when delete triggered then note shouldn't exist in DB`() {
+    }
 }

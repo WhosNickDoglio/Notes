@@ -4,7 +4,6 @@
     <!--Note Fragment-->
     <string name="title_hint">Title</string>
     <string name="note_hint">Note</string>
-    <string name="empty_note_toast">This note is empty! Try writing something.</string>
     <string name="discard_warning">Would you like to discard or save this note?</string>
     <string name="save_button">SAVE</string>
     <string name="discard_button">DISCARD</string>
@@ -16,18 +15,16 @@
 
     <!--Menus-->
     <string name="about_menu_item">About</string>
-    <string name="save_this_note">Save</string>
-    <string name="delete_this_note">Delete</string>
 
     <!--Shortcut-->
     <string name="create_note_shortcut">Create note</string>
 
-    <!--About-->
-    <string name="dev">Developed by Nicholas Doglio</string>
-    <string name="dev_url">https://whosnickdoglio.dev</string>
-    <string name="source_code">Source Code</string>
-    <string name="source_code_url">https://github.com/WhosNickDoglio/Notes</string>
-    <string name="libs">Libraries</string>
+    <!--    Night Mode-->
+    <string-array name="night_mode">
+        <item name="follow_system">Follow system</item>
+        <item name="always_light">Always light</item>
+        <item name="always_night">Always night</item>
+    </string-array>
 
 
 </resources>

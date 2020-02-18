@@ -22,35 +22,14 @@
  * SOFTWARE.
  */
 
-package com.nicholasdoglio.notes.data.about
+package com.nicholasdoglio.notes.shared
 
-import com.nicholasdoglio.notes.R
-import com.nicholasdoglio.notes.util.SchedulersProvider
-import io.reactivex.Single
-import javax.inject.Inject
+import com.nicholasdoglio.notes.util.DispatcherProvider
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 
-class AboutDataStore @Inject constructor(private val schedulersProvider: SchedulersProvider) {
-
-    val aboutItems: Single<List<AboutItem>> = Single.defer {
-        Single.just(
-            listOf(
-                AboutItem(
-                    R.string.dev,
-                    AboutItem.Action.OpenWebsite(
-                        R.string.dev_url
-                    )
-                ),
-                AboutItem(
-                    R.string.libs,
-                    AboutItem.Action.OpenLibs
-                ),
-                AboutItem(
-                    R.string.source_code,
-                    AboutItem.Action.OpenWebsite(
-                        R.string.source_code_url
-                    )
-                )
-            )
-        )
-    }.observeOn(schedulersProvider.background)
+class TestDispatchers : DispatcherProvider {
+    override val main: CoroutineDispatcher = Dispatchers.Unconfined
+    override val background: CoroutineDispatcher = Dispatchers.Unconfined
+    override val database: CoroutineDispatcher = Dispatchers.Unconfined
 }

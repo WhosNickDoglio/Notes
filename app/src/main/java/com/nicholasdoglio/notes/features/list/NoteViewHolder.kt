@@ -48,7 +48,6 @@ class NoteViewHolder(private val rootView: View) : RecyclerView.ViewHolder(rootV
     }
 
     companion object {
-
         fun create(view: ViewGroup): NoteViewHolder =
             NoteViewHolder(
                 LayoutInflater.from(view.context).inflate(

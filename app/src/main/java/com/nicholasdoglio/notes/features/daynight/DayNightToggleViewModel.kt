@@ -22,23 +22,36 @@
  * SOFTWARE.
  */
 
-package com.nicholasdoglio.notes.util
+package com.nicholasdoglio.notes.features.daynight
 
-import io.reactivex.Scheduler
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+import androidx.lifecycle.ViewModel
+import com.nicholasdoglio.notes.util.DispatcherProvider
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-interface SchedulersProvider {
-    val main: Scheduler
-    val background: Scheduler
-    val database: Scheduler
-    val computation: Scheduler
-}
+class DayNightToggleViewModel @Inject constructor(
+    private val model: DayNightModel,
+    private val dispatcherProvider: DispatcherProvider
+) : ViewModel() {
 
-class AppSchedulers @Inject constructor() : SchedulersProvider {
-    override val main: Scheduler = AndroidSchedulers.mainThread()
-    override val background: Scheduler = Schedulers.computation()
-    override val database: Scheduler = Schedulers.single()
-    override val computation: Scheduler = Schedulers.computation()
+    private val scope = CoroutineScope(dispatcherProvider.main)
+
+    val nightModeState: Flow<NightMode> = model.nightMode
+
+    val selected = model.selected
+
+    fun changeNightMode(mode: NightMode) {
+        model.toggleNightMode(scope, mode)
+    }
+
+    fun saveSelected(selected: Int) {
+        model.saveSelected(scope, selected)
+    }
+
+    override fun onCleared() {
+        scope.cancel()
+        super.onCleared()
+    }
 }

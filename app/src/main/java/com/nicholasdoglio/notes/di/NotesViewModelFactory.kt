@@ -26,6 +26,7 @@ package com.nicholasdoglio.notes.di
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Provider
 
@@ -41,8 +42,9 @@ class NotesViewModelFactory @Inject constructor(
 
         return try {
             creator.get() as T
-        } catch (e: Exception) {
-            throw RuntimeException(e)
+        } catch (e: RuntimeException) {
+            Timber.e(e)
+            throw e
         }
     }
 }

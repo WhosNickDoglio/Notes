@@ -24,9 +24,9 @@
 
 package com.nicholasdoglio.notes.di
 
-import com.nicholasdoglio.notes.data.note.TimestampColumnAdapter
-import com.nicholasdoglio.notes.util.AppSchedulers
-import com.nicholasdoglio.notes.util.SchedulersProvider
+import com.nicholasdoglio.notes.data.TimestampColumnAdapter
+import com.nicholasdoglio.notes.util.DefaultDispatchers
+import com.nicholasdoglio.notes.util.DispatcherProvider
 import com.squareup.sqldelight.ColumnAdapter
 import dagger.Binds
 import dagger.Module
@@ -36,7 +36,7 @@ import org.threeten.bp.LocalDateTime
 interface BindingModule {
 
     @Binds
-    fun bindSchedulers(appSchedulers: AppSchedulers): SchedulersProvider
+    fun bindDispatchers(appSchedulers: DefaultDispatchers): DispatcherProvider
 
     @Binds
     fun bindTimestampAdapter(adapter: TimestampColumnAdapter): ColumnAdapter<LocalDateTime, String>

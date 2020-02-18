@@ -27,15 +27,27 @@ package com.nicholasdoglio.notes
 import android.app.Application
 import android.os.StrictMode
 import androidx.appcompat.app.AppCompatDelegate
+import com.facebook.flipper.android.AndroidFlipperClient
+import com.facebook.flipper.android.utils.FlipperUtils
+import com.facebook.flipper.plugins.databases.DatabasesFlipperPlugin
+import com.facebook.flipper.plugins.inspector.DescriptorMapping
+import com.facebook.flipper.plugins.inspector.InspectorFlipperPlugin
+import com.facebook.flipper.plugins.sharedpreferences.SharedPreferencesFlipperPlugin
+import com.facebook.soloader.SoLoader
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.nicholasdoglio.notes.di.AppComponent
 import com.nicholasdoglio.notes.di.AppComponentProvider
 import com.nicholasdoglio.notes.di.DaggerAppComponent
-import com.uber.rxdogtag.RxDogTag
-import com.uber.rxdogtag.autodispose.AutoDisposeConfigurer
+import com.nicholasdoglio.notes.features.daynight.NightMode
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
+// TODO design inspiration https://material.io/design/material-studies/fortnightly.html#
+// Standardize how I handle navigation (directions vs xml ids)
 class NotesApplication : Application(), AppComponentProvider {
+
+    private val dispatchers by lazy { component.dispatcherProvider }
 
     override val component: AppComponent by lazy {
         DaggerAppComponent.factory().create(this)
@@ -43,8 +55,7 @@ class NotesApplication : Application(), AppComponentProvider {
 
     override fun onCreate() {
         super.onCreate()
-        // TODO allow user to change this
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+        AppCompatDelegate.setDefaultNightMode(NightMode.FOLLOW_SYSTEM.value)
         AndroidThreeTen.init(this)
         initDebugTools()
     }
@@ -53,14 +64,8 @@ class NotesApplication : Application(), AppComponentProvider {
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
             initStrictMode()
-            initRxDogTag()
+            initFlipper()
         }
-    }
-
-    private fun initRxDogTag() {
-        RxDogTag.builder()
-            .configureWith(AutoDisposeConfigurer::configure)
-            .install()
     }
 
     private fun initStrictMode() {
@@ -75,8 +80,34 @@ class NotesApplication : Application(), AppComponentProvider {
             StrictMode.VmPolicy.Builder()
                 .detectAll()
                 .penaltyLog()
-                .penaltyDeath()
                 .build()
         )
+    }
+
+    private fun initFlipper() {
+        GlobalScope.launch(dispatchers.background) {
+            SoLoader.init(this@NotesApplication, false)
+            if (FlipperUtils.shouldEnableFlipper(this@NotesApplication)) {
+                AndroidFlipperClient.getInstance(this@NotesApplication).apply {
+                    addPlugin(
+                        InspectorFlipperPlugin(
+                            this@NotesApplication,
+                            DescriptorMapping.withDefaults()
+                        )
+                    )
+                    addPlugin(DatabasesFlipperPlugin(this@NotesApplication))
+                    addPlugin(
+                        SharedPreferencesFlipperPlugin(
+                            this@NotesApplication,
+                            NOTES_PREFERENCES
+                        )
+                    )
+                }.start()
+            }
+        }
+    }
+
+    companion object {
+        private const val NOTES_PREFERENCES = "com.nicholasdoglio.notes_preferences"
     }
 }

@@ -40,7 +40,6 @@ object DatabaseModule {
     private const val NOTES_DB = "notes_db"
 
     @Provides
-    @Singleton
     fun driver(app: Application): AndroidSqliteDriver =
         AndroidSqliteDriver(NoteDatabase.Schema, app, NOTES_DB)
 

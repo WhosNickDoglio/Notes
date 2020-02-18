@@ -27,4 +27,22 @@ package com.nicholasdoglio.notes.features
 import androidx.appcompat.app.AppCompatActivity
 import com.nicholasdoglio.notes.R
 
-class MainActivity : AppCompatActivity(R.layout.activity_main)
+class MainActivity : AppCompatActivity(R.layout.activity_main) {
+
+    /**
+     * Override recreate to allow Day/Night switches
+     * to be smoother and less abrupt
+     */
+    override fun recreate() {
+        finish()
+        overridePendingTransition(
+            android.R.anim.fade_in,
+            android.R.anim.fade_out
+        )
+        startActivity(intent)
+        overridePendingTransition(
+            android.R.anim.fade_in,
+            android.R.anim.fade_out
+        )
+    }
+}

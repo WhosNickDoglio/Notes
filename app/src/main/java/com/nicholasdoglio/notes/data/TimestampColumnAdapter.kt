@@ -22,15 +22,23 @@
  * SOFTWARE.
  */
 
-package com.nicholasdoglio.notes.features.about
+package com.nicholasdoglio.notes.data
 
-import androidx.lifecycle.ViewModel
-import com.nicholasdoglio.notes.data.about.AboutDataStore
-import com.nicholasdoglio.notes.data.about.AboutItem
-import io.reactivex.Single
+import com.squareup.sqldelight.ColumnAdapter
+import org.threeten.bp.LocalDateTime
+import org.threeten.bp.format.DateTimeFormatter
 import javax.inject.Inject
 
-class AboutViewModel @Inject constructor(aboutDataStore: AboutDataStore) : ViewModel() {
+/**
+ * A SQLDelight ColumnAdapter to allow for timestamps to be saved into the database.
+ *
+ * Converts [LocalDateTime] to String and back again.
+ */
+class TimestampColumnAdapter @Inject constructor() : ColumnAdapter<LocalDateTime, String> {
+    private val formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME
 
-    val aboutItems: Single<List<AboutItem>> = aboutDataStore.aboutItems
+    override fun decode(databaseValue: String): LocalDateTime =
+        formatter.parse(databaseValue, LocalDateTime::from)
+
+    override fun encode(value: LocalDateTime): String = value.format(formatter)
 }

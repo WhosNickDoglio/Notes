@@ -36,11 +36,14 @@ val PluginDependenciesSpec.benManesVersions: PluginDependencySpec
 object GradlePlugin {
     const val sqlDelight = "com.squareup.sqldelight:gradle-plugin:${Versions.sqlDelight}"
     const val ktlint = "org.jlleitschuh.gradle:ktlint-gradle:${Versions.ktlintGradlePlugin}"
-    const val navigationSafeArgs = "androidx.navigation:navigation-safe-args-gradle-plugin:${Versions.navigation}"
+    const val navigationSafeArgs =
+        "androidx.navigation:navigation-safe-args-gradle-plugin:${Versions.navigation}"
     const val kotlin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}"
     const val android = "com.android.tools.build:gradle:${Versions.androidBuildTools}"
     const val delect = "com.soundcloud.delect:delect-plugin:${Versions.delect}"
-    const val license = "com.jaredsburrows:gradle-license-plugin:${Versions.licence}"
+    const val junitJacoco = "com.vanniktech:gradle-android-junit-jacoco-plugin:${Versions.junitJacoco}"
+    const val aboutLibraries =
+        "com.mikepenz.aboutlibraries.plugin:aboutlibraries-plugin:${Versions.about}"
 }
 
 object Plugins {
@@ -59,5 +62,6 @@ object Plugins {
     const val sqlDelight = "com.squareup.sqldelight"
     const val delect = "com.soundcloud.delect"
     const val scabbard = "scabbard.gradle"
-    const val license = "com.jaredsburrows.license"
+    const val junitJacoco = "com.vanniktech.android.junit.jacoco"
+    const val aboutLibs = "com.mikepenz.aboutlibraries.plugin"
 }

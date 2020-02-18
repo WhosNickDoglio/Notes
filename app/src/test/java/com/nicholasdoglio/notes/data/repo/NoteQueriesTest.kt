@@ -27,7 +27,7 @@ package com.nicholasdoglio.notes.data.repo
 import com.google.common.truth.Truth.assertThat
 import com.nicholasdoglio.notes.Note
 import com.nicholasdoglio.notes.NoteDatabase
-import com.nicholasdoglio.notes.data.note.TimestampColumnAdapter
+import com.nicholasdoglio.notes.data.TimestampColumnAdapter
 import com.nicholasdoglio.notes.shared.TestData
 import com.squareup.sqldelight.sqlite.driver.JdbcSqliteDriver
 import org.junit.After
@@ -54,11 +54,14 @@ class NoteQueriesTest {
 
     @Test
     fun `given three notes exist in DB when all notes is called then return list of three`() {
-        TestData.someNotes.forEach {
-            queries.insertOrReplace(it.id, it.title, it.contents, it.timestamp)
+        queries.transaction {
+            TestData.someNotes.forEach {
+                queries.insert(it.title, it.contents, it.timestamp)
+            }
         }
 
-        assertThat(queries.allNotes().executeAsList()).isEqualTo(TestData.someNotes)
+        assertThat(queries.allNotes().executeAsList())
+            .isEqualTo(TestData.someNotes.sortedByDescending { it.timestamp })
     }
 
     @Test
@@ -69,8 +72,10 @@ class NoteQueriesTest {
 
     @Test
     fun `given three notes exist in DB when count is called then return three`() {
-        TestData.someNotes.forEach {
-            queries.insertOrReplace(it.id, it.title, it.contents, it.timestamp)
+        queries.transaction {
+            TestData.someNotes.forEach {
+                queries.insert(it.title, it.contents, it.timestamp)
+            }
         }
 
         assertThat(queries.count().executeAsOne()).isEqualTo(3)
@@ -84,8 +89,7 @@ class NoteQueriesTest {
 
     @Test
     fun `given note exists when find by id is called then return note`() {
-        queries.insertOrReplace(
-            TestData.firstNote.id,
+        queries.insert(
             TestData.firstNote.title,
             TestData.firstNote.contents,
             TestData.firstNote.timestamp
@@ -96,9 +100,8 @@ class NoteQueriesTest {
     }
 
     @Test
-    fun `given DB is empty when insertOrReplace is called then insert note`() {
-        queries.insertOrReplace(
-            TestData.firstNote.id,
+    fun `given DB is empty when insert is called then insert note`() {
+        queries.insert(
             TestData.firstNote.title,
             TestData.firstNote.contents,
             TestData.firstNote.timestamp
@@ -115,9 +118,8 @@ class NoteQueriesTest {
     }
 
     @Test
-    fun `given note exists when insertOrReplace is called then update note`() {
-        queries.insertOrReplace(
-            TestData.firstNote.id,
+    fun `given note exists when insert is called then update note`() {
+        queries.insert(
             TestData.firstNote.title,
             TestData.firstNote.contents,
             TestData.firstNote.timestamp
@@ -133,7 +135,7 @@ class NoteQueriesTest {
             TestData.firstNote.timestamp
         )
 
-        queries.insertOrReplace(newNote.id, newNote.title, newNote.contents, newNote.timestamp)
+        queries.updateById(newNote.title, newNote.contents, newNote.timestamp, newNote.id)
 
         assertThat(queries.findNoteById(TestData.firstNote.id).executeAsOneOrNull())
             .isEqualTo(newNote)
@@ -141,8 +143,7 @@ class NoteQueriesTest {
 
     @Test
     fun `give note exists when deleteById is called then delete note`() {
-        queries.insertOrReplace(
-            TestData.firstNote.id,
+        queries.insert(
             TestData.firstNote.title,
             TestData.firstNote.contents,
             TestData.firstNote.timestamp

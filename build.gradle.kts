@@ -34,7 +34,8 @@ buildscript {
         classpath(GradlePlugin.sqlDelight)
         classpath(GradlePlugin.ktlint)
         classpath(GradlePlugin.delect)
-        classpath(GradlePlugin.license)
+        classpath(GradlePlugin.junitJacoco)
+        classpath(GradlePlugin.aboutLibraries)
     }
 }
 
@@ -47,6 +48,16 @@ allprojects {
     repositories {
         google()
         jcenter()
+        maven {
+            url = java.net.URI("https://jitpack.io")
+        }
+    }
+
+    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+        kotlinOptions.freeCompilerArgs = listOf(
+            "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi",
+            "-Xuse-experimental=kotlinx.coroutines.FlowPreview"
+        )
     }
 }
 

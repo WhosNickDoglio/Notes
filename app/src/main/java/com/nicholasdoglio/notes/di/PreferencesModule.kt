@@ -27,10 +27,9 @@ package com.nicholasdoglio.notes.di
 import android.app.Application
 import android.content.SharedPreferences
 import androidx.preference.PreferenceManager
-import com.f2prateek.rx.preferences2.RxSharedPreferences
+import com.tfcporciuncula.flow.FlowSharedPreferences
 import dagger.Module
 import dagger.Provides
-import javax.inject.Singleton
 
 @Module
 object PreferencesModule {
@@ -39,8 +38,7 @@ object PreferencesModule {
     fun sharedPreferences(app: Application): SharedPreferences =
         PreferenceManager.getDefaultSharedPreferences(app)
 
-    @Singleton
     @Provides
-    fun rxSharedPreferences(sharedPreferences: SharedPreferences): RxSharedPreferences =
-        RxSharedPreferences.create(sharedPreferences)
+    fun flowPreferences(sharedPreferences: SharedPreferences): FlowSharedPreferences =
+        FlowSharedPreferences(sharedPreferences)
 }

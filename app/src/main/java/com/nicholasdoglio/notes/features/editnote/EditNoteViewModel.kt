@@ -25,14 +25,20 @@
 package com.nicholasdoglio.notes.features.editnote
 
 import androidx.lifecycle.ViewModel
-import com.jakewharton.rxrelay2.PublishRelay
-import com.nicholasdoglio.notes.Note
-import com.nicholasdoglio.notes.data.note.NoteRepository
-import com.nicholasdoglio.notes.util.SchedulersProvider
-import io.reactivex.Observable
-import io.reactivex.rxkotlin.Observables
-import io.reactivex.rxkotlin.withLatestFrom
-import org.threeten.bp.LocalDateTime
+import com.nicholasdoglio.notes.data.NoteRepository
+import com.nicholasdoglio.notes.util.DispatcherProvider
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.channels.ConflatedBroadcastChannel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapConcat
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import timber.log.Timber
 import javax.inject.Inject
 
 // https://www.reddit.com/r/androiddev/comments/976m70/a_functional_approach_to_mvvm_which_lets_you/
@@ -41,75 +47,73 @@ import javax.inject.Inject
 
 class EditNoteViewModel @Inject constructor(
     private val repository: NoteRepository,
-    private val schedulersProvider: SchedulersProvider
+    private val dispatcherProvider: DispatcherProvider
 ) : ViewModel() {
 
-    private val inputInsert = PublishRelay.create<Unit>()
-
-    private val inputDelete = PublishRelay.create<Unit>()
-
-    private val inputNoteId = PublishRelay.create<Long>()
-
-    private val titleRelay = PublishRelay.create<String>()
-
-    private val contentsRelay = PublishRelay.create<String>()
-
-    private val note: Observable<Note> = Observables.combineLatest(
-        titleRelay,
-        contentsRelay
-    ) { title, contents ->
-        UiNote(
-            title = title,
-            contents = contents
-        )
+    private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
+        Timber.e(throwable)
     }
 
-    fun inputId(id: Long) {
-        inputNoteId.accept(id)
+    // TODO I shouldn't cancel this since it does all the DB transactions?
+    private val scope = CoroutineScope(dispatcherProvider.main + exceptionHandler)
+
+    private val idChannel = ConflatedBroadcastChannel<Long>()
+
+    val inputInsert = ConflatedBroadcastChannel<Unit>()
+
+    val inputDelete = ConflatedBroadcastChannel<Unit>()
+
+    val inputNoteId = ConflatedBroadcastChannel<Long>()
+
+    val titleChannel = ConflatedBroadcastChannel<String>()
+
+    val contentChannel = ConflatedBroadcastChannel<String>()
+
+    val title = titleChannel.asFlow()
+        .flowOn(dispatcherProvider.background)
+
+    val contents = contentChannel.asFlow()
+        .flowOn(dispatcherProvider.background)
+
+    val isEmpty: Flow<Boolean> = combine(
+        title,
+        contents,
+        transform = { title, contents -> title.isEmpty() && contents.isEmpty() })
+
+    private val note: Flow<UiNote> = combine(
+        idChannel.asFlow(),
+        titleChannel.asFlow(),
+        contentChannel.asFlow(),
+        transform = { id, title, contents -> UiNote(id = id, title = title, contents = contents) })
+        .flowOn(dispatcherProvider.background)
+
+    private val input = inputNoteId.asFlow()
+        .flowOn(dispatcherProvider.background)
+        .map { repository.findItemById(it) }
+        // TODO I don't like this
+        .onEach { idChannel.send(it?.id ?: -1L) }
+        .onEach { titleChannel.send(it?.title.orEmpty()) }
+        .onEach { contentChannel.send(it?.contents.orEmpty()) }
+
+    private val insert = inputInsert.asFlow()
+        .flowOn(dispatcherProvider.background)
+        .flatMapConcat { note }
+        .map { repository.upsert(it.id, it.title.orEmpty(), it.contents.orEmpty()) }
+
+    private val delete = inputDelete.asFlow()
+        .flowOn(dispatcherProvider.background)
+        .flatMapConcat { note }
+        .map { repository.deleteById(it.id) }
+
+    init {
+        input.launchIn(scope)
+        insert.launchIn(scope)
+        delete.launchIn(scope)
     }
-
-    fun inputTitle(title: String) {
-        titleRelay.accept(title)
-    }
-
-    fun inputContents(contents: String) {
-        contentsRelay.accept(contents)
-    }
-
-    fun triggerInsert() {
-        inputInsert.accept(Unit)
-    }
-
-    fun triggerDelete() {
-        inputDelete.accept(Unit)
-    }
-
-    val title = titleRelay.hide().firstElement()
-
-    val contents = contentsRelay.hide().firstElement()
-
-    val input = inputNoteId
-        .subscribeOn(schedulersProvider.background)
-        .flatMapMaybe { repository.findItemById(it) }
-        .map {
-            titleRelay.accept(it.title.orEmpty())
-            contentsRelay.accept(it.contents.orEmpty())
-        }
-
-    val insert = inputInsert
-        .subscribeOn(schedulersProvider.background)
-        .withLatestFrom(note)
-        .flatMapCompletable { repository.insert(it.second) }
-
-    val delete = inputDelete
-        .subscribeOn(schedulersProvider.background)
-        .withLatestFrom(note)
-        .flatMapCompletable { repository.delete(it.second) }
 }
 
 private data class UiNote(
-    override val id: Long = 0,
-    override val title: String?,
-    override val contents: String?,
-    override val timestamp: LocalDateTime = LocalDateTime.now()
-) : Note
+    val id: Long = -1L,
+    val title: String?,
+    val contents: String?
+)

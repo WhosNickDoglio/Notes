@@ -22,21 +22,13 @@
  * SOFTWARE.
  */
 
-package com.nicholasdoglio.notes.features.about
+package com.nicholasdoglio.notes.features.daynight
 
-import android.view.ViewGroup
-import androidx.navigation.NavController
-import androidx.recyclerview.widget.ListAdapter
-import com.nicholasdoglio.notes.data.about.AboutItem
+import androidx.appcompat.app.AppCompatDelegate
 
-class AboutAdapter(private val navController: NavController) :
-    ListAdapter<AboutItem, AboutItemViewHolder>(
-        AboutItem.diffCallback) {
-
-    override fun onBindViewHolder(holder: AboutItemViewHolder, position: Int) {
-        holder.bind(getItem(position), navController)
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AboutItemViewHolder =
-        AboutItemViewHolder.create(parent)
+// TODO battery mode for Android 9 might also be needed
+enum class NightMode(val value: Int) {
+    FOLLOW_SYSTEM(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM),
+    ALWAYS_LIGHT(AppCompatDelegate.MODE_NIGHT_NO),
+    ALWAYS_NIGHT(AppCompatDelegate.MODE_NIGHT_YES)
 }

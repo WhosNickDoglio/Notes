@@ -24,48 +24,6 @@
 
 package com.nicholasdoglio.notes.features.about
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.nicholasdoglio.notes.R
-import com.nicholasdoglio.notes.util.SchedulersProvider
-import com.uber.autodispose.android.lifecycle.autoDispose
-import javax.inject.Inject
+import com.mikepenz.aboutlibraries.ui.LibsSupportFragment
 
-class AboutFragment @Inject constructor(
-    private val viewModelFactory: ViewModelProvider.Factory,
-    private val schedulersProvider: SchedulersProvider
-) : DialogFragment() {
-
-    private val viewModel: AboutViewModel by viewModels { viewModelFactory }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.fragment_about, container)
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        val aboutRecyclerView: RecyclerView = view.findViewById(R.id.about_recyclerview)
-        val aboutAdapter = AboutAdapter(findNavController())
-
-        aboutRecyclerView.apply {
-            adapter = aboutAdapter
-            layoutManager = LinearLayoutManager(context)
-        }
-
-        viewModel.aboutItems
-            .observeOn(schedulersProvider.main)
-            .autoDispose(viewLifecycleOwner)
-            .subscribe { items -> aboutAdapter.submitList(items) }
-    }
-}
+class AboutFragment : LibsSupportFragment()

@@ -41,8 +41,9 @@ class NotesFragmentFactory @Inject constructor(
 
         try {
             return creator.get()
-        } catch (e: Exception) {
-            throw RuntimeException(e)
+        } catch (e: RuntimeException) {
+            Timber.e(e)
+            throw e
         }
     }
 

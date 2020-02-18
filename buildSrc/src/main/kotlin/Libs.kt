@@ -1,36 +1,18 @@
 object Libs {
 
     object Square {
-        const val sqlDelightAndroidDriver = "com.squareup.sqldelight:android-driver:${Versions.sqlDelight}"
-        const val sqlDelightRxExt = "com.squareup.sqldelight:rxjava2-extensions:${Versions.sqlDelight}"
+        const val sqlDelightAndroidDriver =
+            "com.squareup.sqldelight:android-driver:${Versions.sqlDelight}"
+
         const val sqlDelightJvm = "com.squareup.sqldelight:sqlite-driver:${Versions.sqlDelight}"
-        const val leakCanary: String = "com.squareup.leakcanary:leakcanary-android:${Versions.leakCanary}"
+
+        const val sqlDelightFlow = "com.squareup.sqldelight:coroutines-extensions:${Versions.sqlDelight}"
+
+
+        const val leakCanary: String =
+            "com.squareup.leakcanary:leakcanary-android:${Versions.leakCanary}"
     }
 
-    object Rx {
-        const val binding: String = "com.jakewharton.rxbinding3:rxbinding:${Versions.rxBinding}"
-
-        const val bindingRecyclerView: String =
-            "com.jakewharton.rxbinding3:rxbinding-recyclerview:${Versions.rxBinding}"
-
-        const val dogTag: String = "com.uber.rxdogtag:rxdogtag:${Versions.dogTag}"
-
-        const val dogTagAutoDispose: String =
-            "com.uber.rxdogtag:rxdogtag-autodispose:${Versions.dogTag}"
-
-        const val autoDispose: String =
-            "com.uber.autodispose:autodispose-android-archcomponents:${Versions.autoDispose}"
-
-        const val android: String = "io.reactivex.rxjava2:rxandroid:${Versions.rxandroid}"
-
-        const val kotlin: String = "io.reactivex.rxjava2:rxkotlin:${Versions.rxkotlin}"
-
-        const val java: String = "io.reactivex.rxjava2:rxjava:${Versions.rxjava}"
-
-        const val preferences: String = "com.f2prateek.rx.preferences2:rx-preferences:${Versions.rx_preferences}"
-
-        const val relay: String = "com.jakewharton.rxrelay2:rxrelay:${Versions.relay}"
-    }
 
     object Dagger {
 
@@ -42,11 +24,30 @@ object Libs {
     object Kotlin {
 
         const val Stdlib: String = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${Versions.kotlin}"
+
+        object Coroutines {
+            const val core: String = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutines}"
+
+            const val android: String = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.coroutines}"
+
+            object Extensions {
+
+                const val flowPreferences: String = "com.github.tfcporciuncula:flow-preferences:${Versions.flowPreferences}"
+
+                object Binding {
+
+                    const val android: String = "io.github.reactivecircus.flowbinding:flowbinding-android:${Versions.flowBinding}"
+                    const val recyclerview: String = "io.github.reactivecircus.flowbinding:flowbinding-recyclerview:${Versions.flowBinding}"
+                    const val activity: String = "io.github.reactivecircus.flowbinding:flowbinding-activity:${Versions.flowBinding}"
+                }
+            }
+        }
     }
 
     object Android {
 
-        const val coordinatorLayout: String = "androidx.coordinatorlayout:coordinatorlayout:${Versions.coordinator}"
+        const val coordinatorLayout: String =
+            "androidx.coordinatorlayout:coordinatorlayout:${Versions.coordinator}"
 
         const val navigationFragmentKtx: String =
             "androidx.navigation:navigation-fragment-ktx:${Versions.navigation}"
@@ -70,6 +71,8 @@ object Libs {
         const val appcompat: String = "androidx.appcompat:appcompat:${Versions.appcompat}"
 
         const val preferences: String = "androidx.preference:preference-ktx:${Versions.preferences}"
+
+        const val cardview = "androidx.cardview:cardview:${Versions.cardview}"
     }
 
     object Test {
@@ -93,15 +96,24 @@ object Libs {
         const val espressoCore: String =
             "androidx.test.espresso:espresso-core:${Versions.espressoCore}"
 
-        const val coreTesting: String = "androidx.arch.core:core-testing:${Versions.coreTesting}"
-
-        const val mockk: String = "io.mockk:mockk:${Versions.mockk}"
-
         const val threeten: String = "org.threeten:threetenbp:${Versions.threeten}"
 
         const val threeTenGroup: String = "com.jakewharton.threetenabp"
 
         const val threeTenModule: String = "threetenabp"
+    }
+
+    object Flipper {
+        const val debug: String = "com.facebook.flipper:flipper:${Versions.flipper}"
+        const val release: String = "com.facebook.flipper:flipper-noop:${Versions.flipper}"
+        const val soloader: String = "com.facebook.soloader:soloader:${Versions.soloader}"
+
+    }
+
+    object AboutLibs {
+        const val core = "com.mikepenz:aboutlibraries-core:${Versions.about}"
+        const val about = "com.mikepenz:aboutlibraries:${Versions.about}"
+
     }
 
     const val threetenabp: String =

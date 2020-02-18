@@ -27,13 +27,14 @@ package com.nicholasdoglio.notes.data.repo
 import com.google.common.truth.Truth.assertThat
 import com.nicholasdoglio.notes.Note
 import com.nicholasdoglio.notes.NoteDatabase
-import com.nicholasdoglio.notes.data.note.NoteRepository
-import com.nicholasdoglio.notes.data.note.TimestampColumnAdapter
+import com.nicholasdoglio.notes.data.NoteRepository
+import com.nicholasdoglio.notes.data.TimestampColumnAdapter
 import com.nicholasdoglio.notes.shared.TestData
-import com.nicholasdoglio.notes.shared.TestSchedulers
+import com.nicholasdoglio.notes.shared.TestDispatchers
 import com.nicholasdoglio.notes.shared.compareNote
+import com.nicholasdoglio.notes.shared.test
 import com.squareup.sqldelight.sqlite.driver.JdbcSqliteDriver
-import org.junit.Before
+import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.threeten.bp.LocalDateTime
 
@@ -45,112 +46,142 @@ class NoteRepositoryTest {
 
     private val queries =
         NoteDatabase(inMemorySqlDriver, Note.Adapter(TimestampColumnAdapter())).noteQueries
-    private lateinit var repository: NoteRepository
+    private val repository: NoteRepository =
+        NoteRepository(queries, TestDispatchers())
 
-    @Before
-    fun setUp() {
-        repository = NoteRepository(
-            queries,
-            TestSchedulers()
-        )
+    @Test
+    fun `given repository is empty when observing number of  notes then return zero`() =
+        runBlocking {
+            repository.observeNumOfNotes.test {
+                assertThat(expectItem()).isEqualTo(0)
+                cancel()
+            }
+        }
+
+    @Test
+    fun `given a note is inserted when observing the number of notes then return one`() =
+        runBlocking {
+            repository.upsert(
+                -1L,
+                TestData.firstNote.title!!,
+                TestData.firstNote.contents!!
+            )
+
+            repository.observeNumOfNotes.test {
+                assertThat(expectItem()).isEqualTo(1)
+                cancel()
+            }
+        }
+
+    @Test
+    fun `given repository is empty when observing notes then return empty list`() = runBlocking {
+        repository.observeNotes.test {
+            assertThat(expectItem()).isEmpty()
+            cancel()
+        }
     }
 
     @Test
-    fun `given repository is empty when observing number of  notes then return zero`() {
+    fun `given a note is inserted when observing notes then return a list of one note`() =
+        runBlocking {
+            repository.upsert(
+                -1L,
+                TestData.firstNote.title!!,
+                TestData.firstNote.contents!!
+            )
 
-        repository.observeCountOfItems
-            .test()
-            .assertValue(0)
-    }
-
-    @Test
-    fun `given a note is inserted when observing the number of notes then return one`() {
-        repository.insert(TestData.firstNote)
-            .andThen(repository.observeCountOfItems)
-            .test()
-            .assertValue(1)
-    }
-
-    @Test
-    fun `given repository is empty when observing notes then return empty list`() {
-        repository.observeItems
-            .test()
-            .assertValue(emptyList())
-    }
-
-    @Test
-    fun `given a note is inserted when observing notes then return a list of one note`() {
-        val notes = repository.insert(TestData.firstNote)
-            .andThen(repository.observeItems)
-            .blockingFirst()
-
-        assertThat(notes)
-            .isNotEmpty()
-    }
+            repository.observeNotes.test {
+                assertThat(expectItem()).isNotEmpty()
+                cancel()
+            }
+        }
 
     @Test
     fun `given note ID exists when findNoteById is called then return the correct note`() {
-        TestData.someNotes.forEach {
-            repository.insert(it).test()
+        runBlocking {
+            queries.transaction {
+                TestData.someNotes.forEach {
+                    runBlocking {
+                        repository.upsert(it.id, it.title!!, it.contents!!)
+                    }
+                }
+            }
+
+            repository.findItemById(TestData.firstNote.id)?.compareNote(TestData.firstNote)
+
+            repository.findItemById(TestData.secondNote.id)
+                ?.compareNote(TestData.secondNote)
+
+            repository.findItemById(TestData.thirdNote.id)
+                ?.compareNote(TestData.thirdNote)
         }
-
-        repository.findItemById(TestData.firstNote.id).blockingGet()
-            .compareNote(TestData.firstNote)
-
-        repository.findItemById(TestData.secondNote.id).blockingGet()
-            .compareNote(TestData.secondNote)
-
-        repository.findItemById(TestData.thirdNote.id).blockingGet()
-            .compareNote(TestData.thirdNote)
     }
 
-    // given a note ID that doesn't exist in the repository
-    // when finding a note then return null
     @Test
-    fun `TODO Fix name`() {
-        repository.findItemById(TestData.thirdNote.id).test()
-            .assertNoValues()
+    fun `given a note doesn't exist when find note is triggered then return null`() = runBlocking {
+        assertThat(repository.findItemById(TestData.thirdNote.id)).isEqualTo(null)
     }
 
-    @Test // TODO think about failure case?
+    @Test
     fun `given a note doesn't exist when upsert is triggered then insert it into DB`() {
         val note =
             Note.Impl(10, "Hello World", "Testing triggerUpsert success", LocalDateTime.now())
-        repository.insert(note)
-            .andThen(repository.observeItems)
-            .test()
-            .assertValue(listOf(note))
 
-        repository.observeCountOfItems
-            .test()
-            .assertValue(1)
+        runBlocking {
+            repository.upsert(-1L, note.title!!, note.contents!!)
+            repository.observeNotes
+                .test {
+                    assertThat(expectItem()).isNotEmpty()
+                    cancel()
+                }
+            repository.observeNumOfNotes
+                .test {
+                    assertThat(expectItem()).isEqualTo(1)
+                    cancel()
+                }
 
-        repository.findItemById(note.id).test()
-            .assertValue(note)
+            repository.findItemById(note.id)?.compareNote(note)
+        }
     }
 
-    @Test // TODO think about failure case?
+    @Test
     fun `given a note exists in the DB when upsert is called then update the note in the DB`() {
         val newNote = Note.Impl(TestData.firstNote.id, "New Note", "New Note", LocalDateTime.now())
 
-        val note = repository.insert(TestData.firstNote)
-            .andThen(repository.insert(newNote))
-            .andThen(repository.findItemById(TestData.firstNote.id))
-            .blockingGet()
+        runBlocking {
+            repository.upsert(
+                TestData.firstNote.id,
+                TestData.firstNote.title!!,
+                TestData.firstNote.contents!!
+            )
 
-        note.compareNote(newNote)
+            repository.upsert(newNote.id, newNote.title!!, newNote.contents!!)
+
+            repository.findItemById(TestData.firstNote.id)?.compareNote(newNote)
+        }
     }
 
-    @Test // TODO think about failure case?
-    fun `given a note exists when delete is triggered then remove the note from the DB`() {
-        repository.insert(TestData.firstNote)
-            .andThen(repository.observeCountOfItems)
-            .test()
-            .assertValue(1)
+    @Test
+    fun `given a note exists when delete is triggered then remove the note from the DB`() =
+        runBlocking {
+            repository.upsert(
+                -1L,
+                TestData.firstNote.title!!,
+                TestData.firstNote.contents!!
+            )
 
-        repository.delete(TestData.firstNote)
-            .andThen(repository.observeCountOfItems)
-            .test()
-            .assertValue(0)
-    }
+            repository.observeNumOfNotes
+                .test {
+                    assertThat(expectItem()).isEqualTo(1)
+                    cancel()
+                }
+
+            repository.deleteById(TestData.firstNote.id)
+
+            repository.observeNumOfNotes
+                .test {
+                    assertThat(expectItem()).isEqualTo(0)
+                    cancel()
+                }
+        }
 }

@@ -11,7 +11,7 @@ CREATE TABLE Note (
 
 allNotes:
 SELECT * FROM Note
-ORDER BY timestamp;
+ORDER BY timestamp DESC;
 
 count:
 SELECT count(*) FROM Note;
@@ -19,10 +19,14 @@ SELECT count(*) FROM Note;
 findNoteById:
 SELECT * FROM Note WHERE id = ?;
 
-insertOrReplace:
-INSERT OR REPLACE INTO Note(id, title, contents, timestamp)
-VALUES (?, ?, ?, ?);
+insert:
+INSERT INTO Note(title, contents, timestamp)
+VALUES (?, ?, ?);
 
+updateById:
+UPDATE Note
+SET title = ?, contents = ?, timestamp = ?
+WHERE id = ?;
 
 deleteById:
 DELETE

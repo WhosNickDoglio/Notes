@@ -26,10 +26,10 @@ package com.nicholasdoglio.notes.di
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentFactory
-import com.nicholasdoglio.notes.features.about.AboutFragment
-import com.nicholasdoglio.notes.features.list.NoteListFragment
+import com.nicholasdoglio.notes.features.daynight.DayNightToggleFragment
 import com.nicholasdoglio.notes.features.editnote.DiscardFragment
 import com.nicholasdoglio.notes.features.editnote.EditNoteFragment
+import com.nicholasdoglio.notes.features.list.NoteListFragment
 import dagger.Binds
 import dagger.MapKey
 import dagger.Module
@@ -68,6 +68,6 @@ interface FragmentBindingModule {
 
     @Binds
     @IntoMap
-    @FragmentKey(AboutFragment::class)
-    fun bindAboutFragment(aboutFragment: AboutFragment): Fragment
+    @FragmentKey(DayNightToggleFragment::class)
+    fun bindDayNightFragment(dayNightToggleFragment: DayNightToggleFragment): Fragment
 }

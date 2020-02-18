@@ -22,35 +22,47 @@
  * SOFTWARE.
  */
 
-package com.nicholasdoglio.notes.features.editnote
+package com.nicholasdoglio.notes.features.daynight
 
 import android.app.Dialog
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.navGraphViewModels
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.nicholasdoglio.notes.R
+import com.nicholasdoglio.notes.util.DispatcherProvider
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
-class DiscardFragment @Inject constructor(
-    private val viewModelFactory: ViewModelProvider.Factory
+class DayNightToggleFragment @Inject constructor(
+    private val factory: ViewModelProvider.Factory,
+    private val dispatcherProvider: DispatcherProvider
 ) : DialogFragment() {
 
-    private val viewModelEdit: EditNoteViewModel
-        by navGraphViewModels(R.id.edit_navigation) { viewModelFactory }
+    private val viewModel: DayNightToggleViewModel by viewModels { factory }
+
+    init {
+        lifecycleScope.launchWhenCreated {
+            viewModel.nightModeState
+                .flowOn(dispatcherProvider.background)
+                .collect { AppCompatDelegate.setDefaultNightMode(it.value) }
+        }
+    }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog =
         MaterialAlertDialogBuilder(requireContext())
-            .setMessage(R.string.discard_warning)
-            .setPositiveButton(R.string.save_button) { _, _ ->
-                viewModelEdit.inputInsert.offer(Unit)
-                findNavController().navigate(DiscardFragmentDirections.openList())
-            }
-            .setNegativeButton(R.string.discard_button) { _, _ ->
-                viewModelEdit.inputDelete.offer(Unit)
-                findNavController().navigate(DiscardFragmentDirections.openList())
+            .setTitle("Night Mode")
+            .setSingleChoiceItems(R.array.night_mode, viewModel.selected) { _, selected ->
+                viewModel.saveSelected(selected)
+                when (selected) {
+                    0 -> viewModel.changeNightMode(NightMode.FOLLOW_SYSTEM)
+                    1 -> viewModel.changeNightMode(NightMode.ALWAYS_LIGHT)
+                    2 -> viewModel.changeNightMode(NightMode.ALWAYS_NIGHT)
+                }
             }
             .create()
 }

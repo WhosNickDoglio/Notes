@@ -35,7 +35,8 @@ plugins {
     id(Plugins.ktlint)
     id(Plugins.sqlDelight)
     id(Plugins.delect)
-    id(Plugins.license)
+    id(Plugins.junitJacoco)
+    id(Plugins.aboutLibs)
     id(Plugins.scabbard) version Versions.scabbard
 }
 
@@ -63,15 +64,15 @@ scabbard.configure(closureOf<ScabbardSpec> {
     enabled(true)
 })
 
-delect {
-    daggerReflectVersion = Versions.daggerReflect
-}
-
 ktlint {
     version.set(Versions.ktlint)
     android.set(true)
     outputColorName.set("RED")
     disabledRules.set(setOf("import-ordering"))
+}
+
+junitJacoco {
+    jacocoVersion = "0.8.5"
 }
 
 android {
@@ -95,6 +96,9 @@ android {
                 )
             )
         }
+        named("debug") {
+            isTestCoverageEnabled = true
+        }
     }
 
     compileOptions {
@@ -103,7 +107,13 @@ android {
     }
 
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
+
+    // TODO see when I can remove this
+    packagingOptions {
+        pickFirst("META-INF/kotlinx-coroutines-io.kotlin_module")
+        pickFirst("META-INF/kotlinx-coroutines-core.kotlin_module")
     }
 }
 
@@ -114,6 +124,13 @@ sqldelight {
 
 dependencies {
     implementation(Libs.Kotlin.Stdlib)
+    implementation(Libs.Kotlin.Coroutines.core)
+    implementation(Libs.Kotlin.Coroutines.android)
+
+    implementation(Libs.Kotlin.Coroutines.Extensions.Binding.android)
+    implementation(Libs.Kotlin.Coroutines.Extensions.Binding.activity)
+    implementation(Libs.Kotlin.Coroutines.Extensions.Binding.recyclerview)
+    implementation(Libs.Kotlin.Coroutines.Extensions.flowPreferences)
 
     implementation(Libs.Android.fragmentKtx)
     implementation(Libs.Android.appcompat)
@@ -124,41 +141,35 @@ dependencies {
     implementation(Libs.Android.navigationUiKtx)
     implementation(Libs.Android.coordinatorLayout)
     implementation(Libs.Android.preferences)
+    implementation(Libs.Android.cardview)
+
+    implementation(Libs.AboutLibs.core)
+    implementation(Libs.AboutLibs.about)
 
     implementation(Libs.Square.sqlDelightAndroidDriver)
-    implementation(Libs.Square.sqlDelightRxExt)
-
-    implementation(Libs.threetenabp)
-    implementation(Libs.Rx.java)
-    implementation(Libs.Rx.kotlin)
-    implementation(Libs.Rx.android)
-    implementation(Libs.Rx.binding) // TODO think about other bindings?)
-    implementation(Libs.Rx.bindingRecyclerView)
-    implementation(Libs.Rx.autoDispose)
-    implementation(Libs.Rx.dogTag)
-    implementation(Libs.Rx.preferences)
-    implementation(Libs.Rx.relay)
-    implementation(Libs.Rx.dogTagAutoDispose)
+    implementation(Libs.Square.sqlDelightFlow)
 
     implementation(Libs.Dagger.dagger)
     kapt(Libs.Dagger.daggerCompiler)
+
+    implementation(Libs.threetenabp)
+
+    debugImplementation(Libs.Flipper.debug)
+    debugImplementation(Libs.Flipper.soloader)
+    releaseImplementation(Libs.Flipper.release)
 
     implementation(Libs.timber)
     debugImplementation(Libs.Square.leakCanary)
 
     testImplementation(Libs.Test.junit)
     testImplementation(Libs.Test.truth)
-    testImplementation(Libs.Test.coreTesting)
-    testImplementation(Libs.Test.mockk)
     testImplementation(Libs.Square.sqlDelightJvm)
-
     testImplementation(Libs.Test.threeten) {
         exclude(group = Libs.Test.threeTenGroup, module = Libs.Test.threeTenModule)
     }
 
     androidTestImplementation(Libs.Android.fragmentTesting)
     androidTestImplementation(Libs.Test.truth)
-    androidTestImplementation(Libs.Test.coreTesting)
     androidTestImplementation(Libs.Test.androidxTestCore)
     androidTestImplementation(Libs.Test.androidxTestExtJunit)
     androidTestImplementation(Libs.Test.androidxTestExtTruth)

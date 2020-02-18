@@ -27,6 +27,7 @@ package com.nicholasdoglio.notes.di
 import android.app.Application
 import android.content.Context
 import com.nicholasdoglio.notes.features.InjectableNavHostFragment
+import com.nicholasdoglio.notes.util.DispatcherProvider
 import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton
@@ -46,6 +47,8 @@ interface AppComponent {
     interface Factory {
         fun create(@BindsInstance application: Application): AppComponent
     }
+
+    val dispatcherProvider: DispatcherProvider
 
     fun inject(target: InjectableNavHostFragment)
 }

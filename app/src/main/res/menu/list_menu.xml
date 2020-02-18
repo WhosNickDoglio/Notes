@@ -26,4 +26,8 @@
     <item
         android:id="@+id/about_item"
         android:title="@string/about_menu_item"/>
+
+    <item
+        android:id="@+id/night_mode_toggle_item"
+        android:title="Toggle Night Mode"/>
 </menu>

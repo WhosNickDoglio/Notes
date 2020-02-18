@@ -33,7 +33,7 @@ All the releases and change logs are kept under [releases](https://github.com/Wh
 
 # License
 
-        Copyright (C) 2017  Nicholas Doglio
+        Copyright (C) 2020  Nicholas Doglio
 
        Licensed under the Apache License, Version 2.0 (the "License");
        you may not use this file except in compliance with the License.

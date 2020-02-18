@@ -45,8 +45,8 @@ object TestData {
 
 fun Note.compareNote(otherNote: Note) {
     otherNote.apply {
-        Truth.assertThat(this.id).isEqualTo(otherNote.id)
-        Truth.assertThat(this.title).isEqualTo(otherNote.title)
-        Truth.assertThat(this.contents).isEqualTo(otherNote.contents)
+        Truth.assertThat(this@compareNote.id).isEqualTo(otherNote.id)
+        Truth.assertThat(this@compareNote.title).isEqualTo(otherNote.title)
+        Truth.assertThat(this@compareNote.contents).isEqualTo(otherNote.contents)
     }
 }

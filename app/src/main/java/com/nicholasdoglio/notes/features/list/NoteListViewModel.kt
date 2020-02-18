@@ -26,15 +26,16 @@ package com.nicholasdoglio.notes.features.list
 
 import androidx.lifecycle.ViewModel
 import com.nicholasdoglio.notes.Note
-import com.nicholasdoglio.notes.data.note.NoteRepository
-import io.reactivex.Flowable
+import com.nicholasdoglio.notes.data.NoteRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class NoteListViewModel @Inject constructor(private val repository: NoteRepository) :
     ViewModel() {
 
-    val notesList: Flowable<List<Note>> = repository.observeItems
+    val notesList: Flow<List<Note>> = repository.observeNotes
 
-    val hasNotes: Flowable<Boolean> = repository.observeCountOfItems
+    val hasNotes: Flow<Boolean> = repository.observeNumOfNotes
         .map { it > 0 }
 }

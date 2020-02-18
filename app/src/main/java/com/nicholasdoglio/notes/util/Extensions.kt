@@ -28,7 +28,12 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.view.View
 import android.view.inputmethod.InputMethodManager
+import com.mikepenz.aboutlibraries.Libs
+import com.mikepenz.aboutlibraries.LibsBuilder
+import com.mikepenz.aboutlibraries.LibsConfiguration
+import com.mikepenz.aboutlibraries.entity.Library
 
 fun Activity.hideKeyboard() {
     val input = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -37,7 +42,55 @@ fun Activity.hideKeyboard() {
 
 fun Context.openWebPage(url: String) {
     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-    if (intent.resolveActivity(this.packageManager) != null) {
-        this.startActivity(intent)
+    if (intent.resolveActivity(this.packageManager) != null) startActivity(intent)
+}
+
+inline fun LibsBuilder.withListener(
+    crossinline onExtraClicked: (v: View, specialButton: Libs.SpecialButton) -> Boolean =
+        { _, _ -> true },
+    crossinline onIconClicked: (v: View) -> Unit = {},
+    crossinline onIconLongClicked: (v: View) -> Boolean = { true },
+    crossinline onLibraryAuthorClicked: (v: View, library: Library) -> Boolean =
+        { _, _ -> true },
+    crossinline onLibraryAuthorLongClicked: (v: View, library: Library) -> Boolean =
+        { _, _ -> true },
+    crossinline onLibraryBottomClicked: (v: View, library: Library) -> Boolean =
+        { _, _ -> true },
+    crossinline onLibraryBottomLongClicked: (v: View, library: Library) -> Boolean =
+        { _, _ -> true },
+    crossinline onLibraryContentClicked: (v: View, library: Library) -> Boolean =
+        { _, _ -> true },
+    crossinline onLibraryContentLongClicked: (v: View, library: Library) -> Boolean =
+        { _, _ -> true }
+): LibsBuilder {
+    LibsConfiguration.instance.listener = object : LibsConfiguration.LibsListener {
+        override fun onExtraClicked(v: View, specialButton: Libs.SpecialButton): Boolean =
+            onExtraClicked(v, specialButton)
+
+        override fun onIconClicked(v: View) {
+            onIconClicked(v)
+        }
+
+        override fun onIconLongClicked(v: View): Boolean = onIconLongClicked(v)
+
+        override fun onLibraryAuthorClicked(v: View, library: Library): Boolean =
+            onLibraryAuthorClicked(v, library)
+
+        override fun onLibraryAuthorLongClicked(v: View, library: Library): Boolean =
+            onLibraryAuthorLongClicked(v, library)
+
+        override fun onLibraryBottomClicked(v: View, library: Library): Boolean =
+            onLibraryBottomClicked(v, library)
+
+        override fun onLibraryBottomLongClicked(v: View, library: Library): Boolean =
+            onLibraryBottomLongClicked(v, library)
+
+        override fun onLibraryContentClicked(v: View, library: Library): Boolean =
+            onLibraryContentClicked(v, library)
+
+        override fun onLibraryContentLongClicked(v: View, library: Library): Boolean =
+            onLibraryContentLongClicked(v, library)
     }
+
+    return this
 }

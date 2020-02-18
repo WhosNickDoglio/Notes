@@ -22,25 +22,29 @@
  * SOFTWARE.
  */
 
-package com.nicholasdoglio.notes.features.about
+package com.nicholasdoglio.notes.util
 
-import android.app.Dialog
-import android.os.Bundle
-import android.webkit.WebView
-import androidx.fragment.app.DialogFragment
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.asCoroutineDispatcher
+import java.util.concurrent.Executors
+import javax.inject.Inject
 
-class LibsFragment : DialogFragment() {
+/**]
+ *
+ */
+interface DispatcherProvider {
+    val main: CoroutineDispatcher
+    val background: CoroutineDispatcher
+    val database: CoroutineDispatcher
+}
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val libsWebView = WebView(requireActivity())
-
-        libsWebView.loadUrl("file:///android_asset/open_source_licenses.html")
-
-        return MaterialAlertDialogBuilder(requireActivity())
-            .setTitle("Open Source Licenses")
-            .setView(libsWebView)
-            .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
-            .create()
-    }
+/**
+ *
+ */
+class DefaultDispatchers @Inject constructor() : DispatcherProvider {
+    override val main: CoroutineDispatcher = Dispatchers.Main
+    override val background: CoroutineDispatcher = Dispatchers.Default
+    override val database: CoroutineDispatcher =
+        Executors.newSingleThreadExecutor().asCoroutineDispatcher()
 }
