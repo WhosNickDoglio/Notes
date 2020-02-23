@@ -30,9 +30,9 @@ import org.threeten.bp.format.DateTimeFormatter
 import javax.inject.Inject
 
 /**
- * A SQLDelight ColumnAdapter to allow for timestamps to be saved into the database.
+ * A SQLDelight [ColumnAdapter] to allow for timestamps to be saved into the database.
  *
- * Converts [LocalDateTime] to String and back again.
+ * Converts [LocalDateTime] to [String] and back again.
  */
 class TimestampColumnAdapter @Inject constructor() : ColumnAdapter<LocalDateTime, String> {
     private val formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME

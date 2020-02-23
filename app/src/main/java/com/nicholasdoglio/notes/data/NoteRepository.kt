@@ -44,13 +44,13 @@ class NoteRepository @Inject constructor(
 ) {
 
     /**
-     * A [Flow] that returns the number of [Note]s in the database each time it updates.
+     * A [Flow] that returns the number of [Notes][Note] in the database each time it updates.
      */
     val observeNumOfNotes: Flow<Long> =
         noteQueries.count().asFlow().mapToOne(dispatcherProvider.database)
 
     /**
-     * A [Flow] that returns a list of [Note]s each time the database updates.
+     * A [Flow] that returns a list of [Notes][Note] each time the database updates.
      */
     val observeNotes: Flow<List<Note>> =
         noteQueries.allNotes().asFlow().mapToList(dispatcherProvider.database)

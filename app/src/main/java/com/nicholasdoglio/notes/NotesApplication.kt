@@ -38,10 +38,6 @@ import timber.log.Timber
 // Standardize how I handle navigation (directions vs xml ids)
 class NotesApplication : Application(), AppComponentProvider {
 
-    private val flipper by lazy {
-        component.flipperInitializer
-    }
-
     override val component: AppComponent by lazy {
         DaggerAppComponent.factory().create(this)
     }
@@ -57,7 +53,7 @@ class NotesApplication : Application(), AppComponentProvider {
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
             initStrictMode()
-            flipper()
+            component.flipperInitializer()
         }
     }
 
