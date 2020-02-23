@@ -20,8 +20,6 @@ jobs:
 
       - name: setup-android
         uses: msfjarvis/setup-android@0.2
-        with:
-          gradleTasks: build
 
       - name: ktlint
         uses: eskatos/gradle-command-action@v1
