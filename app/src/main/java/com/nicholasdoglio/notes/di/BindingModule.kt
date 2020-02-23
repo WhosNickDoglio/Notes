@@ -36,7 +36,7 @@ import org.threeten.bp.LocalDateTime
 interface BindingModule {
 
     @Binds
-    fun bindDispatchers(appSchedulers: DefaultDispatchers): DispatcherProvider
+    fun bindDispatchers(dispatchers: DefaultDispatchers): DispatcherProvider
 
     @Binds
     fun bindTimestampAdapter(adapter: TimestampColumnAdapter): ColumnAdapter<LocalDateTime, String>

@@ -33,7 +33,7 @@ import javax.inject.Inject
 
 class DayNightToggleViewModel @Inject constructor(
     private val model: DayNightModel,
-    private val dispatcherProvider: DispatcherProvider
+    dispatcherProvider: DispatcherProvider
 ) : ViewModel() {
 
     private val scope = CoroutineScope(dispatcherProvider.main)

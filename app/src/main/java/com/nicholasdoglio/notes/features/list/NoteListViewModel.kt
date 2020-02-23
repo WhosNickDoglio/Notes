@@ -31,8 +31,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class NoteListViewModel @Inject constructor(private val repository: NoteRepository) :
-    ViewModel() {
+class NoteListViewModel @Inject constructor(repository: NoteRepository) : ViewModel() {
 
     val notesList: Flow<List<Note>> = repository.observeNotes
 

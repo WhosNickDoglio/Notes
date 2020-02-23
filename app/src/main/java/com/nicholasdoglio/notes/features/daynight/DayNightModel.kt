@@ -37,8 +37,8 @@ import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 class DayNightModel @Inject constructor(
-    private val flowSharedPreferences: FlowSharedPreferences,
-    private val dispatcherProvider: DispatcherProvider
+    private val dispatcherProvider: DispatcherProvider,
+    flowSharedPreferences: FlowSharedPreferences
 ) {
     private val toggleNightModeChannel = ConflatedBroadcastChannel<NightMode>()
 
@@ -54,6 +54,7 @@ class DayNightModel @Inject constructor(
 
     fun saveSelected(scope: CoroutineScope, selected: Int) {
         toggleNightModeChannel.asFlow()
+            .flowOn(dispatcherProvider.background)
             .onEach { selectedNightMode.setAndCommit(selected) }
             .launchIn(scope)
     }
