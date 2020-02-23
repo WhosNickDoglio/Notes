@@ -35,6 +35,7 @@ import javax.inject.Inject
  * Converts [LocalDateTime] to [String] and back again.
  */
 class TimestampColumnAdapter @Inject constructor() : ColumnAdapter<LocalDateTime, String> {
+
     private val formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME
 
     override fun decode(databaseValue: String): LocalDateTime =
