@@ -75,4 +75,6 @@ object Versions {
     const val about = "8.0.0-rc01"
 
     const val junitJacoco = "0.15.0"
+
+    const val lifecycle = "2.2.0"
 }

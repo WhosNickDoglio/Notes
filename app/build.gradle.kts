@@ -146,7 +146,7 @@ dependencies {
     implementation(Libs.Android.coordinatorLayout)
     implementation(Libs.Android.preferences)
     implementation(Libs.Android.cardview)
-    implementation("androidx.lifecycle:lifecycle-common-java8:2.2.0")
+    implementation(Libs.Android.lifecycleJava8)
 
     implementation(Libs.AboutLibs.core)
     implementation(Libs.AboutLibs.about)

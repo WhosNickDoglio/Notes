@@ -73,6 +73,8 @@ object Libs {
         const val preferences: String = "androidx.preference:preference-ktx:${Versions.preferences}"
 
         const val cardview = "androidx.cardview:cardview:${Versions.cardview}"
+
+        const val lifecycleJava8 = "androidx.lifecycle:lifecycle-common-java8:${Versions.lifecycle}"
     }
 
     object Test {
