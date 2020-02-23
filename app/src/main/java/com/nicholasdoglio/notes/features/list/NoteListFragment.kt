@@ -66,12 +66,41 @@ class NoteListFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val notesListAdapter = NoteListAdapter(findNavController())
+
+        initViews(view)
+
+        notesRecyclerView.apply {
+            addItemDecoration(DividerItemDecoration(context, RecyclerView.VERTICAL))
+            adapter = notesListAdapter
+            layoutManager = LinearLayoutManager(context)
+        }
+
+        createNoteFab
+            .clicks()
+            .flowOn(dispatcherProvider.main)
+            .onEach { findNavController().navigate(NoteListFragmentDirections.openNote()) }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
+
+        viewModel.notesList
+            .flowOn(dispatcherProvider.main)
+            .onEach { notesListAdapter.submitList(it) }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
+
+        viewModel.hasNotes
+            .flowOn(dispatcherProvider.main)
+            .onEach {
+                emptyStateView.isVisible = !it
+                notesRecyclerView.isVisible = it
+            }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
+    }
+
+    private fun initViews(view: View) {
         appBar = view.findViewById(R.id.app_bar)
         notesRecyclerView = view.findViewById(R.id.notes_recyclerview)
         createNoteFab = view.findViewById(R.id.create_note_fab)
         emptyStateView = view.findViewById(R.id.empty_state_view)
-
-        val notesListAdapter = NoteListAdapter(findNavController())
 
         appBar.apply {
             inflateMenu(R.menu.list_menu)
@@ -110,31 +139,6 @@ class NoteListFragment @Inject constructor(
                 }
             }
         }
-
-        notesRecyclerView.apply {
-            addItemDecoration(DividerItemDecoration(context, RecyclerView.VERTICAL))
-            adapter = notesListAdapter
-            layoutManager = LinearLayoutManager(context)
-        }
-
-        createNoteFab
-            .clicks()
-            .flowOn(dispatcherProvider.main)
-            .onEach { findNavController().navigate(NoteListFragmentDirections.openNote()) }
-            .launchIn(viewLifecycleOwner.lifecycleScope)
-
-        viewModel.notesList
-            .flowOn(dispatcherProvider.main)
-            .onEach { notesListAdapter.submitList(it) }
-            .launchIn(viewLifecycleOwner.lifecycleScope)
-
-        viewModel.hasNotes
-            .flowOn(dispatcherProvider.main)
-            .onEach {
-                emptyStateView.isVisible = !it
-                notesRecyclerView.isVisible = it
-            }
-            .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 }
 
