@@ -4,7 +4,7 @@ object Versions {
 
     const val ktlintGradlePlugin = "9.2.1"
 
-    const val benManesVersions = "0.27.0"
+    const val benManesVersions = "0.28.0"
 
     const val delect = "0.2.1"
 
@@ -22,7 +22,7 @@ object Versions {
 
     const val androidTest: String = "1.3.0-alpha04"
 
-    const val androidBuildTools: String = "3.5.3"
+    const val androidBuildTools: String = "3.6.0-rc03"
 
     const val junitTextExtensions: String = "1.1.2-alpha04"
 

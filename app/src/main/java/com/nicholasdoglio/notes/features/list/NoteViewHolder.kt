@@ -25,19 +25,18 @@
 package com.nicholasdoglio.notes.features.list
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
 import com.nicholasdoglio.notes.Note
-import com.nicholasdoglio.notes.R
+import com.nicholasdoglio.notes.databinding.ItemNoteBinding
 
-class NoteViewHolder(private val rootView: View) : RecyclerView.ViewHolder(rootView) {
-    private val note: ConstraintLayout = rootView.findViewById(R.id.note)
-    private val titleListItem: TextView = rootView.findViewById(R.id.title_list_item)
-    private val contentsListItem: TextView = rootView.findViewById(R.id.contents_list_item)
+class NoteViewHolder(binding: ItemNoteBinding) : RecyclerView.ViewHolder(binding.root) {
+    private val note: ConstraintLayout = binding.note
+    private val titleListItem: TextView = binding.titleListItem
+    private val contentsListItem: TextView = binding.contentsListItem
 
     fun bind(model: Note, navController: NavController) {
         titleListItem.text = model.title
@@ -49,12 +48,6 @@ class NoteViewHolder(private val rootView: View) : RecyclerView.ViewHolder(rootV
 
     companion object {
         fun create(view: ViewGroup): NoteViewHolder =
-            NoteViewHolder(
-                LayoutInflater.from(view.context).inflate(
-                    R.layout.item_note,
-                    view,
-                    false
-                )
-            )
+            NoteViewHolder(ItemNoteBinding.inflate(LayoutInflater.from(view.context), view, false))
     }
 }

@@ -26,7 +26,6 @@ package com.nicholasdoglio.notes.features.list
 
 import android.os.Bundle
 import android.view.View
-import android.widget.LinearLayout
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -36,13 +35,13 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.bottomappbar.BottomAppBar
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.mikepenz.aboutlibraries.Libs
 import com.mikepenz.aboutlibraries.LibsBuilder
 import com.nicholasdoglio.notes.R
+import com.nicholasdoglio.notes.databinding.FragmentNoteListBinding
 import com.nicholasdoglio.notes.util.DispatcherProvider
 import com.nicholasdoglio.notes.util.openWebPage
+import com.nicholasdoglio.notes.util.viewBinding
 import com.nicholasdoglio.notes.util.withListener
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
@@ -56,27 +55,40 @@ class NoteListFragment @Inject constructor(
     private val dispatcherProvider: DispatcherProvider
 ) : Fragment(R.layout.fragment_note_list) {
 
+    private val binding by viewBinding {
+        FragmentNoteListBinding.bind(it)
+    }
     private val viewModel: NoteListViewModel by viewModels { viewModelFactory }
-
-    private lateinit var appBar: BottomAppBar
-    private lateinit var notesRecyclerView: RecyclerView
-    private lateinit var createNoteFab: FloatingActionButton
-    private lateinit var emptyStateView: LinearLayout
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val notesListAdapter = NoteListAdapter(findNavController())
 
-        initViews(view)
+        binding.appBar.apply {
+            inflateMenu(R.menu.list_menu)
+            setOnMenuItemClickListener {
+                when (it.itemId) {
+                    R.id.about_item -> {
+                        navigateToAbout()
+                        true
+                    }
+                    R.id.night_mode_toggle_item -> {
+                        findNavController().navigate(R.id.open_night_toggle)
+                        true
+                    }
+                    else -> false
+                }
+            }
+        }
 
-        notesRecyclerView.apply {
+        binding.notesRecyclerview.apply {
             addItemDecoration(DividerItemDecoration(context, RecyclerView.VERTICAL))
             adapter = notesListAdapter
             layoutManager = LinearLayoutManager(context)
         }
 
-        createNoteFab
+        binding.createNoteFab
             .clicks()
             .flowOn(dispatcherProvider.main)
             .onEach { findNavController().navigate(NoteListFragmentDirections.openNote()) }
@@ -90,55 +102,35 @@ class NoteListFragment @Inject constructor(
         viewModel.hasNotes
             .flowOn(dispatcherProvider.main)
             .onEach {
-                emptyStateView.isVisible = !it
-                notesRecyclerView.isVisible = it
+                binding.emptyStateView.isVisible = !it
+                binding.notesRecyclerview.isVisible = it
             }
             .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
-    private fun initViews(view: View) {
-        appBar = view.findViewById(R.id.app_bar)
-        notesRecyclerView = view.findViewById(R.id.notes_recyclerview)
-        createNoteFab = view.findViewById(R.id.create_note_fab)
-        emptyStateView = view.findViewById(R.id.empty_state_view)
-
-        appBar.apply {
-            inflateMenu(R.menu.list_menu)
-            setOnMenuItemClickListener {
-                when (it.itemId) {
-                    R.id.about_item -> {
-                        findNavController().navigate(
-                            NoteListFragmentDirections.openLibs(
-                                LibsBuilder()
-                                    .withAboutVersionShownCode(false)
-                                    .withEdgeToEdge(true)
-                                    .withLicenseShown(true)
-                                    .withAboutSpecial1("Nicholas Doglio")
-                                    .withAboutSpecial2("Source Code")
-                                    .withListener(onExtraClicked = { v, specialButton ->
-                                        when (specialButton) {
-                                            Libs.SpecialButton.SPECIAL1 ->
-                                                v.context.openWebPage("https://whosnickdoglio.dev")
-                                            Libs.SpecialButton.SPECIAL2 ->
-                                                v.context.openWebPage(
-                                                    "https://github.com/WhosNickDoglio/Notes"
-                                                )
-                                            else -> Timber.i("This shouldn't have been clicked 🤷‍")
-                                        }
-                                        true
-                                    })
-                            )
-                        )
+    private fun navigateToAbout() {
+        findNavController().navigate(
+            NoteListFragmentDirections.openLibs(
+                LibsBuilder()
+                    .withAboutVersionShownCode(false)
+                    .withEdgeToEdge(true)
+                    .withLicenseShown(true)
+                    .withAboutSpecial1("Nicholas Doglio")
+                    .withAboutSpecial2("Source Code")
+                    .withListener(onExtraClicked = { v, specialButton ->
+                        when (specialButton) {
+                            Libs.SpecialButton.SPECIAL1 ->
+                                v.context.openWebPage("https://whosnickdoglio.dev")
+                            Libs.SpecialButton.SPECIAL2 ->
+                                v.context.openWebPage(
+                                    "https://github.com/WhosNickDoglio/Notes"
+                                )
+                            else -> Timber.i("This shouldn't have been clicked 🤷‍")
+                        }
                         true
-                    }
-                    R.id.night_mode_toggle_item -> {
-                        findNavController().navigate(R.id.open_night_toggle)
-                        true
-                    }
-                    else -> false
-                }
-            }
-        }
+                    })
+            )
+        )
     }
 }
 
