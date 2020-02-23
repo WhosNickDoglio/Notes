@@ -14,19 +14,19 @@ object Versions {
 
     const val kotlin: String = "1.3.61"
 
-    const val navigation: String = "2.3.0-alpha01"
+    const val navigation: String = "2.3.0-alpha02"
 
-    const val fragment: String = "1.2.1"
+    const val fragment: String = "1.2.2"
 
     const val dagger: String = "2.26"
 
-    const val androidTest: String = "1.3.0-alpha03"
+    const val androidTest: String = "1.3.0-alpha04"
 
     const val androidBuildTools: String = "3.5.3"
 
-    const val junitTextExtensions: String = "1.1.2-alpha03"
+    const val junitTextExtensions: String = "1.1.2-alpha04"
 
-    const val truthTestExtensions: String = "1.3.0-alpha03"
+    const val truthTestExtensions: String = "1.3.0-alpha04"
 
     const val truth: String = "1.0.1"
 
@@ -38,7 +38,7 @@ object Versions {
 
     const val constraintLayout: String = "2.0.0-beta4"
 
-    const val espressoCore: String = "3.3.0-alpha03"
+    const val espressoCore: String = "3.3.0-alpha04"
 
     const val recyclerview: String = "1.2.0-alpha01"
 
@@ -46,7 +46,7 @@ object Versions {
 
     const val appcompat: String = "1.2.0-alpha02"
 
-    const val material: String = "1.2.0-alpha04"
+    const val material: String = "1.2.0-alpha05"
 
     const val cardview: String = "1.0.0"
 
@@ -68,7 +68,7 @@ object Versions {
 
     const val flowPreferences: String = "1.0.0"
 
-    const val flipper: String = "0.31.1"
+    const val flipper: String = "0.31.2"
 
     const val soloader: String = "0.8.2"
 
