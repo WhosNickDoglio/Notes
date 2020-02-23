@@ -22,41 +22,15 @@
  * SOFTWARE.
  */
 
-package com.nicholasdoglio.notes.di
+package com.nicholasdoglio.notes
 
-import android.app.Application
-import android.content.Context
-import com.nicholasdoglio.notes.FlipperBindingModule
-import com.nicholasdoglio.notes.features.InjectableNavHostFragment
 import com.nicholasdoglio.notes.util.FlipperInitializer
-import dagger.BindsInstance
-import dagger.Component
-import javax.inject.Singleton
+import dagger.Binds
+import dagger.Module
 
-@Singleton
-@Component(
-    modules = [
-        DatabaseModule::class,
-        FragmentBindingModule::class,
-        BindingModule::class,
-        FlipperBindingModule::class,
-        PreferencesModule::class,
-        ViewModelModule::class
-    ]
-)
-interface AppComponent {
-    @Component.Factory
-    interface Factory {
-        fun create(@BindsInstance application: Application): AppComponent
-    }
+@Module
+interface FlipperBindingModule {
 
-    val flipperInitializer: FlipperInitializer
-
-    fun inject(target: InjectableNavHostFragment)
+    @Binds
+    fun bindFlipper(debugFlipperInitializer: DebugFlipperInitializer): FlipperInitializer
 }
-
-interface AppComponentProvider {
-    val component: AppComponent
-}
-
-val Context.injector: AppComponent get() = (applicationContext as AppComponentProvider).component
