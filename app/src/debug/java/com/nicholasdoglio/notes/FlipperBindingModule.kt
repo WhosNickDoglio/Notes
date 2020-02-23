@@ -24,13 +24,48 @@
 
 package com.nicholasdoglio.notes
 
+import android.app.Application
+import com.facebook.flipper.android.AndroidFlipperClient
+import com.facebook.flipper.android.utils.FlipperUtils
+import com.facebook.flipper.plugins.databases.DatabasesFlipperPlugin
+import com.facebook.flipper.plugins.inspector.DescriptorMapping
+import com.facebook.flipper.plugins.inspector.InspectorFlipperPlugin
+import com.facebook.flipper.plugins.sharedpreferences.SharedPreferencesFlipperPlugin
+import com.facebook.soloader.SoLoader
+import com.nicholasdoglio.notes.util.DispatcherProvider
 import com.nicholasdoglio.notes.util.FlipperInitializer
 import dagger.Binds
 import dagger.Module
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @Module
 interface FlipperBindingModule {
 
     @Binds
     fun bindFlipper(debugFlipperInitializer: DebugFlipperInitializer): FlipperInitializer
+}
+
+class DebugFlipperInitializer @Inject constructor(
+    private val dispatcherProvider: DispatcherProvider,
+    private val application: Application
+) : FlipperInitializer {
+
+    override fun invoke() {
+        GlobalScope.launch(dispatcherProvider.background) {
+            SoLoader.init(application, false)
+            if (FlipperUtils.shouldEnableFlipper(application)) {
+                AndroidFlipperClient.getInstance(application).apply {
+                    addPlugin(InspectorFlipperPlugin(application, DescriptorMapping.withDefaults()))
+                    addPlugin(DatabasesFlipperPlugin(application))
+                    addPlugin(SharedPreferencesFlipperPlugin(application, NOTES_PREFERENCES))
+                }.start()
+            }
+        }
+    }
+
+    companion object {
+        private const val NOTES_PREFERENCES = "com.nicholasdoglio.notes_preferences"
+    }
 }

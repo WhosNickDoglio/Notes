@@ -27,10 +27,15 @@ package com.nicholasdoglio.notes
 import com.nicholasdoglio.notes.util.FlipperInitializer
 import dagger.Binds
 import dagger.Module
+import javax.inject.Inject
 
 @Module
 interface FlipperBindingModule {
 
     @Binds
     fun bindFlipper(releaseFlipperInitializer: ReleaseFlipperInitializer): FlipperInitializer
+}
+
+class ReleaseFlipperInitializer @Inject constructor() : FlipperInitializer {
+    override fun invoke() {}
 }
