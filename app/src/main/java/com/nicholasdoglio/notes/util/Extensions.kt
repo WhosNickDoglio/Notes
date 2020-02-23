@@ -45,6 +45,7 @@ fun Context.openWebPage(url: String) {
     if (intent.resolveActivity(this.packageManager) != null) startActivity(intent)
 }
 
+@Suppress("LongParameterList")
 inline fun LibsBuilder.withListener(
     crossinline onExtraClicked: (v: View, specialButton: Libs.SpecialButton) -> Boolean =
         { _, _ -> true },

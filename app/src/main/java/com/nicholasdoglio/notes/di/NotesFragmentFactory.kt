@@ -30,6 +30,7 @@ import javax.inject.Inject
 import javax.inject.Provider
 import timber.log.Timber
 
+@Suppress("TooGenericExceptionCaught")
 class NotesFragmentFactory @Inject constructor(
     private val creators: Map<Class<out Fragment>, @JvmSuppressWildcards Provider<Fragment>>
 ) : FragmentFactory() {
