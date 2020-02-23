@@ -24,21 +24,21 @@ jobs:
           gradleTasks: build
 
       - name: ktlint
-          uses: eskatos/gradle-command-action@v1
-          with:
-            arguments: ktlintCheck
+        uses: eskatos/gradle-command-action@v1
+        with:
+          arguments: ktlintCheck
 
       - name: detekt
-          uses: eskatos/gradle-command-action@v1
-          with:
-            arguments: detekt
+        uses: eskatos/gradle-command-action@v1
+        with:
+          arguments: detekt
 
       - name: Run Unit Tests
-          uses: eskatos/gradle-command-action@v1
-          with:
-            arguments: jacocoTestReportDebug
+        uses: eskatos/gradle-command-action@v1
+        with:
+          arguments: jacocoTestReportDebug
 
       - name: Codecov
-          uses: codecov/codecov-action@v1.0.5
-          with:
-            token: ${{ secrets.CODE_COV_TOKEN  }}
+        uses: codecov/codecov-action@v1.0.5
+        with:
+          token: ${{ secrets.CODE_COV_TOKEN  }}
