@@ -22,7 +22,7 @@ object Versions {
 
     const val androidTest: String = "1.3.0-alpha04"
 
-    const val androidBuildTools: String = "3.6.0-rc03"
+    const val androidBuildTools: String = "3.6.0"
 
     const val junitTextExtensions: String = "1.1.2-alpha04"
 
