@@ -32,7 +32,7 @@ object Versions {
 
     const val junit: String = "4.13"
 
-    const val detekt: String = "1.5.1"
+    const val detekt: String = "1.6.0"
 
     const val leakCanary: String = "2.2"
 
@@ -54,7 +54,7 @@ object Versions {
 
     const val timber: String = "4.7.1"
 
-    const val gradle: String = "6.2"
+    const val gradle: String = "6.2.1"
 
     const val coordinator: String = "1.1.0"
 
