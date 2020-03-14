@@ -18,6 +18,14 @@ jobs:
       - name: Gradle Wrapper Validation
         uses: gradle/wrapper-validation-action@v1.0.2
 
+      - name: NDK install
+        uses: actions/android-ndk-toolchain-setup@v0.1
+        with:
+          api: '20'
+          arch: 'arm'
+          install-location: 'toolchains'
+          force: true
+
       - name: Build with Gradle
         run: ./gradlew build
 
