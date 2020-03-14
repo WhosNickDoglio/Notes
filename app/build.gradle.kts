@@ -79,6 +79,7 @@ junitJacoco {
 
 android {
     compileSdkVersion(Config.compileSdk)
+    ndkVersion = "20.0.5594570"
     defaultConfig {
         applicationId = Config.applicationId
         minSdkVersion(Config.minSdk)
