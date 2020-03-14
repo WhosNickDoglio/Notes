@@ -27,6 +27,7 @@ package com.nicholasdoglio.notes.di
 import android.app.Application
 import android.content.SharedPreferences
 import androidx.preference.PreferenceManager
+import com.nicholasdoglio.notes.util.DispatcherProvider
 import com.tfcporciuncula.flow.FlowSharedPreferences
 import dagger.Module
 import dagger.Provides
@@ -39,6 +40,9 @@ object PreferencesModule {
         PreferenceManager.getDefaultSharedPreferences(app)
 
     @Provides
-    fun flowPreferences(sharedPreferences: SharedPreferences): FlowSharedPreferences =
-        FlowSharedPreferences(sharedPreferences)
+    fun flowPreferences(
+        sharedPreferences: SharedPreferences,
+        dispatcherProvider: DispatcherProvider
+    ): FlowSharedPreferences =
+        FlowSharedPreferences(sharedPreferences, dispatcherProvider.background)
 }

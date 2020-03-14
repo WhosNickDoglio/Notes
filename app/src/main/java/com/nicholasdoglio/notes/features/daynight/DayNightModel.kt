@@ -26,13 +26,11 @@ package com.nicholasdoglio.notes.features.daynight
 
 import com.nicholasdoglio.notes.util.DispatcherProvider
 import com.tfcporciuncula.flow.FlowSharedPreferences
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
@@ -52,21 +50,17 @@ class DayNightModel @Inject constructor(
 
     val selected = selectedNightMode.get()
 
-    fun saveSelected(scope: CoroutineScope, selected: Int) {
-        toggleNightModeChannel.asFlow()
-            .flowOn(dispatcherProvider.background)
-            .onEach { selectedNightMode.setAndCommit(selected) }
-            .launchIn(scope)
-    }
+    suspend fun saveSelected(selected: Int) = toggleNightModeChannel.asFlow()
+        .flowOn(dispatcherProvider.background)
+        .onEach { selectedNightMode.setAndCommit(selected) }
 
-    fun toggleNightMode(scope: CoroutineScope, mode: NightMode) {
+    suspend fun toggleNightMode(mode: NightMode) {
         toggleNightModeChannel.offer(mode)
 
         toggleNightModeChannel.asFlow()
             .flowOn(dispatcherProvider.background)
             .distinctUntilChanged()
             .onEach { nightModePref.setAndCommit(it) }
-            .launchIn(scope)
     }
 
     companion object {

@@ -36,7 +36,7 @@ import org.threeten.bp.LocalDateTime
 import javax.inject.Inject
 
 /**
- * A Repository to manage [Note] in the app database.
+ * A Repository to manage [Notes][Note] in the app database.
  */
 class NoteRepository @Inject constructor(
     private val noteQueries: NoteQueries,

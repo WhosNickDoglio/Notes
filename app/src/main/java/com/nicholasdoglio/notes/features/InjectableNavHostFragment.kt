@@ -28,7 +28,6 @@ import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.FragmentFactory
 import androidx.navigation.fragment.NavHostFragment
-import com.nicholasdoglio.notes.di.AppComponent
 import com.nicholasdoglio.notes.di.injector
 import javax.inject.Inject
 
@@ -37,12 +36,8 @@ class InjectableNavHostFragment : NavHostFragment() {
     @Inject
     lateinit var fragmentFactory: FragmentFactory
 
-    private val component: AppComponent by lazy {
-        requireActivity().injector
-    }
-
     override fun onAttach(context: Context) {
-        component.inject(this)
+        requireActivity().injector.inject(this)
         super.onAttach(context)
     }
 

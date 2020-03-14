@@ -24,27 +24,29 @@
 
 package com.nicholasdoglio.notes.util
 
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.asCoroutineDispatcher
 import java.util.concurrent.Executors
 import javax.inject.Inject
+import kotlin.coroutines.CoroutineContext
 
 /**]
  *
  */
 interface DispatcherProvider {
-    val main: CoroutineDispatcher
-    val background: CoroutineDispatcher
-    val database: CoroutineDispatcher
+    val main: CoroutineContext
+    val background: CoroutineContext
+    val database: CoroutineContext
 }
 
 /**
  *
  */
 class DefaultDispatchers @Inject constructor() : DispatcherProvider {
-    override val main: CoroutineDispatcher = Dispatchers.Main
-    override val background: CoroutineDispatcher = Dispatchers.Default
-    override val database: CoroutineDispatcher =
-        Executors.newSingleThreadExecutor().asCoroutineDispatcher()
+    override val main: CoroutineContext = Dispatchers.Main
+    override val background: CoroutineContext = Dispatchers.Default
+    override val database: CoroutineContext = Executors
+        .newSingleThreadExecutor()
+        .asCoroutineDispatcher() + NonCancellable
 }

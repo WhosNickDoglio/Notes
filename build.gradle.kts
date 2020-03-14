@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 /*
  * MIT License
  *
@@ -53,7 +55,7 @@ allprojects {
         }
     }
 
-    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+    tasks.withType<KotlinCompile> {
         kotlinOptions.freeCompilerArgs = listOf(
             "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi",
             "-Xuse-experimental=kotlinx.coroutines.FlowPreview"

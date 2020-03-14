@@ -1,7 +1,5 @@
 import org.threeten.bp.LocalDateTime;
 
-
-
 CREATE TABLE Note (
     id INTEGER NOT NULL UNIQUE PRIMARY KEY AUTOINCREMENT,
     title TEXT,

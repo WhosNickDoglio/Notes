@@ -29,6 +29,7 @@ import com.nicholasdoglio.notes.util.DispatcherProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class DayNightToggleViewModel @Inject constructor(
@@ -43,11 +44,11 @@ class DayNightToggleViewModel @Inject constructor(
     val selected = model.selected
 
     fun changeNightMode(mode: NightMode) {
-        model.toggleNightMode(scope, mode)
+        scope.launch { model.toggleNightMode(mode) }
     }
 
     fun saveSelected(selected: Int) {
-        model.saveSelected(scope, selected)
+        scope.launch { model.saveSelected(selected) }
     }
 
     override fun onCleared() {

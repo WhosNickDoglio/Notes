@@ -1,4 +1,3 @@
-import dev.arunkumar.scabbard.gradle.ScabbardSpec
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 
@@ -45,6 +44,9 @@ kapt {
     javacOptions {
         option("-source", "8")
         option("-target", "8")
+        arguments {
+            arg("dagger.experimentalDaggerErrorMessages", "enabled")
+        }
     }
 }
 
@@ -60,9 +62,9 @@ tasks.withType<Test> {
     }
 }
 
-scabbard.configure(closureOf<ScabbardSpec> {
-    enabled(true)
-})
+scabbard {
+    enabled = true
+}
 
 ktlint {
     version.set(Versions.ktlint)

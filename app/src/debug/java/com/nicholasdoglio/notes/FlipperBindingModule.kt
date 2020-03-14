@@ -36,7 +36,7 @@ import com.nicholasdoglio.notes.util.DispatcherProvider
 import com.nicholasdoglio.notes.util.FlipperInitializer
 import dagger.Binds
 import dagger.Module
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -52,8 +52,10 @@ class DebugFlipperInitializer @Inject constructor(
     private val application: Application
 ) : FlipperInitializer {
 
+    private val backgroundScope = CoroutineScope(dispatcherProvider.background)
+
     override fun invoke() {
-        GlobalScope.launch(dispatcherProvider.background) {
+        backgroundScope.launch {
             SoLoader.init(application, false)
             if (FlipperUtils.shouldEnableFlipper(application)) {
                 AndroidFlipperClient.getInstance(application).apply {
