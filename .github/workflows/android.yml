@@ -18,24 +18,16 @@ jobs:
       - name: Gradle Wrapper Validation
         uses: gradle/wrapper-validation-action@v1.0.2
 
-      - name: Install SDK
-        uses: malinskiy/action-android/install-sdk@release/0.0.5
-
       - name: Install NDK
-        run: sdkmanager 'ndk;20.0.5594570'
+        run: sudo /usr/local/lib/android/tools/bin/sdkmanager --install "ndk;20.0.5594570" --sdk_root=${ANDROID_SDK_ROOT}
 
       - name: Build with Gradle
         run: ./gradlew build
 
-      - name: ktlint
+      - name: Lint
         uses: eskatos/gradle-command-action@v1
         with:
-          arguments: ktlintCheck
-
-      - name: detekt
-        uses: eskatos/gradle-command-action@v1
-        with:
-          arguments: detekt
+          arguments: ktlintCheck detekt
 
       - name: Run Unit Tests
         uses: eskatos/gradle-command-action@v1

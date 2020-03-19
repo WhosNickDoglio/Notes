@@ -62,7 +62,7 @@ object Versions {
 
     const val preferences: String = "1.1.0"
 
-    const val coroutines: String = "1.3.4"
+    const val coroutines: String = "1.3.5"
 
     const val flowBinding: String = "0.9.0"
 
