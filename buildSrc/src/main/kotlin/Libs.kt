@@ -88,7 +88,7 @@ object Libs {
         const val androidxTestRunner: String = "androidx.test:runner:${Versions.androidTest}"
 
         const val androidxTestExtJunit: String =
-            "androidx.test.ext:junit:${Versions.junitTextExtensions}"
+            "androidx.test.ext:junit:${Versions.junitTestExtensions}"
 
         const val androidxTestExtTruth: String =
             "androidx.test.ext:truth:${Versions.truthTestExtensions}"
