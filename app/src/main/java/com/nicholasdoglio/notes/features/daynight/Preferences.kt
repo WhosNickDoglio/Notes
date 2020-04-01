@@ -22,43 +22,34 @@
  * SOFTWARE.
  */
 
-package com.nicholasdoglio.notes.util
+package com.nicholasdoglio.notes.features.daynight
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.NonCancellable
-import kotlinx.coroutines.asCoroutineDispatcher
-import java.util.concurrent.Executors
+import com.tfcporciuncula.flow.FlowSharedPreferences
+import com.tfcporciuncula.flow.Preference
 import javax.inject.Inject
-import kotlin.coroutines.CoroutineContext
 
-/**
- * An interface that provides a [CoroutineContext] for different use cases.
- */
-interface DispatcherProvider {
-
-    /**
-     *  The main (UI) context that should be used for anything UI related.
-     */
-    val main: CoroutineContext
-
-    /**
-     *  The background context for running any computation or background work.
-     */
-    val background: CoroutineContext
-
-    /**
-     * The database context used only for running read/writes from the database.
-     */
-    val database: CoroutineContext
+interface DayNightPreferences {
+    val nightModePreference: Preference<NightMode>
+    val currentlySelectedNightModePreference: Preference<Int>
+    val currentlySelectedNightMode: Int
 }
 
-/**
- * The default implementation of [DispatcherProvider].
- */
-class DefaultDispatchers @Inject constructor() : DispatcherProvider {
-    override val main: CoroutineContext = Dispatchers.Main
-    override val background: CoroutineContext = Dispatchers.Default
-    override val database: CoroutineContext = Executors
-        .newSingleThreadExecutor()
-        .asCoroutineDispatcher() + NonCancellable
+class DefaultDayNightPreferences @Inject constructor(
+    private val flowSharedPreferences: FlowSharedPreferences
+) :
+    DayNightPreferences {
+
+    override val nightModePreference: Preference<NightMode> =
+        flowSharedPreferences.getEnum(NIGHT_MODE, NightMode.FOLLOW_SYSTEM)
+
+    override val currentlySelectedNightModePreference: Preference<Int> =
+        flowSharedPreferences.getInt(SELECTED_NIGHT_MODE, 0)
+
+    override val currentlySelectedNightMode: Int
+        get() = currentlySelectedNightModePreference.get()
+
+    companion object {
+        private const val SELECTED_NIGHT_MODE = "SELECTED_NIGHT_MODE"
+        private const val NIGHT_MODE = "NIGHT_MODE"
+    }
 }

@@ -24,7 +24,17 @@
 
 package com.nicholasdoglio.notes.util
 
+/**
+ *  An interface used to initialize Flipper.
+ *
+ *  Flipper should only be included in debug builds so there's a DebugFlipperInitializer
+ *  that actually initializes Flipper with debug tools and there's a ReleaseFlipperInitializer
+ *  that has an empty [invoke] method.
+ */
 interface FlipperInitializer {
 
+    /**
+     * Initializes Flipper.
+     */
     operator fun invoke()
 }

@@ -16,13 +16,13 @@ object Versions {
 
     const val navigation: String = "2.3.0-alpha04"
 
-    const val fragment: String = "1.3.0-alpha02"
+    const val fragment: String = "1.3.0-alpha03"
 
     const val dagger: String = "2.27"
 
     const val androidTest: String = "1.3.0-alpha05"
 
-    const val androidBuildTools: String = "3.6.1"
+    const val androidBuildTools: String = "3.6.2"
 
     const val junitTestExtensions: String = "1.1.2-alpha05"
 
@@ -32,7 +32,7 @@ object Versions {
 
     const val junit: String = "4.13"
 
-    const val detekt: String = "1.7.1"
+    const val detekt: String = "1.7.3"
 
     const val leakCanary: String = "2.2"
 
@@ -40,11 +40,11 @@ object Versions {
 
     const val espressoCore: String = "3.3.0-alpha05"
 
-    const val recyclerview: String = "1.2.0-alpha01"
+    const val recyclerview: String = "1.2.0-alpha02"
 
     const val threetenabp: String = "1.2.3"
 
-    const val appcompat: String = "1.2.0-alpha03"
+    const val appcompat: String = "1.2.0-beta01"
 
     const val material: String = "1.2.0-alpha05"
 
@@ -72,7 +72,7 @@ object Versions {
 
     const val soloader: String = "0.8.2"
 
-    const val about = "8.0.0"
+    const val about = "8.1.0"
 
     const val junitJacoco = "0.16.0"
 

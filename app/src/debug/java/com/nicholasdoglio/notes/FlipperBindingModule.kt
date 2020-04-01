@@ -48,8 +48,8 @@ interface FlipperBindingModule {
 }
 
 class DebugFlipperInitializer @Inject constructor(
-    private val dispatcherProvider: DispatcherProvider,
-    private val application: Application
+    private val application: Application,
+    dispatcherProvider: DispatcherProvider
 ) : FlipperInitializer {
 
     private val backgroundScope = CoroutineScope(dispatcherProvider.background)

@@ -25,46 +25,39 @@
 package com.nicholasdoglio.notes.features.daynight
 
 import com.nicholasdoglio.notes.util.DispatcherProvider
-import com.tfcporciuncula.flow.FlowSharedPreferences
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 class DayNightModel @Inject constructor(
     private val dispatcherProvider: DispatcherProvider,
-    flowSharedPreferences: FlowSharedPreferences
+    private val dayNightPreferences: DayNightPreferences
 ) {
     private val toggleNightModeChannel = ConflatedBroadcastChannel<NightMode>()
 
-    private val nightModePref = flowSharedPreferences.getEnum(NIGHT_MODE, NightMode.FOLLOW_SYSTEM)
+    val nightMode: Flow<NightMode> = dayNightPreferences.nightModePreference.asFlow()
 
-    private val selectedNightMode = flowSharedPreferences.getInt(SELECTED_NIGHT_MODE, 0)
+    val selected = dayNightPreferences.currentlySelectedNightMode
 
-    val nightMode: Flow<NightMode> =
-        nightModePref.asFlow()
-            .flowOn(dispatcherProvider.background)
-
-    val selected = selectedNightMode.get()
-
-    suspend fun saveSelected(selected: Int) = toggleNightModeChannel.asFlow()
-        .flowOn(dispatcherProvider.background)
-        .onEach { selectedNightMode.setAndCommit(selected) }
+    suspend fun saveSelected(selected: Int) {
+        dayNightPreferences.currentlySelectedNightModePreference.setAndCommit(selected)
+    }
 
     suspend fun toggleNightMode(mode: NightMode) {
-        toggleNightModeChannel.offer(mode)
+        toggleNightModeChannel.send(mode)
+    }
 
+    init {
         toggleNightModeChannel.asFlow()
             .flowOn(dispatcherProvider.background)
             .distinctUntilChanged()
-            .onEach { nightModePref.setAndCommit(it) }
-    }
-
-    companion object {
-        private const val SELECTED_NIGHT_MODE = "SELECTED_NIGHT_MODE"
-        private const val NIGHT_MODE = "NIGHT_MODE"
+            .onEach { dayNightPreferences.nightModePreference.setAndCommit(it) }
+            .launchIn(GlobalScope) // TODO FIX
     }
 }

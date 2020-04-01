@@ -25,6 +25,8 @@
 package com.nicholasdoglio.notes.di
 
 import com.nicholasdoglio.notes.data.TimestampColumnAdapter
+import com.nicholasdoglio.notes.features.daynight.DayNightPreferences
+import com.nicholasdoglio.notes.features.daynight.DefaultDayNightPreferences
 import com.nicholasdoglio.notes.util.DefaultDispatchers
 import com.nicholasdoglio.notes.util.DispatcherProvider
 import com.squareup.sqldelight.ColumnAdapter
@@ -40,4 +42,7 @@ interface BindingModule {
 
     @Binds
     fun bindTimestampAdapter(adapter: TimestampColumnAdapter): ColumnAdapter<LocalDateTime, String>
+
+    @Binds
+    fun bindDayNightPreferences(preferences: DefaultDayNightPreferences): DayNightPreferences
 }

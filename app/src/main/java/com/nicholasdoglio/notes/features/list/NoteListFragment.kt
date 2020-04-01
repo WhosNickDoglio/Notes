@@ -133,5 +133,3 @@ class NoteListFragment @Inject constructor(
         )
     }
 }
-
-data class NoteUi(val id: Long, val title: String?, val contents: String?)

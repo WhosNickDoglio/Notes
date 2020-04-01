@@ -35,16 +35,27 @@ import com.mikepenz.aboutlibraries.LibsBuilder
 import com.mikepenz.aboutlibraries.LibsConfiguration
 import com.mikepenz.aboutlibraries.entity.Library
 
+/**
+ * Hides the soft keyboard.
+ */
 fun Activity.hideKeyboard() {
     val input = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
     input.hideSoftInputFromWindow(this.currentFocus?.windowToken, 0)
 }
 
+/**
+ * Opens the given [url] in a web browser.
+ *
+ * @param url The website to be launched.
+ */
 fun Context.openWebPage(url: String) {
     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
     if (intent.resolveActivity(this.packageManager) != null) startActivity(intent)
 }
 
+/**
+ * Convenience method for [LibsBuilder] to just pass a function for each onClick.
+ */
 @Suppress("LongParameterList")
 inline fun LibsBuilder.withListener(
     crossinline onExtraClicked: (v: View, specialButton: Libs.SpecialButton) -> Boolean =
