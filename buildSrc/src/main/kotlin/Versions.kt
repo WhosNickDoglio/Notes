@@ -1,6 +1,6 @@
 object Versions {
 
-    const val sqlDelight = "1.2.2"
+    const val sqlDelight = "1.3.0"
 
     const val ktlintGradlePlugin = "9.2.1"
 
@@ -32,7 +32,7 @@ object Versions {
 
     const val junit: String = "4.13"
 
-    const val detekt: String = "1.7.3"
+    const val detekt: String = "1.7.4"
 
     const val leakCanary: String = "2.2"
 
@@ -68,7 +68,7 @@ object Versions {
 
     const val flowPreferences: String = "1.1.1"
 
-    const val flipper: String = "0.35.0"
+    const val flipper: String = "0.36.0"
 
     const val soloader: String = "0.8.2"
 
