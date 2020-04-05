@@ -27,6 +27,7 @@ package com.nicholasdoglio.notes
 import android.app.Application
 import android.os.StrictMode
 import androidx.appcompat.app.AppCompatDelegate
+import com.jakewharton.threetenabp.AndroidThreeTen
 import com.nicholasdoglio.notes.di.AppComponent
 import com.nicholasdoglio.notes.di.AppComponentProvider
 import com.nicholasdoglio.notes.di.DaggerAppComponent
@@ -61,6 +62,7 @@ class NotesApplication : Application(), AppComponentProvider {
     override fun onCreate() {
         component.inject(this)
         super.onCreate()
+        AndroidThreeTen.init(this)
         initDebugTools()
 
         dayNightModel.nightMode

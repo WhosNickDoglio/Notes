@@ -75,7 +75,7 @@ inline fun LibsBuilder.withListener(
     crossinline onLibraryContentLongClicked: (v: View, library: Library) -> Boolean =
         { _, _ -> true }
 ): LibsBuilder {
-    LibsConfiguration.instance.listener = object : LibsConfiguration.LibsListener {
+    LibsConfiguration.listener = object : LibsConfiguration.LibsListener {
         override fun onExtraClicked(v: View, specialButton: Libs.SpecialButton): Boolean =
             onExtraClicked(v, specialButton)
 
