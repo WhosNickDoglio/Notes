@@ -58,7 +58,7 @@ object Versions {
 
     const val coordinator: String = "1.1.0"
 
-    const val threeten: String = "1.4.2"
+    const val threeten: String = "1.4.3"
 
     const val preferences: String = "1.1.0"
 
