@@ -79,7 +79,6 @@ junitJacoco {
 
 android {
     compileSdkVersion(Config.compileSdk)
-    ndkVersion = "20.0.5594570"
     defaultConfig {
         applicationId = Config.applicationId
         minSdkVersion(Config.minSdk)
@@ -115,12 +114,6 @@ android {
 
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
-    }
-
-    // TODO see when I can remove this
-    packagingOptions {
-        pickFirst("META-INF/kotlinx-coroutines-io.kotlin_module")
-        pickFirst("META-INF/kotlinx-coroutines-core.kotlin_module")
     }
 }
 
