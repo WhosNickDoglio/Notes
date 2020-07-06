@@ -38,10 +38,11 @@ class CreateNoteTile : TileService() {
 
     override fun onClick() {
         super.onClick()
-        startActivityAndCollapse(Intent(applicationContext, MainActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK
-            data = Uri.parse(CREATE_NOTE_DEEP_LINK_URL)
-        }
+        startActivityAndCollapse(
+            Intent(applicationContext, MainActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                data = Uri.parse(CREATE_NOTE_DEEP_LINK_URL)
+            }
         )
     }
 }

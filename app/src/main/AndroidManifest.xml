@@ -25,8 +25,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.nicholasdoglio.notes">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-
     <application
         android:name=".NotesApplication"
         android:allowBackup="true"
@@ -48,19 +46,16 @@
                 android:resource="@xml/shortcuts" />
         </activity>
 
-        <service
-            android:name=".features.tile.CreateNoteTile"
-            android:icon="@drawable/ic_edit"
-            android:label="Create note"
-            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+<!--        <service-->
+<!--            android:name=".features.tile.CreateNoteTile"-->
+<!--            android:icon="@drawable/ic_edit"-->
+<!--            android:label="Create note"-->
+<!--            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">-->
 
-            <intent-filter>
-                <action android:name="android.service.quicksettings.action.QS_TILE" />
-            </intent-filter>
-        </service>
+<!--            <intent-filter>-->
+<!--                <action android:name="android.service.quicksettings.action.QS_TILE" />-->
+<!--            </intent-filter>-->
+<!--        </service>-->
 
-        <activity
-            android:name="com.facebook.flipper.android.diagnostics.FlipperDiagnosticActivity"
-            android:exported="true" />
     </application>
 </manifest>

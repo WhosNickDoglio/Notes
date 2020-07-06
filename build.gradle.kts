@@ -32,12 +32,9 @@ buildscript {
     dependencies {
         classpath(GradlePlugin.android)
         classpath(GradlePlugin.kotlin)
-        classpath(GradlePlugin.navigationSafeArgs)
         classpath(GradlePlugin.sqlDelight)
         classpath(GradlePlugin.ktlint)
-        classpath(GradlePlugin.delect)
         classpath(GradlePlugin.junitJacoco)
-        classpath(GradlePlugin.aboutLibraries)
     }
 }
 
@@ -57,8 +54,8 @@ allprojects {
 
     tasks.withType<KotlinCompile> {
         kotlinOptions.freeCompilerArgs = listOf(
-            "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi",
-            "-Xuse-experimental=kotlinx.coroutines.FlowPreview"
+                "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi",
+                "-Xuse-experimental=kotlinx.coroutines.FlowPreview"
         )
     }
 }

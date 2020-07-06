@@ -29,14 +29,9 @@ plugins {
     id(Plugins.Android.application)
     kotlin(Plugins.Kotlin.android)
     kotlin(Plugins.Kotlin.kapt)
-    id(Plugins.Android.safeArgs)
     id(Plugins.detekt)
     id(Plugins.ktlint)
-    id(Plugins.sqlDelight)
-    id(Plugins.delect)
     id(Plugins.junitJacoco)
-    id(Plugins.aboutLibs)
-    id(Plugins.scabbard) version Versions.scabbard
 }
 
 kapt {
@@ -60,10 +55,6 @@ tasks.withType<Test> {
         )
         showStandardStreams = true
     }
-}
-
-scabbard {
-    enabled = true
 }
 
 ktlint {
@@ -103,11 +94,17 @@ android {
         }
     }
 
-    viewBinding {
-        isEnabled = true
+    buildFeatures {
+        compose = true
+    }
+
+    composeOptions {
+        kotlinCompilerVersion = "1.3.70-dev-withExperimentalGoogleExtensions-20200424"
+        kotlinCompilerExtensionVersion = Versions.compose
     }
 
     compileOptions {
+        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
@@ -117,64 +114,34 @@ android {
     }
 }
 
-sqldelight {
-    database("NoteDatabase") {
-    }
-}
-
 dependencies {
+    coreLibraryDesugaring(Libs.Android.desguar)
+
+    implementation(project(":shared"))
+
     implementation(Libs.Kotlin.Stdlib)
     implementation(Libs.Kotlin.Coroutines.core)
     implementation(Libs.Kotlin.Coroutines.android)
 
-    implementation(Libs.Kotlin.Coroutines.Extensions.Binding.android)
-    implementation(Libs.Kotlin.Coroutines.Extensions.Binding.activity)
-    implementation(Libs.Kotlin.Coroutines.Extensions.Binding.recyclerview)
-    implementation(Libs.Kotlin.Coroutines.Extensions.flowPreferences)
-
-    implementation(Libs.Android.fragmentKtx)
     implementation(Libs.Android.appcompat)
-    implementation(Libs.Android.recyclerview)
     implementation(Libs.Android.material)
-    implementation(Libs.Android.constraintLayout)
-    implementation(Libs.Android.navigationFragmentKtx)
-    implementation(Libs.Android.navigationUiKtx)
-    implementation(Libs.Android.coordinatorLayout)
-    implementation(Libs.Android.preferences)
-    implementation(Libs.Android.cardview)
-    implementation(Libs.Android.lifecycleJava8)
-
-    implementation(Libs.AboutLibs.core)
-    implementation(Libs.AboutLibs.about)
-
-    implementation(Libs.Square.sqlDelightAndroidDriver)
-    implementation(Libs.Square.sqlDelightFlow)
+    implementation(Libs.Android.Compose.runtime)
+    implementation(Libs.Android.Compose.Ui.tooling)
+    implementation(Libs.Android.Compose.Ui.layout)
+    implementation(Libs.Android.Compose.Ui.material)
+    implementation(Libs.Android.Compose.Ui.icons_extened)
+    implementation(Libs.Android.Compose.Ui.foundation)
+    implementation(Libs.Android.Compose.Ui.core)
+    implementation(Libs.Android.Compose.router)
 
     implementation(Libs.Dagger.dagger)
     kapt(Libs.Dagger.daggerCompiler)
 
-    implementation(Libs.threetenabp)
-
-    debugImplementation(Libs.Flipper.debug)
-    debugImplementation(Libs.Flipper.soloader)
-    releaseImplementation(Libs.Flipper.release)
+    implementation(Libs.Square.sqlDelightAndroidDriver)
 
     implementation(Libs.timber)
     debugImplementation(Libs.Square.leakCanary)
 
     testImplementation(Libs.Test.junit)
     testImplementation(Libs.Test.truth)
-    testImplementation(Libs.Square.sqlDelightJvm)
-    testImplementation(Libs.Test.threeten) {
-        exclude(group = Libs.Test.threeTenGroup, module = Libs.Test.threeTenModule)
-    }
-
-    androidTestImplementation(Libs.Android.fragmentTesting)
-    androidTestImplementation(Libs.Test.truth)
-    androidTestImplementation(Libs.Test.androidxTestCore)
-    androidTestImplementation(Libs.Test.androidxTestExtJunit)
-    androidTestImplementation(Libs.Test.androidxTestExtTruth)
-    androidTestImplementation(Libs.Test.androidxTestRunner)
-    androidTestImplementation(Libs.Test.androidxTestRules)
-    androidTestImplementation(Libs.Test.espressoCore)
 }

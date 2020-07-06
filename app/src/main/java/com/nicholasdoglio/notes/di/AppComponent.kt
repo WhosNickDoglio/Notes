@@ -26,9 +26,9 @@ package com.nicholasdoglio.notes.di
 
 import android.app.Application
 import android.content.Context
-import com.nicholasdoglio.notes.FlipperBindingModule
-import com.nicholasdoglio.notes.NotesApplication
-import com.nicholasdoglio.notes.features.InjectableNavHostFragment
+import com.doglio.shared.di.BindingModule
+import com.doglio.shared.di.DatabaseModule
+import com.nicholasdoglio.notes.features.MainActivity
 import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton
@@ -37,10 +37,7 @@ import javax.inject.Singleton
 @Component(
     modules = [
         DatabaseModule::class,
-        FragmentBindingModule::class,
         BindingModule::class,
-        FlipperBindingModule::class,
-        PreferencesModule::class,
         ViewModelModule::class
     ]
 )
@@ -51,9 +48,7 @@ interface AppComponent {
         fun create(@BindsInstance application: Application): AppComponent
     }
 
-    fun inject(target: InjectableNavHostFragment)
-
-    fun inject(target: NotesApplication)
+    fun inject(target: MainActivity)
 }
 
 interface AppComponentProvider {

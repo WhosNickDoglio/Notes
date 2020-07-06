@@ -24,25 +24,94 @@
 
 package com.nicholasdoglio.notes.features
 
+import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.nicholasdoglio.notes.R
+import androidx.compose.Composable
+import androidx.compose.Providers
+import androidx.lifecycle.ViewModelProvider
+import androidx.ui.core.setContent
+import androidx.ui.material.MaterialTheme
+import com.doglio.shared.util.DispatcherProvider
+import com.github.zsoltk.compose.backpress.AmbientBackPressHandler
+import com.github.zsoltk.compose.backpress.BackPressHandler
+import com.github.zsoltk.compose.router.Router
+import com.nicholasdoglio.notes.di.injector
+import com.nicholasdoglio.notes.features.detail.DetailView
+import com.nicholasdoglio.notes.features.discard.DiscardNoteView
+import com.nicholasdoglio.notes.features.overview.OverviewView
+import com.nicholasdoglio.shared.db.Note
+import java.time.LocalDateTime
+import javax.inject.Inject
 
-class MainActivity : AppCompatActivity(R.layout.activity_main) {
+class MainActivity : AppCompatActivity() {
+    private val backPressHandler = BackPressHandler()
 
-    /**
-     * Override recreate to allow Day/Night switches
-     * to be smoother and less abrupt
-     */
-    override fun recreate() {
-        finish()
-        overridePendingTransition(
-            android.R.anim.fade_in,
-            android.R.anim.fade_out
-        )
-        startActivity(intent)
-        overridePendingTransition(
-            android.R.anim.fade_in,
-            android.R.anim.fade_out
-        )
+    @Inject
+    lateinit var factory: ViewModelProvider.Factory
+
+    @Inject
+    lateinit var dispatcherProvider: DispatcherProvider
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        injector.inject(this)
+        super.onCreate(savedInstanceState)
+        setContent {
+            Providers(AmbientBackPressHandler provides backPressHandler) {
+                MaterialTheme {
+                    Stack(
+                            screen = Screen.Overview,
+                            factory = factory,
+                            dispatcherProvider = dispatcherProvider
+                    )
+                }
+            }
+        }
     }
+
+    override fun onBackPressed() {
+        if (!backPressHandler.handle()) {
+            super.onBackPressed()
+        }
+    }
+}
+
+@Composable
+fun Stack(
+        screen: Screen,
+        factory: ViewModelProvider.Factory,
+        dispatcherProvider: DispatcherProvider
+) {
+    // TODO deep-linking
+    Router(defaultRouting = screen) { stack ->
+        when (val routing = stack.last()) {
+            is Screen.Overview -> OverviewView(
+                    factory = factory,
+                    dispatcherProvider = dispatcherProvider,
+//                    navigateToNote = { stack.push(Screen.Detail(it)) }
+                    navigateToNote = { stack.push(Screen.Discard(Note(0, "", "", LocalDateTime.now()))) }
+            )
+            is Screen.Detail -> DetailView(
+                    id = routing.id,
+                    factory = factory,
+                    dispatcherProvider = dispatcherProvider,
+                    popBack = { stack.pop() }
+            )
+            is Screen.Discard -> DiscardNoteView(
+                    note = routing.note,
+                    factory = factory
+            )
+        }
+    }
+}
+
+// @Composable
+// fun NotesApp() {
+// }
+
+sealed class Screen {
+    object Overview : Screen()
+    data class Detail(val id: Long) : Screen()
+    data class Discard(val note: Note) : Screen()
+//    object DayNightToggle: Screen()
+//    object About: Screen()
 }

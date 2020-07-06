@@ -26,55 +26,26 @@ package com.nicholasdoglio.notes
 
 import android.app.Application
 import android.os.StrictMode
-import androidx.appcompat.app.AppCompatDelegate
-import com.jakewharton.threetenabp.AndroidThreeTen
 import com.nicholasdoglio.notes.di.AppComponent
 import com.nicholasdoglio.notes.di.AppComponentProvider
 import com.nicholasdoglio.notes.di.DaggerAppComponent
-import com.nicholasdoglio.notes.features.daynight.DayNightModel
-import com.nicholasdoglio.notes.util.DispatcherProvider
-import com.nicholasdoglio.notes.util.FlipperInitializer
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.NonCancellable
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.plus
 import timber.log.Timber
-import javax.inject.Inject
 
-// TODO design inspiration https://material.io/design/material-studies/fortnightly.html#
-// Standardize how I handle navigation (directions vs xml ids)
 class NotesApplication : Application(), AppComponentProvider {
-
-    @Inject
-    lateinit var dayNightModel: DayNightModel
-
-    @Inject
-    lateinit var flipperInitializer: FlipperInitializer
-
-    @Inject
-    lateinit var dispatcherProvider: DispatcherProvider
 
     override val component: AppComponent by lazy {
         DaggerAppComponent.factory().create(this)
     }
 
     override fun onCreate() {
-        component.inject(this)
         super.onCreate()
-        AndroidThreeTen.init(this)
         initDebugTools()
-
-        dayNightModel.nightMode
-            .onEach { AppCompatDelegate.setDefaultNightMode(it.value) }
-            .launchIn(GlobalScope + NonCancellable)
     }
 
     private fun initDebugTools() {
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
             initStrictMode()
-            flipperInitializer()
         }
     }
 

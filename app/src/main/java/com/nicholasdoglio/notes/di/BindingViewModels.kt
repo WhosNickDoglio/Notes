@@ -26,9 +26,9 @@ package com.nicholasdoglio.notes.di
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.nicholasdoglio.notes.features.daynight.DayNightToggleViewModel
-import com.nicholasdoglio.notes.features.editnote.EditNoteViewModel
-import com.nicholasdoglio.notes.features.list.NoteListViewModel
+import com.nicholasdoglio.notes.features.detail.DetailViewModel
+import com.nicholasdoglio.notes.features.discard.DiscardViewModel
+import com.nicholasdoglio.notes.features.overview.OverviewViewModel
 import dagger.Binds
 import dagger.MapKey
 import dagger.Module
@@ -52,16 +52,16 @@ interface ViewModelModule {
 
     @Binds
     @IntoMap
-    @ViewModelKey(EditNoteViewModel::class)
-    fun bindEditNoteViewModel(editNoteViewModel: EditNoteViewModel): ViewModel
+    @ViewModelKey(DetailViewModel::class)
+    fun bindDetailViewModel(detailViewModel: DetailViewModel): ViewModel
 
     @Binds
     @IntoMap
-    @ViewModelKey(NoteListViewModel::class)
-    fun bindNoteListViewModel(noteListViewModel: NoteListViewModel): ViewModel
+    @ViewModelKey(OverviewViewModel::class)
+    fun bindOverviewViewModel(overviewViewModel: OverviewViewModel): ViewModel
 
     @Binds
     @IntoMap
-    @ViewModelKey(DayNightToggleViewModel::class)
-    fun bindDayNightToggleViewModel(dayNightToggleViewModel: DayNightToggleViewModel): ViewModel
+    @ViewModelKey(DiscardViewModel::class)
+    fun bindsDiscardViewModel(discardViewModel: DiscardViewModel): ViewModel
 }

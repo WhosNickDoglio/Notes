@@ -24,7 +24,7 @@
 
 package com.nicholasdoglio.notes.shared
 
-import com.nicholasdoglio.notes.util.DispatcherProvider
+import com.doglio.shared.util.DispatcherProvider
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 

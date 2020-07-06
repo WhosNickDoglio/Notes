@@ -26,7 +26,7 @@ package com.nicholasdoglio.notes.shared
 
 import com.google.common.truth.Truth
 import com.nicholasdoglio.notes.Note
-import org.threeten.bp.LocalDateTime
+import java.time.LocalDateTime
 
 // TODO should this be an object?
 object TestData {

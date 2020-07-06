@@ -1,0 +1,37 @@
+import java.time.LocalDateTime;
+
+CREATE TABLE Note (
+    id INTEGER NOT NULL UNIQUE PRIMARY KEY AUTOINCREMENT,
+    title TEXT,
+    contents TEXT,
+    timestamp TEXT AS LocalDateTime NOT NULL
+);
+
+allNotes:
+SELECT * FROM Note
+ORDER BY timestamp DESC;
+
+count:
+SELECT count(*) FROM Note;
+
+findNoteById:
+SELECT * FROM Note WHERE id = ?;
+
+insert:
+INSERT INTO Note(title, contents, timestamp)
+VALUES (?, ?, ?);
+
+updateById:
+UPDATE Note
+SET title = ?, contents = ?, timestamp = ?
+WHERE id = ?;
+
+deleteById:
+DELETE
+FROM Note
+WHERE id = ?;
+
+-- Just for testing
+dropTable:
+DELETE
+FROM Note;
