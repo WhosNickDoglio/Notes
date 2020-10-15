@@ -24,9 +24,12 @@
 
 package com.nicholasdoglio.notes.features.detail
 
-import com.nicholasdoglio.shared.db.Note
-
-data class DetailState(
-    val note: Note? = null,
-    val isFinished: Boolean = false
-)
+sealed class DetailState {
+    object Idle : DetailState()
+    data class Content(
+        val id: Long = -1L,
+        val title: String = "",
+        val contents: String = "",
+        val isFinished: Boolean = false,
+    ) : DetailState()
+}

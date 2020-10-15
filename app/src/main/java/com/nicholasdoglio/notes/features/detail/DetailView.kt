@@ -64,10 +64,28 @@ fun DetailView(
         context = dispatcherProvider.main
     )
 
-    if (state.value.isFinished) {
-        popBack()
+    val currentState = state.value
+
+    if (currentState is DetailState.Content) {
+        if (currentState.isFinished) {
+            popBack()
+        }
+
+        // No Note exists yet
+        if (currentState.id != -id) viewModel.input(DetailInput.FirstLoad(id))
+
+        NoteView(currentState, viewModel)
     }
-    Column {
+}
+
+@Composable
+private fun NoteView(
+    state: DetailState.Content,
+    viewModel: DetailViewModel
+) {
+    ConstraintLayout(modifier = Modifier.fillMaxSize()) {
+        val (title, content, save, discard) = createRefs()
+
         TextField(
             value = state.title,
             onValueChange = { viewModel.input(DetailInput.TitleChange(it)) },
@@ -124,3 +142,5 @@ fun DetailView(
         }
     }
 }
+
+private const val PADDING = 8

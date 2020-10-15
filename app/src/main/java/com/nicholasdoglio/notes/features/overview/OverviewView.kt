@@ -63,6 +63,7 @@ fun OverviewView(
 ) {
     // TODO this is stateful, do I want it to be?
     val viewModel = viewModel<OverviewViewModel>(factory = factory)
+    // TODO am I using this correctly?
     val state = viewModel.state.collectAsState(
         initial = OverviewState(),
         context = dispatcherProvider.main
