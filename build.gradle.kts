@@ -47,15 +47,17 @@ allprojects {
     repositories {
         google()
         jcenter()
-        maven {
-            url = java.net.URI("https://jitpack.io")
-        }
+        maven(url = "https://jitpack.io/")
+        maven(url = "https://kotlin.bintray.com/kotlinx/")
     }
 
     tasks.withType<KotlinCompile> {
         kotlinOptions.freeCompilerArgs = listOf(
-                "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi",
-                "-Xuse-experimental=kotlinx.coroutines.FlowPreview"
+            "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi",
+            "-Xuse-experimental=kotlinx.coroutines.FlowPreview",
+            "-Xopt-in=kotlin.time.ExperimentalTime",
+            "-Xopt-in=kotlin.Experimental",
+            "-Xallow-jvm-ir-dependencies"
         )
     }
 }

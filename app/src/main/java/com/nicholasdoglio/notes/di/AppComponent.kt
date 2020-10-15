@@ -26,8 +26,6 @@ package com.nicholasdoglio.notes.di
 
 import android.app.Application
 import android.content.Context
-import com.doglio.shared.di.BindingModule
-import com.doglio.shared.di.DatabaseModule
 import com.nicholasdoglio.notes.features.MainActivity
 import dagger.BindsInstance
 import dagger.Component
@@ -37,8 +35,10 @@ import javax.inject.Singleton
 @Component(
     modules = [
         DatabaseModule::class,
+        DataStoreModule::class,
         BindingModule::class,
-        ViewModelModule::class
+        ScopeModule::class,
+        ViewModelModule::class,
     ]
 )
 interface AppComponent {

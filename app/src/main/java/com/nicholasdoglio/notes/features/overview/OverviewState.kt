@@ -24,7 +24,7 @@
 
 package com.nicholasdoglio.notes.features.overview
 
-import com.nicholasdoglio.shared.db.Note
+import com.nicholasdoglio.notes.db.Note
 
 data class OverviewState(
     val data: List<Note> = emptyList(),

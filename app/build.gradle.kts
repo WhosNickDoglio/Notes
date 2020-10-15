@@ -31,6 +31,7 @@ plugins {
     kotlin(Plugins.Kotlin.kapt)
     id(Plugins.detekt)
     id(Plugins.ktlint)
+    id(Plugins.sqlDelight)
     id(Plugins.junitJacoco)
 }
 
@@ -68,6 +69,12 @@ junitJacoco {
     jacocoVersion = "0.8.5"
 }
 
+sqldelight {
+    database("NoteDatabase") {
+        packageName = "com.nicholasdoglio.notes.db"
+    }
+}
+
 android {
     compileSdkVersion(Config.compileSdk)
     defaultConfig {
@@ -99,7 +106,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerVersion = "1.3.70-dev-withExperimentalGoogleExtensions-20200424"
+        kotlinCompilerVersion = Versions.kotlin
         kotlinCompilerExtensionVersion = Versions.compose
     }
 
@@ -117,31 +124,35 @@ android {
 dependencies {
     coreLibraryDesugaring(Libs.Android.desguar)
 
-    implementation(project(":shared"))
-
-    implementation(Libs.Kotlin.Stdlib)
+    implementation(Libs.Kotlin.date)
     implementation(Libs.Kotlin.Coroutines.core)
     implementation(Libs.Kotlin.Coroutines.android)
 
     implementation(Libs.Android.appcompat)
     implementation(Libs.Android.material)
+    implementation(Libs.Android.dataStore)
     implementation(Libs.Android.Compose.runtime)
     implementation(Libs.Android.Compose.Ui.tooling)
     implementation(Libs.Android.Compose.Ui.layout)
     implementation(Libs.Android.Compose.Ui.material)
     implementation(Libs.Android.Compose.Ui.icons_extened)
     implementation(Libs.Android.Compose.Ui.foundation)
+    implementation(Libs.Android.Compose.Ui.foundation_text)
     implementation(Libs.Android.Compose.Ui.core)
     implementation(Libs.Android.Compose.router)
+    implementation(Libs.Android.Compose.backstack)
 
     implementation(Libs.Dagger.dagger)
     kapt(Libs.Dagger.daggerCompiler)
 
     implementation(Libs.Square.sqlDelightAndroidDriver)
+    implementation(Libs.Square.sqlDelightFlow)
 
     implementation(Libs.timber)
     debugImplementation(Libs.Square.leakCanary)
 
     testImplementation(Libs.Test.junit)
     testImplementation(Libs.Test.truth)
+    testImplementation(Libs.Square.turbine)
+    testImplementation(Libs.Square.sqlDelightJvm)
 }

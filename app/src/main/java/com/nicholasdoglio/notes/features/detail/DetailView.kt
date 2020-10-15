@@ -24,19 +24,32 @@
 
 package com.nicholasdoglio.notes.features.detail
 
-import androidx.compose.Composable
-import androidx.compose.collectAsState
-import androidx.compose.launchInComposition
+import androidx.compose.foundation.Text
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.ConstraintLayout
+import androidx.compose.foundation.layout.Dimension
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Button
+import androidx.compose.material.TextField
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.viewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.ui.foundation.TextField
-import androidx.ui.foundation.VerticalScroller
-import androidx.ui.input.TextFieldValue
-import androidx.ui.layout.Column
-import androidx.ui.viewmodel.viewModel
-import com.doglio.shared.util.DispatcherProvider
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collect
+import com.nicholasdoglio.notes.util.DispatcherProvider
 
+/**
+ *
+ *
+ *
+ * @param id The initial [com.nicholasdoglio.notes.db.Note] identifier,
+ * @param factory a [ViewModelProvider.Factory] that is used to create our [androidx.lifecycle.ViewModel].
+ * @param dispatcherProvider a container for Coroutine [kotlinx.coroutines.Dispatchers] to launch async work.
+ * @param popBack a function that is called to navigate out of this screen.
+ */
 @Composable
 fun DetailView(
     id: Long,
@@ -44,13 +57,10 @@ fun DetailView(
     dispatcherProvider: DispatcherProvider,
     popBack: () -> Unit
 ) {
-    val input = MutableStateFlow<DetailInput>(DetailInput.FirstLoad(id))
     val viewModel = viewModel<DetailViewModel>(factory = factory)
 
-    launchInComposition { input.collect { viewModel.input(it) } }
-
     val state = viewModel.state.collectAsState(
-        initial = DetailState(),
+        initial = DetailState.Idle,
         context = dispatcherProvider.main
     )
 
@@ -59,15 +69,58 @@ fun DetailView(
     }
     Column {
         TextField(
-            value = TextFieldValue("This is my title"),
-            onValueChange = { input.value = DetailInput.TitleChange(it.text) }
+            value = state.title,
+            onValueChange = { viewModel.input(DetailInput.TitleChange(it)) },
+            label = {},
+            modifier = Modifier
+                .padding(PADDING.dp)
+                .constrainAs(title) {
+                    width = Dimension.fillToConstraints
+                    centerHorizontallyTo(parent)
+                    top.linkTo(parent.top)
+                }
         )
 
-        VerticalScroller {
-            TextField(
-                value = TextFieldValue("This is my content"),
-                onValueChange = { input.value = DetailInput.ContentChange(it.text) }
-            )
+        TextField(
+            value = state.contents,
+            onValueChange = { viewModel.input(DetailInput.ContentChange(it)) },
+            modifier = Modifier
+                // TODO figure out scrollable
+                // .scrollable(orientation = Orientation.Vertical, rememberScrollableController())
+                .background(Color.White)
+                .padding(PADDING.dp)
+                .constrainAs(content) {
+                    width = Dimension.fillToConstraints
+
+                    top.linkTo(title.bottom)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                },
+            label = {},
+        )
+
+        Button(
+            onClick = { viewModel.input(DetailInput.Save) },
+            modifier = Modifier
+                .padding(PADDING.dp)
+                .constrainAs(save) {
+                    start.linkTo(parent.start)
+                    bottom.linkTo(parent.bottom)
+                }
+        ) {
+            Text("SAVE")
+        }
+
+        Button(
+            onClick = { viewModel.input(DetailInput.Delete) },
+            modifier = Modifier
+                .padding(PADDING.dp)
+                .constrainAs(discard) {
+                    end.linkTo(parent.end)
+                    bottom.linkTo(parent.bottom)
+                }
+        ) {
+            Text("DISCARD")
         }
     }
 }

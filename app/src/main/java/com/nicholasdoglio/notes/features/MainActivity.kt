@@ -26,21 +26,14 @@ package com.nicholasdoglio.notes.features
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.Composable
-import androidx.compose.Providers
+import androidx.compose.material.MaterialTheme
+import androidx.compose.runtime.Providers
+import androidx.compose.ui.platform.setContent
 import androidx.lifecycle.ViewModelProvider
-import androidx.ui.core.setContent
-import androidx.ui.material.MaterialTheme
-import com.doglio.shared.util.DispatcherProvider
 import com.github.zsoltk.compose.backpress.AmbientBackPressHandler
 import com.github.zsoltk.compose.backpress.BackPressHandler
-import com.github.zsoltk.compose.router.Router
 import com.nicholasdoglio.notes.di.injector
-import com.nicholasdoglio.notes.features.detail.DetailView
-import com.nicholasdoglio.notes.features.discard.DiscardNoteView
-import com.nicholasdoglio.notes.features.overview.OverviewView
-import com.nicholasdoglio.shared.db.Note
-import java.time.LocalDateTime
+import com.nicholasdoglio.notes.util.DispatcherProvider
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
@@ -58,10 +51,9 @@ class MainActivity : AppCompatActivity() {
         setContent {
             Providers(AmbientBackPressHandler provides backPressHandler) {
                 MaterialTheme {
-                    Stack(
-                            screen = Screen.Overview,
-                            factory = factory,
-                            dispatcherProvider = dispatcherProvider
+                    NotesApp(
+                        factory = factory,
+                        dispatcherProvider = dispatcherProvider
                     )
                 }
             }

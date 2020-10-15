@@ -25,10 +25,12 @@
 package com.nicholasdoglio.notes.features.overview
 
 import androidx.lifecycle.ViewModel
-import com.doglio.shared.data.ObserveNoteCountUseCase
-import com.doglio.shared.data.ObserveNotesUseCase
+import com.nicholasdoglio.notes.data.ObserveNoteCountUseCase
+import com.nicholasdoglio.notes.data.ObserveNotesUseCase
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import timber.log.Timber
 import javax.inject.Inject
 
 class OverviewViewModel @Inject constructor(
@@ -41,4 +43,5 @@ class OverviewViewModel @Inject constructor(
             observeNoteCountUseCase()
                 .map { it == 0L }
         ) { data, isEmpty -> OverviewState(data, isEmpty) }
+        .onEach { Timber.i("CURRENT STATE: $it") }
 }

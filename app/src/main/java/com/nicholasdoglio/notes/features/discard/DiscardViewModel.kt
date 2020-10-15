@@ -25,9 +25,9 @@
 package com.nicholasdoglio.notes.features.discard
 
 import androidx.lifecycle.ViewModel
-import com.doglio.shared.data.DeleteNoteByIdUseCase
-import com.doglio.shared.data.UpsertNoteUseCase
-import com.doglio.shared.util.DispatcherProvider
+import com.nicholasdoglio.notes.data.DeleteNoteByIdUseCase
+import com.nicholasdoglio.notes.data.UpsertNoteUseCase
+import com.nicholasdoglio.notes.util.DispatcherProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
@@ -36,9 +36,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class DiscardViewModel @Inject constructor(
-        dispatcherProvider: DispatcherProvider,
-        private val deleteNoteByIdUseCase: DeleteNoteByIdUseCase,
-        private val upsertNoteUseCase: UpsertNoteUseCase
+    dispatcherProvider: DispatcherProvider,
+    private val deleteNoteByIdUseCase: DeleteNoteByIdUseCase,
+    private val upsertNoteUseCase: UpsertNoteUseCase
 ) : ViewModel() {
 
     private val scope = CoroutineScope(dispatcherProvider.main)
@@ -51,9 +51,9 @@ class DiscardViewModel @Inject constructor(
                 val note = input.note
                 scope.launch {
                     upsertNoteUseCase(
-                            note.id,
-                            note.title.orEmpty(),
-                            note.contents.orEmpty()
+                        note.id,
+                        note.title.orEmpty(),
+                        note.contents.orEmpty()
                     )
                 }
                 _isFinished.value = true

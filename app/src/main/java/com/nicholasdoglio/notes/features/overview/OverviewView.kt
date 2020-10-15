@@ -24,26 +24,36 @@
 
 package com.nicholasdoglio.notes.features.overview
 
-import androidx.compose.Composable
-import androidx.compose.collectAsState
+import androidx.compose.foundation.Icon
+import androidx.compose.foundation.Text
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ConstraintLayout
+import androidx.compose.foundation.layout.absolutePadding
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.lazy.LazyColumnFor
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.BottomAppBar
+import androidx.compose.material.Divider
+import androidx.compose.material.FabPosition
+import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.viewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.ui.core.Modifier
-import androidx.ui.foundation.Icon
-import androidx.ui.foundation.Text
-import androidx.ui.foundation.clickable
-import androidx.ui.foundation.lazy.LazyColumnItems
-import androidx.ui.foundation.shape.corner.CircleShape
-import androidx.ui.graphics.Color
-import androidx.ui.layout.Column
-import androidx.ui.material.BottomAppBar
-import androidx.ui.material.FloatingActionButton
-import androidx.ui.material.MaterialTheme
-import androidx.ui.material.Scaffold
-import androidx.ui.material.icons.Icons
-import androidx.ui.material.icons.filled.Edit
-import androidx.ui.viewmodel.viewModel
-import com.doglio.shared.util.DispatcherProvider
-import com.nicholasdoglio.shared.db.Note
+import com.nicholasdoglio.notes.db.Note
+import com.nicholasdoglio.notes.util.DispatcherProvider
 
 @Composable
 fun OverviewView(
@@ -51,6 +61,7 @@ fun OverviewView(
     dispatcherProvider: DispatcherProvider,
     navigateToNote: (id: Long) -> Unit
 ) {
+    // TODO this is stateful, do I want it to be?
     val viewModel = viewModel<OverviewViewModel>(factory = factory)
     val state = viewModel.state.collectAsState(
         initial = OverviewState(),
@@ -58,49 +69,109 @@ fun OverviewView(
     )
 
     Scaffold(
-        bottomBar = {
-            BottomAppBar(cutoutShape = CircleShape, backgroundColor = Color.White) {}
-        },
+        bottomBar = { BottomAppBar(cutoutShape = CircleShape, backgroundColor = Color.White) {} },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { navigateToNote(0) },
+                onClick = { navigateToNote(-1L) },
                 shape = CircleShape,
                 backgroundColor = MaterialTheme.colors.primary
             ) { Icon(asset = Icons.Filled.Edit) }
         },
-        floatingActionButtonPosition = Scaffold.FabPosition.Center,
+        floatingActionButtonPosition = FabPosition.Center,
         isFloatingActionButtonDocked = true,
         bodyContent = {
             if (state.value.isEmpty) {
-                emptyView()
+                EmptyView()
             } else {
-                LazyColumnItems(items = state.value.data) { note ->
-                    NoteListItemView(
-                        note = note,
-                        onClick = {
-                            navigateToNote(it)
-                        }
-                    )
-                }
+                LazyColumnFor(
+                    items = state.value.data,
+                    itemContent = { note ->
+                        NoteListItemView(
+                            note = note,
+                            onClick = { navigateToNote(it) }
+                        )
+                    }
+                )
             }
         }
     )
 }
 
 @Composable
-fun emptyView() {
-    // TODO make this look not terrible
-    Column {
-        Text("No Notes")
-        Text("Click the create button to add your first note!")
+fun EmptyView() {
+    ConstraintLayout(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)
+    ) {
+        val (header, message) = createRefs()
+
+        Text(
+            "No Notes",
+            style = TextStyle(fontWeight = FontWeight.W700),
+            modifier = Modifier
+                .constrainAs(header) { centerTo(parent) },
+        )
+        Text(
+            "Click the create button to add your first note!",
+            modifier = Modifier.constrainAs(message) {
+                centerHorizontallyTo(parent)
+                top.linkTo(header.bottom)
+            }
+        )
     }
 }
 
-// TODO make this look not terrible
 @Composable
-fun NoteListItemView(note: Note, onClick: (id: Long) -> Unit) {
-    Column(modifier = Modifier.clickable(onClick = { onClick(note.id) })) {
-        Text(note.title.orEmpty())
-        Text(note.contents.orEmpty())
+fun NoteListItemView(
+    note: Note,
+    onClick: (id: Long) -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .background(color = Color.White)
+            .absolutePadding(
+                left = PADDING_EIGHT.dp,
+                top = PADDING_EIGHT.dp,
+                right = PADDING_EIGHT.dp,
+            )
+            .clickable(onClick = { onClick(note.id) })
+    ) {
+
+        Text(
+            note.title.orEmpty(),
+            style = TextStyle(
+                fontWeight = FontWeight.W700,
+                fontSize = TITLE_FONT_SIZE.sp,
+            ),
+            maxLines = 1,
+            modifier = Modifier
+                .absolutePadding(
+                    left = PADDING_EIGHT.dp,
+                    right = PADDING_EIGHT.dp,
+                ),
+        )
+
+        Text(
+            note.contents.orEmpty(),
+            style = TextStyle(
+                color = Color.Gray,
+                fontSize = CONTENT_FONT_SIZE.sp,
+            ),
+            maxLines = 1,
+            modifier = Modifier
+                .absolutePadding(
+                    left = PADDING_EIGHT.dp,
+                    top = PADDING_FOUR.dp,
+                    right = PADDING_EIGHT.dp,
+                ),
+        )
+
+        Divider()
     }
 }
+
+private const val TITLE_FONT_SIZE = 16
+private const val CONTENT_FONT_SIZE = 12
+private const val PADDING_EIGHT = 8
+private const val PADDING_FOUR = 4

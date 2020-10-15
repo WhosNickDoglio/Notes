@@ -2,29 +2,16 @@
     <string name="app_name">Notes</string>
 
     <!--Note Fragment-->
-    <string name="title_hint">Title</string>
-    <string name="note_hint">Note</string>
-    <string name="discard_warning">Would you like to discard or save this note?</string>
-    <string name="save_button">SAVE</string>
-    <string name="discard_button">DISCARD</string>
 
 
     <!--Note List Fragment-->
-    <string name="empty_list_view">No notes</string>
-    <string name="empty_list_sub_text">Click the create button to add your first note!</string>
 
     <!--Menus-->
-    <string name="about_menu_item">About</string>
 
     <!--Shortcut-->
     <string name="create_note_shortcut">Create note</string>
 
     <!--    Night Mode-->
-    <string-array name="night_mode">
-        <item name="follow_system">Follow system</item>
-        <item name="always_light">Always light</item>
-        <item name="always_night">Always night</item>
-    </string-array>
 
 
 </resources>

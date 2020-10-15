@@ -10,6 +10,8 @@ object Libs {
 
         const val leakCanary: String =
                 "com.squareup.leakcanary:leakcanary-android:${Versions.leakCanary}"
+
+        const val turbine: String = "app.cash.turbine:turbine:${Versions.turbine}"
     }
 
 
@@ -22,7 +24,7 @@ object Libs {
 
     object Kotlin {
 
-        const val Stdlib: String = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${Versions.kotlin}"
+        const val date = "org.jetbrains.kotlinx:kotlinx-datetime:${Versions.dateTime}"
 
         object Coroutines {
             const val core: String = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutines}"
@@ -39,24 +41,30 @@ object Libs {
 
         const val desguar: String = "com.android.tools:desugar_jdk_libs:${Versions.desguar}"
 
+        const val dataStore: String = "androidx.datastore:datastore-preferences:${Versions.dataStore}"
+
         object Compose {
             
-            const val runtime: String = "androidx.compose:compose-runtime:${Versions.compose}"
+            const val runtime: String = "androidx.compose.runtime:runtime:${Versions.compose}"
 
             const val router: String = "com.github.zsoltk:compose-router:${Versions.router}"
+
+            const val backstack: String = "com.zachklipp:compose-backstack:${Versions.backstack}"
             
             object Ui {
                 const val tooling: String = "androidx.ui:ui-tooling:${Versions.compose}"
                 
-                const val layout: String = "androidx.ui:ui-layout:${Versions.compose}"
+                const val layout: String = "androidx.compose.foundation:foundation-layout:${Versions.compose}"
                 
-                const val material: String = "androidx.ui:ui-material:${Versions.compose}"
+                const val material: String = "androidx.compose.material:material:${Versions.compose}"
                 
-                const val core: String = "androidx.ui:ui-core:${Versions.compose}"
+                const val core: String = "androidx.compose.ui:ui:${Versions.compose}"
 
-                const val icons_extened = "androidx.ui:ui-material-icons-extended:${Versions.compose}"
+                const val icons_extened = "androidx.compose.material:material-icons-extended:${Versions.compose}"
 
-                const val foundation = "androidx.ui:ui-foundation:${Versions.compose}"
+                const val foundation = "androidx.compose.foundation:foundation:${Versions.compose}"
+
+                const val foundation_text = "androidx.compose.foundation:foundation-text:${Versions.compose}"
             }
         }
     }
