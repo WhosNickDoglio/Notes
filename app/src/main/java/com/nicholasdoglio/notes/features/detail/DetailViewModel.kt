@@ -29,66 +29,76 @@ import com.nicholasdoglio.notes.data.DeleteNoteByIdUseCase
 import com.nicholasdoglio.notes.data.FindNoteByIdUseCase
 import com.nicholasdoglio.notes.data.UpsertNoteUseCase
 import com.nicholasdoglio.notes.di.AppCoroutineScope
+import com.nicholasdoglio.notes.util.NEW_NOTE_ID
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
 class DetailViewModel @Inject constructor(
-    private val upsertNoteUseCase: UpsertNoteUseCase,
-    private val findNoteByIdUseCase: FindNoteByIdUseCase,
-    private val deleteNoteByIdUseCase: DeleteNoteByIdUseCase,
-    @AppCoroutineScope private val scope: CoroutineScope
+        private val upsertNoteUseCase: UpsertNoteUseCase,
+        private val findNoteByIdUseCase: FindNoteByIdUseCase,
+        private val deleteNoteByIdUseCase: DeleteNoteByIdUseCase,
+        @AppCoroutineScope private val scope: CoroutineScope
+) : ViewModel(), Detail {
+    private val mutableStateFlow: MutableStateFlow<DetailState?> = MutableStateFlow(null)
 
-) : ViewModel() {
-    private val mutableStateFlow: MutableStateFlow<DetailState> = MutableStateFlow(DetailState.Idle)
+    override val state: Flow<DetailState> = mutableStateFlow.filterNotNull()
+        .onEach { Timber.i("Current State: $it") }
 
-    val state: Flow<DetailState> = mutableStateFlow
-        .onEach { Timber.i("CURRENT STATE: $it") }
-
-    fun input(input: DetailInput) {
-        Timber.i("CURRENT INPUT: $input")
+    override fun input(input: DetailInput) {
+        Timber.i("Current Input: $input")
 
         val previousState = mutableStateFlow.value
 
-        if (previousState is DetailState.Content) {
-            when (input) {
-                DetailInput.Save -> {
-                    scope.launch {
+        when (input) {
+            DetailInput.Save -> {
+                scope.launch {
+                    if (previousState != null) {
                         upsertNoteUseCase(
                             previousState.id,
                             previousState.title,
                             previousState.contents
                         )
                     }
-                    mutableStateFlow.value = DetailState.Content(isFinished = true)
                 }
-                DetailInput.Delete -> {
-
-                    scope.launch { deleteNoteByIdUseCase(previousState.id) }
-                    mutableStateFlow.value = DetailState.Content(isFinished = true)
-                }
-                is DetailInput.FirstLoad -> {
-                    scope.launch {
-                        val note = findNoteByIdUseCase(input.id)
-
-                        mutableStateFlow.value = DetailState.Content(
-                            id = note?.id ?: -1L,
-                            title = note?.title.orEmpty(),
-                            contents = note?.contents.orEmpty(), isFinished = false
-                        )
+                mutableStateFlow.value = DetailState(isFinished = true)
+            }
+            DetailInput.Delete -> {
+                scope.launch {
+                    if (previousState != null) {
+                        deleteNoteByIdUseCase(previousState.id)
                     }
                 }
-                is DetailInput.TitleChange -> {
-                    mutableStateFlow.value = previousState.copy(title = input.title)
+                mutableStateFlow.value = DetailState(isFinished = true)
+            }
+            is DetailInput.FirstLoad -> {
+                scope.launch {
+                    val note = findNoteByIdUseCase(input.id)
+
+                    mutableStateFlow.value = DetailState(
+                        id = note?.id ?: NEW_NOTE_ID,
+                        title = note?.title.orEmpty(),
+                        contents = note?.contents.orEmpty(), isFinished = false
+                    )
                 }
-                is DetailInput.ContentChange -> {
-                    mutableStateFlow.value = previousState.copy(contents = input.content)
-                }
+            }
+            is DetailInput.TitleChange -> {
+                mutableStateFlow.value = previousState?.copy(title = input.title)
+            }
+            is DetailInput.ContentChange -> {
+                mutableStateFlow.value = previousState?.copy(contents = input.content)
             }
         }
     }
+}
+
+interface Detail {
+    val state: Flow<DetailState>
+
+    fun input(input: DetailInput)
 }

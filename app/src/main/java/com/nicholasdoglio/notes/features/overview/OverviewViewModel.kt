@@ -27,6 +27,7 @@ package com.nicholasdoglio.notes.features.overview
 import androidx.lifecycle.ViewModel
 import com.nicholasdoglio.notes.data.ObserveNoteCountUseCase
 import com.nicholasdoglio.notes.data.ObserveNotesUseCase
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -34,14 +35,17 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class OverviewViewModel @Inject constructor(
-    observeNoteCountUseCase: ObserveNoteCountUseCase,
-    observeNotesUseCase: ObserveNotesUseCase
-) : ViewModel() {
+        observeNoteCountUseCase: ObserveNoteCountUseCase,
+        observeNotesUseCase: ObserveNotesUseCase
+) : ViewModel(), Overview {
 
-    val state = observeNotesUseCase()
-        .combine(
-            observeNoteCountUseCase()
-                .map { it == 0L }
-        ) { data, isEmpty -> OverviewState(data, isEmpty) }
-        .onEach { Timber.i("CURRENT STATE: $it") }
+    override val state = observeNotesUseCase()
+        .combine(observeNoteCountUseCase().map { it == 0L }) { data, isEmpty ->
+            OverviewState(data, isEmpty)
+        }
+        .onEach { Timber.i("Current State: $it") }
+}
+
+interface Overview {
+    val state: Flow<OverviewState>
 }

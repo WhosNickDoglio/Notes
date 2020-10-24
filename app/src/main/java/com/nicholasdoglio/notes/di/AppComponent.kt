@@ -29,15 +29,16 @@ import android.content.Context
 import com.nicholasdoglio.notes.features.MainActivity
 import dagger.BindsInstance
 import dagger.Component
+import javax.inject.Qualifier
 import javax.inject.Singleton
 
 @Singleton
 @Component(
     modules = [
+        BindingModule::class,
+        CoroutineScopeModule::class,
         DatabaseModule::class,
         DataStoreModule::class,
-        BindingModule::class,
-        ScopeModule::class,
         ViewModelModule::class,
     ]
 )
@@ -56,3 +57,6 @@ interface AppComponentProvider {
 }
 
 val Context.injector: AppComponent get() = (applicationContext as AppComponentProvider).component
+
+@Qualifier
+annotation class AppCoroutineScope

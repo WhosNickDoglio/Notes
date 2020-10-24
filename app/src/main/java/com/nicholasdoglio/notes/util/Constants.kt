@@ -24,16 +24,4 @@
 
 package com.nicholasdoglio.notes.util
 
-import kotlinx.datetime.LocalDateTime
-import org.junit.Test
-
-typealias jLocalDateTime = java.time.LocalDateTime
-
-class DateExtensionsTest {
-
-    @Test
-    fun test() {
-        // TODO fix this
-        // assertThat(LocalDateTime.now()).isEqualTo(jLocalDateTime.now())
-    }
-}
+internal const val NEW_NOTE_ID = -1L

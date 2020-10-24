@@ -22,14 +22,25 @@
  * SOFTWARE.
  */
 
-package com.nicholasdoglio.notes.features.overview
+package com.nicholasdoglio.notes.ui
 
+import androidx.compose.foundation.lazy.LazyColumnFor
+import androidx.compose.runtime.Composable
 import com.nicholasdoglio.notes.db.Note
 
-/**
- * class representation of state of the [OverviewView].
- */
-data class OverviewState(
-    val data: List<Note> = emptyList(),
-    val isEmpty: Boolean = true
-)
+@Composable
+fun NoteList(
+    notes: List<Note>,
+    onItemClicked: (id: Long) -> Unit,
+//        onSwipeRight: (id: Long) -> Unit,
+) {
+    LazyColumnFor(
+        items = notes,
+        itemContent = { note ->
+            NoteListItemView(
+                note = note,
+                onClick = { onItemClicked(it) }
+            )
+        }
+    )
+}

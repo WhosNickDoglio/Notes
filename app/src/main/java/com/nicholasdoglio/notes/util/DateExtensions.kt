@@ -30,7 +30,7 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
 /**
- * Replacement for javax.time LocalDateTime.now() call.
+ * Replacement for javax.time.LocalDateTime.now() call.
  *
  * @return the current [LocalDateTime] at the time this is called.
  */

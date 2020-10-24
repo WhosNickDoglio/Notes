@@ -24,10 +24,17 @@
 
 package com.nicholasdoglio.notes.data
 
+import com.google.common.truth.Truth.assertThat
 import com.nicholasdoglio.notes.db.NoteDatabase
 import com.nicholasdoglio.notes.db.Note
+import com.nicholasdoglio.notes.util.NEW_NOTE_ID
 import com.nicholasdoglio.notes.util.TestDispatchers
+import com.nicholasdoglio.notes.util.compareNote
+import com.nicholasdoglio.notes.util.firstTestNote
+import com.nicholasdoglio.notes.util.now
 import com.squareup.sqldelight.sqlite.driver.JdbcSqliteDriver
+import kotlinx.coroutines.runBlocking
+import kotlinx.datetime.LocalDateTime
 import org.junit.Test
 
 class UpsertNoteUseCaseTest {
@@ -42,9 +49,47 @@ class UpsertNoteUseCaseTest {
 
     @Test
     fun `given no note exists in DB when upsert is called then insert note`() {
+        assertThat(queries.count().executeAsOne()).isEqualTo(0)
+
+        runBlocking {
+            upsertNoteUseCase(
+                NEW_NOTE_ID,
+                firstTestNote.title.orEmpty(),
+                firstTestNote.contents.orEmpty()
+            )
+        }
+
+        assertThat(queries.count().executeAsOne()).isEqualTo(1)
+
+        val foundNote = queries.findNoteById(firstTestNote.id).executeAsOne()
+
+        firstTestNote.compareNote(foundNote)
     }
 
     @Test
     fun `given a note exists in DB when upsert is called then update note`() {
+        queries.insert(firstTestNote.title, firstTestNote.contents, LocalDateTime.now())
+
+        assertThat(queries.count().executeAsOne()).isEqualTo(1)
+
+        val insertedNote = queries.findNoteById(firstTestNote.id).executeAsOne()
+
+        insertedNote.compareNote(firstTestNote)
+
+        runBlocking {
+            upsertNoteUseCase(
+                firstTestNote.id,
+                "New Note title",
+                "New note content"
+            )
+        }
+
+        val foundNote = queries.findNoteById(firstTestNote.id).executeAsOne()
+
+        foundNote.run {
+            assertThat(this.id).isEqualTo(firstTestNote.id)
+            assertThat(this.title).isNotEqualTo(firstTestNote.title)
+            assertThat(this.contents).isNotEqualTo(firstTestNote.contents)
+        }
     }
 }

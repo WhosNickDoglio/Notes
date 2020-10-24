@@ -9,7 +9,7 @@ object Versions {
 
     const val dagger: String = "2.29.1"
 
-    const val androidBuildTools: String = "4.2.0-alpha13"
+    const val androidBuildTools: String = "4.2.0-alpha14"
 
     const val truth: String = "1.0.1"
 

@@ -26,6 +26,7 @@ package com.nicholasdoglio.notes.data
 
 import com.nicholasdoglio.notes.db.NoteQueries
 import com.nicholasdoglio.notes.util.DispatcherProvider
+import com.nicholasdoglio.notes.util.NEW_NOTE_ID
 import com.nicholasdoglio.notes.util.now
 import kotlinx.coroutines.withContext
 import kotlinx.datetime.LocalDateTime
@@ -42,9 +43,9 @@ class UpsertNoteUseCase @Inject constructor(
     private val noteQueries: NoteQueries,
     private val dispatcherProvider: DispatcherProvider
 ) {
-    suspend operator fun invoke(id: Long = -1L, title: String, content: String) =
+    suspend operator fun invoke(id: Long, title: String, content: String) =
         withContext(dispatcherProvider.database) {
-            if (id > -1L) {
+            if (id > NEW_NOTE_ID) {
                 noteQueries.updateById(
                     title = title,
                     contents = content,

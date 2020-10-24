@@ -66,7 +66,7 @@ ktlint {
 }
 
 junitJacoco {
-    jacocoVersion = "0.8.5"
+    jacocoVersion = "0.8.7"
 }
 
 sqldelight {

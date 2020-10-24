@@ -22,14 +22,37 @@
  * SOFTWARE.
  */
 
-package com.nicholasdoglio.notes.features.overview
+package com.nicholasdoglio.notes.ui
 
-import com.nicholasdoglio.notes.db.Note
+import androidx.compose.foundation.Text
+import androidx.compose.foundation.layout.ConstraintLayout
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 
-/**
- * class representation of state of the [OverviewView].
- */
-data class OverviewState(
-    val data: List<Note> = emptyList(),
-    val isEmpty: Boolean = true
-)
+@Composable
+fun EmptyState(
+    title: String,
+    message: String
+) {
+    ConstraintLayout(modifier = Modifier.fillMaxSize()) {
+        val (titleRef, messageRef) = createRefs()
+
+        Text(
+            text = title,
+            style = TextStyle(fontWeight = FontWeight.W700),
+            modifier = Modifier
+                .constrainAs(titleRef) { centerTo(parent) },
+        )
+
+        Text(
+            text = message,
+            modifier = Modifier.constrainAs(messageRef) {
+                centerHorizontallyTo(parent)
+                top.linkTo(titleRef.bottom)
+            }
+        )
+    }
+}

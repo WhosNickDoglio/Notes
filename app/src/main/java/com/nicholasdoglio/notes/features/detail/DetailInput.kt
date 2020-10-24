@@ -27,7 +27,6 @@ package com.nicholasdoglio.notes.features.detail
 sealed class DetailInput {
     object Save : DetailInput()
     object Delete : DetailInput()
-//    object Discard: EditNoteInput()
     data class FirstLoad(val id: Long) : DetailInput()
     data class TitleChange(val title: String) : DetailInput()
     data class ContentChange(val content: String) : DetailInput()

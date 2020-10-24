@@ -28,44 +28,36 @@ import androidx.compose.foundation.Text
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.viewinterop.viewModel
-import androidx.lifecycle.ViewModelProvider
-import com.nicholasdoglio.notes.db.Note
+import com.nicholasdoglio.notes.util.DispatcherProvider
 
 @Composable
-fun DiscardNoteView(
-    note: Note,
-    factory: ViewModelProvider.Factory
+fun DiscardNoteDialog(
+    id: Long,
+    title: String,
+    content: String,
+    dispatcherProvider: DispatcherProvider,
+    viewModel: Discard,
 ) {
-    val viewModel = viewModel<DiscardViewModel>(factory = factory)
+    val hideDialog by viewModel.isFinished.collectAsState(
+        initial = false,
+        context = dispatcherProvider.main
+    )
 
-    var showDialog by remember { mutableStateOf(true) }
-
-    val dismissDialog = { showDialog = false }
-
-    if (showDialog) {
+    if (hideDialog) {
         AlertDialog(
             onDismissRequest = { },
             text = { Text(text = "Would you like to discard or save this note?") },
             confirmButton = {
-                Button(
-                    onClick = {
-                        viewModel.input(DiscardInput.Save(note))
-                        dismissDialog()
-                    }
-                ) { Text("SAVE") }
+                Button(onClick = { viewModel.input(DiscardInput.Save(id, title, content)) }) {
+                    Text("SAVE")
+                }
             },
             dismissButton = {
-                Button(
-                    onClick = {
-                        viewModel.input(DiscardInput.Delete(note.id))
-                        dismissDialog()
-                    }
-                ) { Text("DISCARD") }
+                Button(onClick = { viewModel.input(DiscardInput.Delete(id)) }) {
+                    Text("DISCARD")
+                }
             }
         )
     }

@@ -24,12 +24,11 @@
 
 package com.nicholasdoglio.notes.features.detail
 
-sealed class DetailState {
-    object Idle : DetailState()
-    data class Content(
-        val id: Long = -1L,
-        val title: String = "",
-        val contents: String = "",
-        val isFinished: Boolean = false,
-    ) : DetailState()
-}
+import com.nicholasdoglio.notes.util.NEW_NOTE_ID
+
+data class DetailState(
+    val id: Long = NEW_NOTE_ID,
+    val title: String = "",
+    val contents: String = "",
+    val isFinished: Boolean = false,
+)

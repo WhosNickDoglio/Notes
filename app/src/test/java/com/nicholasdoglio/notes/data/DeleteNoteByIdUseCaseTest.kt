@@ -46,13 +46,16 @@ class DeleteNoteByIdUseCaseTest {
 
     @Test
     fun `given note exists when DeleteNoteByIdUseCase is triggered then delete note`() {
-        val note = firstTestNote
 
-        queries.insert(note.title, note.contents, note.timestamp)
+        queries.insert(firstTestNote.title, firstTestNote.contents, firstTestNote.timestamp)
 
-        runBlocking { deleteNoteByIdUseCase(note.id) }
+        val insertedNote = queries.findNoteById(firstTestNote.id).executeAsOne()
 
-        val foundNote = queries.findNoteById(note.id).executeAsOneOrNull()
+        assertThat(insertedNote).isNotNull()
+
+        runBlocking { deleteNoteByIdUseCase(firstTestNote.id) }
+
+        val foundNote = queries.findNoteById(firstTestNote.id).executeAsOneOrNull()
 
         assertThat(foundNote).isNull()
     }

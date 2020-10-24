@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package com.nicholasdoglio.notes.features.detail
+package com.nicholasdoglio.notes.ui
 
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.background
@@ -33,63 +33,27 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.viewModel
-import androidx.lifecycle.ViewModelProvider
-import com.nicholasdoglio.notes.util.DispatcherProvider
-
-/**
- *
- *
- *
- * @param id The initial [com.nicholasdoglio.notes.db.Note] identifier,
- * @param factory a [ViewModelProvider.Factory] that is used to create our [androidx.lifecycle.ViewModel].
- * @param dispatcherProvider a container for Coroutine [kotlinx.coroutines.Dispatchers] to launch async work.
- * @param popBack a function that is called to navigate out of this screen.
- */
-@Composable
-fun DetailView(
-    id: Long,
-    factory: ViewModelProvider.Factory,
-    dispatcherProvider: DispatcherProvider,
-    popBack: () -> Unit
-) {
-    val viewModel = viewModel<DetailViewModel>(factory = factory)
-
-    val state = viewModel.state.collectAsState(
-        initial = DetailState.Idle,
-        context = dispatcherProvider.main
-    )
-
-    val currentState = state.value
-
-    if (currentState is DetailState.Content) {
-        if (currentState.isFinished) {
-            popBack()
-        }
-
-        // No Note exists yet
-        if (currentState.id != -id) viewModel.input(DetailInput.FirstLoad(id))
-
-        NoteView(currentState, viewModel)
-    }
-}
+import com.nicholasdoglio.notes.features.detail.DetailState
 
 @Composable
-private fun NoteView(
-    state: DetailState.Content,
-    viewModel: DetailViewModel
+fun Note(
+    state: DetailState,
+    onTitleChange: (title: String) -> Unit,
+    onContentsChange: (contents: String) -> Unit,
+    onNoteSaved: () -> Unit,
+    onNoteDeleted: () -> Unit,
 ) {
     ConstraintLayout(modifier = Modifier.fillMaxSize()) {
         val (title, content, save, discard) = createRefs()
 
         TextField(
             value = state.title,
-            onValueChange = { viewModel.input(DetailInput.TitleChange(it)) },
-            label = {},
+            onValueChange = { onTitleChange(it) },
+            label = { Text("Title") },
+            backgroundColor = Color.Transparent,
             modifier = Modifier
                 .padding(PADDING.dp)
                 .constrainAs(title) {
@@ -101,7 +65,7 @@ private fun NoteView(
 
         TextField(
             value = state.contents,
-            onValueChange = { viewModel.input(DetailInput.ContentChange(it)) },
+            onValueChange = { value -> onContentsChange(value) },
             modifier = Modifier
                 // TODO figure out scrollable
                 // .scrollable(orientation = Orientation.Vertical, rememberScrollableController())
@@ -114,11 +78,12 @@ private fun NoteView(
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                 },
-            label = {},
+            label = { Text("Content") },
+            backgroundColor = Color.Transparent,
         )
 
         Button(
-            onClick = { viewModel.input(DetailInput.Save) },
+            onClick = { onNoteSaved() },
             modifier = Modifier
                 .padding(PADDING.dp)
                 .constrainAs(save) {
@@ -130,7 +95,7 @@ private fun NoteView(
         }
 
         Button(
-            onClick = { viewModel.input(DetailInput.Delete) },
+            onClick = { onNoteDeleted() },
             modifier = Modifier
                 .padding(PADDING.dp)
                 .constrainAs(discard) {

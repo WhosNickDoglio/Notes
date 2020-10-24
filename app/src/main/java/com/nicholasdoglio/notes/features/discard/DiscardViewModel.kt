@@ -27,33 +27,34 @@ package com.nicholasdoglio.notes.features.discard
 import androidx.lifecycle.ViewModel
 import com.nicholasdoglio.notes.data.DeleteNoteByIdUseCase
 import com.nicholasdoglio.notes.data.UpsertNoteUseCase
-import com.nicholasdoglio.notes.util.DispatcherProvider
+import com.nicholasdoglio.notes.di.AppCoroutineScope
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 class DiscardViewModel @Inject constructor(
-    dispatcherProvider: DispatcherProvider,
-    private val deleteNoteByIdUseCase: DeleteNoteByIdUseCase,
-    private val upsertNoteUseCase: UpsertNoteUseCase
-) : ViewModel() {
+        private val deleteNoteByIdUseCase: DeleteNoteByIdUseCase,
+        private val upsertNoteUseCase: UpsertNoteUseCase,
+        @AppCoroutineScope private val scope: CoroutineScope,
+) : ViewModel(), Discard {
 
-    private val scope = CoroutineScope(dispatcherProvider.main)
     private val _isFinished = MutableStateFlow(false)
-    val isFinished: Flow<Boolean> = _isFinished
+    override val isFinished: Flow<Boolean> = _isFinished
+        .onEach { Timber.i("Is Dialog finished: $it") }
 
-    fun input(input: DiscardInput) {
+    override fun input(input: DiscardInput) {
+        Timber.i("Current Discard Input: $input")
         when (input) {
             is DiscardInput.Save -> {
-                val note = input.note
                 scope.launch {
                     upsertNoteUseCase(
-                        note.id,
-                        note.title.orEmpty(),
-                        note.contents.orEmpty()
+                        input.id,
+                        input.title,
+                        input.content
                     )
                 }
                 _isFinished.value = true
@@ -64,9 +65,11 @@ class DiscardViewModel @Inject constructor(
             }
         }
     }
+}
 
-    override fun onCleared() {
-        scope.coroutineContext.cancel()
-        super.onCleared()
-    }
+interface Discard {
+
+    val isFinished: Flow<Boolean>
+
+    fun input(input: DiscardInput)
 }

@@ -26,7 +26,6 @@ package com.nicholasdoglio.notes.features
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Providers
 import androidx.compose.ui.platform.setContent
 import androidx.lifecycle.ViewModelProvider
@@ -50,12 +49,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             Providers(AmbientBackPressHandler provides backPressHandler) {
-                MaterialTheme {
-                    NotesApp(
-                        factory = factory,
-                        dispatcherProvider = dispatcherProvider
-                    )
-                }
+                NotesApp(
+                    factory = factory,
+                    dispatcherProvider = dispatcherProvider
+                )
             }
         }
     }

@@ -24,37 +24,39 @@
 
 package com.nicholasdoglio.notes.ui
 
-import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.ConstraintLayout
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Typography
-import androidx.compose.material.darkColors
-import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.unit.dp
+import com.nicholasdoglio.notes.R
 
 @Composable
-fun NotesTheme(
-    isDarkModeEnabled: Boolean = isSystemInDarkTheme(),
-    content: @Composable () -> Unit,
-) {
-    val colors = if (isDarkModeEnabled) dark else light
-
-    MaterialTheme(
-        colors = colors,
-        typography = notesTypography
+fun SplashView() {
+    ConstraintLayout(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)
     ) {
-        content()
+
+        val image = createRef()
+
+        Image(
+            asset = vectorResource(id = R.drawable.ic_launcher_foreground),
+            colorFilter = ColorFilter(MaterialTheme.colors.primary, BlendMode.SrcIn),
+            modifier = Modifier
+                .size(200.dp)
+                .constrainAs(image) {
+                    centerTo(parent)
+                }
+        )
     }
 }
-
-private val notesTypography = Typography()
-
-private val light = lightColors(
-    primary = Color.White,
-    secondary = Color(0x6B38FB)
-)
-
-private val dark = darkColors(
-    primary = Color.Black,
-    secondary = Color(0x6B38FB)
-)

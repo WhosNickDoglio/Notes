@@ -45,19 +45,16 @@ class FindNoteByIdUseCaseTest {
 
     @Test
     fun `given note exists when FindNoteByIdUseCase is triggered then return note`() {
-        val note = firstTestNote
+        queries.insert(firstTestNote.title, firstTestNote.contents, firstTestNote.timestamp)
 
-        queries.insert(note.title, note.contents, note.timestamp)
-
-        val foundNote = runBlocking { findNoteByIdUseCase(note.id) }
+        val foundNote = runBlocking { findNoteByIdUseCase(firstTestNote.id) }
 
         assertThat(foundNote).isNotNull()
-        assertThat(foundNote).isEqualTo(note)
+        assertThat(foundNote).isEqualTo(firstTestNote)
     }
 
     @Test
     fun `given note doesn't exist when FindNoteByIdUseCase is triggered then return null`() {
-
         val foundNote = runBlocking { findNoteByIdUseCase(firstTestNote.id) }
 
         assertThat(foundNote).isNull()

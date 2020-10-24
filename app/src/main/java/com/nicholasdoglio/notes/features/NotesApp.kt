@@ -24,13 +24,17 @@
 
 package com.nicholasdoglio.notes.features
 
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.viewinterop.viewModel
 import androidx.lifecycle.ViewModelProvider
 import com.github.zsoltk.compose.router.Router
-import com.nicholasdoglio.notes.db.Note
-import com.nicholasdoglio.notes.features.detail.DetailView
-import com.nicholasdoglio.notes.features.discard.DiscardNoteView
+import com.nicholasdoglio.notes.features.detail.DetailScreen
+import com.nicholasdoglio.notes.features.detail.DetailViewModel
+import com.nicholasdoglio.notes.features.discard.DiscardNoteDialog
+import com.nicholasdoglio.notes.features.discard.DiscardViewModel
 import com.nicholasdoglio.notes.features.overview.OverviewView
+import com.nicholasdoglio.notes.features.overview.OverviewViewModel
 import com.nicholasdoglio.notes.util.DispatcherProvider
 
 @Composable
@@ -38,11 +42,13 @@ fun NotesApp(
     factory: ViewModelProvider.Factory,
     dispatcherProvider: DispatcherProvider
 ) {
-    Stack(
-        screen = Screen.Overview,
-        factory = factory,
-        dispatcherProvider = dispatcherProvider
-    )
+    MaterialTheme {
+        Stack(
+            screen = Screen.Overview,
+            factory = factory,
+            dispatcherProvider = dispatcherProvider
+        )
+    }
 }
 
 @Composable
@@ -51,23 +57,28 @@ fun Stack(
     factory: ViewModelProvider.Factory,
     dispatcherProvider: DispatcherProvider
 ) {
-    // TODO deep-linking
     Router(defaultRouting = screen) { stack ->
         when (val routing = stack.last()) {
             is Screen.Overview -> OverviewView(
-                factory = factory,
+                viewModel = viewModel<OverviewViewModel>(factory = factory),
                 dispatcherProvider = dispatcherProvider,
                 navigateToNote = { stack.push(Screen.Detail(it)) }
             )
-            is Screen.Detail -> DetailView(
+            is Screen.Detail -> DetailScreen(
                 id = routing.id,
-                factory = factory,
+                viewModel = viewModel<DetailViewModel>(factory = factory),
                 dispatcherProvider = dispatcherProvider,
-                popBack = { stack.pop() }
+                popBack = { stack.pop() },
+                displayDiscardDialog = { id, title, content ->
+                    stack.push(Screen.Discard(id, title, content))
+                }
             )
-            is Screen.Discard -> DiscardNoteView(
-                note = routing.note,
-                factory = factory
+            is Screen.Discard -> DiscardNoteDialog(
+                id = routing.id,
+                title = routing.title,
+                content = routing.content,
+                dispatcherProvider = dispatcherProvider,
+                viewModel = viewModel<DiscardViewModel>(factory = factory),
             )
         }
     }
@@ -76,7 +87,11 @@ fun Stack(
 sealed class Screen {
     object Overview : Screen()
     data class Detail(val id: Long) : Screen()
-    data class Discard(val note: Note) : Screen()
+    data class Discard(
+        val id: Long,
+        val title: String,
+        val content: String
+    ) : Screen()
 //    object DayNightToggle: Screen()
 //    object About: Screen()
 }

@@ -29,16 +29,12 @@ import dagger.Module
 import dagger.Provides
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
-import javax.inject.Qualifier
 
 @Module
-object ScopeModule {
+object CoroutineScopeModule {
 
     @Provides
     @AppCoroutineScope
     fun appCoroutineScope(dispatcherProvider: DispatcherProvider): CoroutineScope =
         CoroutineScope(SupervisorJob() + dispatcherProvider.main)
 }
-
-@Qualifier
-annotation class AppCoroutineScope

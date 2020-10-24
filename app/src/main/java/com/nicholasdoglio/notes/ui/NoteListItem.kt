@@ -22,106 +22,22 @@
  * SOFTWARE.
  */
 
-package com.nicholasdoglio.notes.features.overview
+package com.nicholasdoglio.notes.ui
 
-import androidx.compose.foundation.Icon
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ConstraintLayout
 import androidx.compose.foundation.layout.absolutePadding
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.lazy.LazyColumnFor
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.BottomAppBar
 import androidx.compose.material.Divider
-import androidx.compose.material.FabPosition
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.viewinterop.viewModel
-import androidx.lifecycle.ViewModelProvider
 import com.nicholasdoglio.notes.db.Note
-import com.nicholasdoglio.notes.util.DispatcherProvider
-
-@Composable
-fun OverviewView(
-    factory: ViewModelProvider.Factory,
-    dispatcherProvider: DispatcherProvider,
-    navigateToNote: (id: Long) -> Unit
-) {
-    // TODO this is stateful, do I want it to be?
-    val viewModel = viewModel<OverviewViewModel>(factory = factory)
-    // TODO am I using this correctly?
-    val state = viewModel.state.collectAsState(
-        initial = OverviewState(),
-        context = dispatcherProvider.main
-    )
-
-    Scaffold(
-        bottomBar = { BottomAppBar(cutoutShape = CircleShape, backgroundColor = Color.White) {} },
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = { navigateToNote(-1L) },
-                shape = CircleShape,
-                backgroundColor = MaterialTheme.colors.primary
-            ) { Icon(asset = Icons.Filled.Edit) }
-        },
-        floatingActionButtonPosition = FabPosition.Center,
-        isFloatingActionButtonDocked = true,
-        bodyContent = {
-            if (state.value.isEmpty) {
-                EmptyView()
-            } else {
-                LazyColumnFor(
-                    items = state.value.data,
-                    itemContent = { note ->
-                        NoteListItemView(
-                            note = note,
-                            onClick = { navigateToNote(it) }
-                        )
-                    }
-                )
-            }
-        }
-    )
-}
-
-@Composable
-fun EmptyView() {
-    ConstraintLayout(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White)
-    ) {
-        val (header, message) = createRefs()
-
-        Text(
-            "No Notes",
-            style = TextStyle(fontWeight = FontWeight.W700),
-            modifier = Modifier
-                .constrainAs(header) { centerTo(parent) },
-        )
-        Text(
-            "Click the create button to add your first note!",
-            modifier = Modifier.constrainAs(message) {
-                centerHorizontallyTo(parent)
-                top.linkTo(header.bottom)
-            }
-        )
-    }
-}
 
 @Composable
 fun NoteListItemView(
