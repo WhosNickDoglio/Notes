@@ -37,9 +37,9 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class DiscardViewModel @Inject constructor(
-        private val deleteNoteByIdUseCase: DeleteNoteByIdUseCase,
-        private val upsertNoteUseCase: UpsertNoteUseCase,
-        @AppCoroutineScope private val scope: CoroutineScope,
+    private val deleteNoteByIdUseCase: DeleteNoteByIdUseCase,
+    private val upsertNoteUseCase: UpsertNoteUseCase,
+    @AppCoroutineScope private val scope: CoroutineScope,
 ) : ViewModel(), Discard {
 
     private val _isFinished = MutableStateFlow(false)

@@ -35,8 +35,8 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class OverviewViewModel @Inject constructor(
-        observeNoteCountUseCase: ObserveNoteCountUseCase,
-        observeNotesUseCase: ObserveNotesUseCase
+    observeNoteCountUseCase: ObserveNoteCountUseCase,
+    observeNotesUseCase: ObserveNotesUseCase
 ) : ViewModel(), Overview {
 
     override val state = observeNotesUseCase()

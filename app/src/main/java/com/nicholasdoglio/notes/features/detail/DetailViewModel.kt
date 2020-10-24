@@ -40,10 +40,10 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class DetailViewModel @Inject constructor(
-        private val upsertNoteUseCase: UpsertNoteUseCase,
-        private val findNoteByIdUseCase: FindNoteByIdUseCase,
-        private val deleteNoteByIdUseCase: DeleteNoteByIdUseCase,
-        @AppCoroutineScope private val scope: CoroutineScope
+    private val upsertNoteUseCase: UpsertNoteUseCase,
+    private val findNoteByIdUseCase: FindNoteByIdUseCase,
+    private val deleteNoteByIdUseCase: DeleteNoteByIdUseCase,
+    @AppCoroutineScope private val scope: CoroutineScope
 ) : ViewModel(), Detail {
     private val mutableStateFlow: MutableStateFlow<DetailState?> = MutableStateFlow(null)
 
