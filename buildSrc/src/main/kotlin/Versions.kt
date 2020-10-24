@@ -11,11 +11,11 @@ object Versions {
 
     const val androidBuildTools: String = "4.2.0-alpha14"
 
-    const val truth: String = "1.0.1"
+    const val truth: String = "1.1"
 
     const val junit: String = "4.13.1"
 
-    const val detekt: String = "1.14.1"
+    const val detekt: String = "1.14.2"
 
     const val leakCanary: String = "2.5"
 
