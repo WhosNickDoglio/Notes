@@ -53,10 +53,12 @@ fun SplashView() {
             asset = vectorResource(id = R.drawable.ic_launcher_foreground),
             colorFilter = ColorFilter(MaterialTheme.colors.primary, BlendMode.SrcIn),
             modifier = Modifier
-                .size(200.dp)
+                .size(IMAGE_SIZE.dp)
                 .constrainAs(image) {
                     centerTo(parent)
                 }
         )
     }
 }
+
+private const val IMAGE_SIZE = 200

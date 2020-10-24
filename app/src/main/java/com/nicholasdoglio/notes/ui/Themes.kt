@@ -47,14 +47,16 @@ fun NotesTheme(
     }
 }
 
+private const val SECONDARY_COLOR = 0x6B38FB
+
 private val notesTypography = Typography()
 
 private val light = lightColors(
     primary = Color.White,
-    secondary = Color(0x6B38FB)
+    secondary = Color(SECONDARY_COLOR)
 )
 
 private val dark = darkColors(
     primary = Color.Black,
-    secondary = Color(0x6B38FB)
+    secondary = Color(SECONDARY_COLOR)
 )
