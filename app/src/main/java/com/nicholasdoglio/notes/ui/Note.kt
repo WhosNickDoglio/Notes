@@ -38,6 +38,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.nicholasdoglio.notes.features.detail.DetailState
 
+@Suppress("LongParameterList")
 @Composable
 fun Note(
     state: DetailState,
@@ -45,8 +46,9 @@ fun Note(
     onContentsChange: (contents: String) -> Unit,
     onNoteSaved: () -> Unit,
     onNoteDeleted: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
-    ConstraintLayout(modifier = Modifier.fillMaxSize()) {
+    ConstraintLayout(modifier = modifier.fillMaxSize()) {
         val (title, content, save, discard) = createRefs()
 
         TextField(

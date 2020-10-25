@@ -32,6 +32,7 @@ import com.nicholasdoglio.notes.data.UpsertNoteUseCase
 import com.nicholasdoglio.notes.db.Note
 import com.nicholasdoglio.notes.util.TestDispatchers
 import com.squareup.sqldelight.sqlite.driver.JdbcSqliteDriver
+import kotlinx.coroutines.CoroutineScope
 
 class DetailViewModelTest {
     private val inMemorySqlDriver = JdbcSqliteDriver(JdbcSqliteDriver.IN_MEMORY).apply {
@@ -39,9 +40,18 @@ class DetailViewModelTest {
     }
 
     private val queries =
-        NoteDatabase(inMemorySqlDriver, Note.Adapter(TimestampColumnAdapter())).noteQueries
+            NoteDatabase(inMemorySqlDriver, Note.Adapter(TimestampColumnAdapter())).noteQueries
 
-    private val upsertNoteUseCase = UpsertNoteUseCase(queries, TestDispatchers())
-    private val findNoteByIdUseCase = FindNoteByIdUseCase(queries, TestDispatchers())
-    private val deleteNoteByIdUseCase = DeleteNoteByIdUseCase(queries, TestDispatchers())
+    private val dispatchers = TestDispatchers()
+
+    private val upsertNoteUseCase = UpsertNoteUseCase(queries, dispatchers)
+    private val findNoteByIdUseCase = FindNoteByIdUseCase(queries, dispatchers)
+    private val deleteNoteByIdUseCase = DeleteNoteByIdUseCase(queries, dispatchers)
+
+    private val viewModel = DetailViewModel(
+            upsertNoteUseCase,
+            findNoteByIdUseCase,
+            deleteNoteByIdUseCase,
+            CoroutineScope(dispatchers.main)
+    )
 }

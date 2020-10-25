@@ -35,9 +35,10 @@ import androidx.compose.ui.text.font.FontWeight
 @Composable
 fun EmptyState(
     title: String,
-    message: String
+    message: String,
+    modifier: Modifier = Modifier
 ) {
-    ConstraintLayout(modifier = Modifier.fillMaxSize()) {
+    ConstraintLayout(modifier = modifier.fillMaxSize()) {
         val (titleRef, messageRef) = createRefs()
 
         Text(

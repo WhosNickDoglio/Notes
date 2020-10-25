@@ -34,31 +34,31 @@ import com.nicholasdoglio.notes.util.DispatcherProvider
 
 @Composable
 fun DiscardNoteDialog(
-    id: Long,
-    title: String,
-    content: String,
-    dispatcherProvider: DispatcherProvider,
-    viewModel: Discard,
+        id: Long,
+        title: String,
+        content: String,
+        dispatcherProvider: DispatcherProvider,
+        viewModel: Discard,
 ) {
     val hideDialog by viewModel.isFinished.collectAsState(
-        initial = false,
-        context = dispatcherProvider.main
+            initial = false,
+            context = dispatcherProvider.main
     )
 
     if (hideDialog) {
         AlertDialog(
-            onDismissRequest = { },
-            text = { Text(text = "Would you like to discard or save this note?") },
-            confirmButton = {
-                Button(onClick = { viewModel.input(DiscardInput.Save(id, title, content)) }) {
-                    Text("SAVE")
+                onDismissRequest = { },
+                text = { Text(text = "Would you like to discard or save this note?") },
+                confirmButton = {
+                    Button(onClick = { viewModel.input(DiscardInput.Save(id, title, content)) }) {
+                        Text("SAVE")
+                    }
+                },
+                dismissButton = {
+                    Button(onClick = { viewModel.input(DiscardInput.Delete(id)) }) {
+                        Text("DISCARD")
+                    }
                 }
-            },
-            dismissButton = {
-                Button(onClick = { viewModel.input(DiscardInput.Delete(id)) }) {
-                    Text("DISCARD")
-                }
-            }
         )
     }
 }

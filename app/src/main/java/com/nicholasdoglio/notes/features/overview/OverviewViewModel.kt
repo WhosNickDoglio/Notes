@@ -35,15 +35,16 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class OverviewViewModel @Inject constructor(
-    observeNoteCountUseCase: ObserveNoteCountUseCase,
-    observeNotesUseCase: ObserveNotesUseCase
+    private val observeNoteCountUseCase: ObserveNoteCountUseCase,
+    private val observeNotesUseCase: ObserveNotesUseCase
 ) : ViewModel(), Overview {
 
-    override val state = observeNotesUseCase()
-        .combine(observeNoteCountUseCase().map { it == 0L }) { data, isEmpty ->
-            OverviewState(data, isEmpty)
-        }
-        .onEach { Timber.i("Current State: $it") }
+    override val state: Flow<OverviewState>
+        get() = observeNotesUseCase()
+            .combine(observeNoteCountUseCase().map { it == 0L }) { data, isEmpty ->
+                OverviewState(data, isEmpty)
+            }
+            .onEach { Timber.i("Current State: $it") }
 }
 
 interface Overview {

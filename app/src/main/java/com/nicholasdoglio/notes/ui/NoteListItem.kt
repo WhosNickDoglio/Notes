@@ -42,10 +42,11 @@ import com.nicholasdoglio.notes.db.Note
 @Composable
 fun NoteListItemView(
     note: Note,
-    onClick: (id: Long) -> Unit
+    onClick: (id: Long) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .background(color = Color.White)
             .absolutePadding(
                 left = PADDING_EIGHT.dp,

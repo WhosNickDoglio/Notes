@@ -31,40 +31,38 @@ import com.nicholasdoglio.notes.ui.Note
 import com.nicholasdoglio.notes.util.DispatcherProvider
 
 /**
- *
- *
+ * A screen that displays the entirety of a [com.nicholasdoglio.notes.db.Note] and allows for it to
+ * be edited or deleted.
  *
  * @param id The initial [com.nicholasdoglio.notes.db.Note] identifier.
- * @param viewModel the [DetailViewModel] that controls the data flow.
+ * @param viewModel A [androidx.lifecycle.ViewModel] that adheres to [Detail] and supplies state..
  * @param dispatcherProvider a container for Coroutine [kotlinx.coroutines.Dispatchers] to launch async work.
  * @param popBack a function that is called to navigate out of this screen.
  */
 @Composable
 fun DetailScreen(
-    id: Long,
-    viewModel: Detail,
-    dispatcherProvider: DispatcherProvider,
-    popBack: () -> Unit,
-    displayDiscardDialog: (id: Long, title: String, content: String) -> Unit
+        id: Long,
+        viewModel: Detail,
+        dispatcherProvider: DispatcherProvider,
+        popBack: () -> Unit,
+        displayDiscardDialog: (id: Long, title: String, content: String) -> Unit
 ) {
     val state by viewModel.state.collectAsState(
-        initial = null,
-        context = dispatcherProvider.main
+            initial = null,
+            context = dispatcherProvider.main
     )
 
     if (state?.id != id) viewModel.input(DetailInput.FirstLoad(id))
 
-    state?.let { detailState ->
-        if (detailState.isFinished) {
-            popBack()
-        }
+    if (state?.isFinished == true) popBack()
 
+    state?.let { detailState ->
         Note(
-            state = detailState,
-            onTitleChange = { viewModel.input(DetailInput.TitleChange(it)) },
-            onContentsChange = { viewModel.input(DetailInput.ContentChange(it)) },
-            onNoteSaved = { viewModel.input(DetailInput.Save) },
-            onNoteDeleted = { viewModel.input(DetailInput.Delete) }
+                state = detailState,
+                onTitleChange = { viewModel.input(DetailInput.TitleChange(it)) },
+                onContentsChange = { viewModel.input(DetailInput.ContentChange(it)) },
+                onNoteSaved = { viewModel.input(DetailInput.Save) },
+                onNoteDeleted = { viewModel.input(DetailInput.Delete) }
         )
     }
 }

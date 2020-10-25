@@ -47,8 +47,9 @@ class DetailViewModel @Inject constructor(
 ) : ViewModel(), Detail {
     private val mutableStateFlow: MutableStateFlow<DetailState?> = MutableStateFlow(null)
 
-    override val state: Flow<DetailState> = mutableStateFlow.filterNotNull()
-        .onEach { Timber.i("Current State: $it") }
+    override val state: Flow<DetailState>
+        get() = mutableStateFlow.filterNotNull()
+            .onEach { Timber.i("Current State: $it") }
 
     override fun input(input: DetailInput) {
         Timber.i("Current Input: $input")

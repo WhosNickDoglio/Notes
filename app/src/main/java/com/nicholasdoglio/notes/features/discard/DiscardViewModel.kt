@@ -43,8 +43,9 @@ class DiscardViewModel @Inject constructor(
 ) : ViewModel(), Discard {
 
     private val _isFinished = MutableStateFlow(false)
-    override val isFinished: Flow<Boolean> = _isFinished
-        .onEach { Timber.i("Is Dialog finished: $it") }
+    override val isFinished: Flow<Boolean>
+        get() = _isFinished
+            .onEach { Timber.i("Is Dialog finished: $it") }
 
     override fun input(input: DiscardInput) {
         Timber.i("Current Discard Input: $input")

@@ -40,9 +40,9 @@ import androidx.compose.ui.unit.dp
 import com.nicholasdoglio.notes.R
 
 @Composable
-fun SplashView() {
+fun SplashView(modifier: Modifier = Modifier) {
     ConstraintLayout(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .background(Color.White)
     ) {
