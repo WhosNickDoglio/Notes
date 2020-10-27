@@ -9,7 +9,7 @@ object Versions {
 
     const val dagger: String = "2.29.1"
 
-    const val androidBuildTools: String = "4.2.0-alpha14"
+    const val androidBuildTools: String = "4.2.0-alpha15"
 
     const val truth: String = "1.1"
 
@@ -29,13 +29,13 @@ object Versions {
 
     const val gradle: String = "6.7"
 
-    const val coroutines: String = "1.4.0-M1"
+    const val coroutines: String = "1.4.0"
 
     const val junitJacoco = "0.16.0"
 
     const val compose = "1.0.0-alpha05"
 
-    const val router = "0.20.0"
+    const val router = "0.21.0"
 
     const val backstack = "0.7.0+alpha04"
 
