@@ -40,7 +40,7 @@ class DetailViewModelTest {
     }
 
     private val queries =
-            NoteDatabase(inMemorySqlDriver, Note.Adapter(TimestampColumnAdapter())).noteQueries
+        NoteDatabase(inMemorySqlDriver, Note.Adapter(TimestampColumnAdapter())).noteQueries
 
     private val dispatchers = TestDispatchers()
 
@@ -49,9 +49,9 @@ class DetailViewModelTest {
     private val deleteNoteByIdUseCase = DeleteNoteByIdUseCase(queries, dispatchers)
 
     private val viewModel = DetailViewModel(
-            upsertNoteUseCase,
-            findNoteByIdUseCase,
-            deleteNoteByIdUseCase,
-            CoroutineScope(dispatchers.main)
+        upsertNoteUseCase,
+        findNoteByIdUseCase,
+        deleteNoteByIdUseCase,
+        CoroutineScope(dispatchers.main)
     )
 }

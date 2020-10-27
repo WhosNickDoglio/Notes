@@ -41,15 +41,15 @@ import com.nicholasdoglio.notes.util.DispatcherProvider
  */
 @Composable
 fun DetailScreen(
-        id: Long,
-        viewModel: Detail,
-        dispatcherProvider: DispatcherProvider,
-        popBack: () -> Unit,
-        displayDiscardDialog: (id: Long, title: String, content: String) -> Unit
+    id: Long,
+    viewModel: Detail,
+    dispatcherProvider: DispatcherProvider,
+    popBack: () -> Unit,
+    displayDiscardDialog: (id: Long, title: String, content: String) -> Unit
 ) {
     val state by viewModel.state.collectAsState(
-            initial = null,
-            context = dispatcherProvider.main
+        initial = null,
+        context = dispatcherProvider.main
     )
 
     if (state?.id != id) viewModel.input(DetailInput.FirstLoad(id))
@@ -58,11 +58,11 @@ fun DetailScreen(
 
     state?.let { detailState ->
         Note(
-                state = detailState,
-                onTitleChange = { viewModel.input(DetailInput.TitleChange(it)) },
-                onContentsChange = { viewModel.input(DetailInput.ContentChange(it)) },
-                onNoteSaved = { viewModel.input(DetailInput.Save) },
-                onNoteDeleted = { viewModel.input(DetailInput.Delete) }
+            state = detailState,
+            onTitleChange = { viewModel.input(DetailInput.TitleChange(it)) },
+            onContentsChange = { viewModel.input(DetailInput.ContentChange(it)) },
+            onNoteSaved = { viewModel.input(DetailInput.Save) },
+            onNoteDeleted = { viewModel.input(DetailInput.Delete) }
         )
     }
 }

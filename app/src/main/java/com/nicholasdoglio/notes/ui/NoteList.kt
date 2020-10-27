@@ -31,19 +31,19 @@ import com.nicholasdoglio.notes.db.Note
 
 @Composable
 fun NoteList(
-        notes: List<Note>,
-        onItemClicked: (id: Long) -> Unit,
+    notes: List<Note>,
+    onItemClicked: (id: Long) -> Unit,
 //        onSwipeRight: (id: Long) -> Unit,
-        modifier: Modifier = Modifier
+    modifier: Modifier = Modifier
 ) {
     LazyColumnFor(
-            items = notes,
-            modifier = modifier,
-            itemContent = { note ->
-                NoteListItemView(
-                        note = note,
-                        onClick = { onItemClicked(it) }
-                )
-            },
+        items = notes,
+        modifier = modifier,
+        itemContent = { note ->
+            NoteListItemView(
+                note = note,
+                onClick = { onItemClicked(it) }
+            )
+        },
     )
 }
