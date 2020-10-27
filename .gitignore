@@ -8,7 +8,8 @@
 /captures
 .externalNativeBuild
 /projectFilesBackup
-/.idea/assetWizardSettings.xml
-/.idea/gradle.xml
-/.idea/caches
-/.idea/navEditor.xml
+/.idea/
+/.idea/*
+!/.idea/codeStyles
+!/.idea/dictionaries
+!/.idea/copyright
