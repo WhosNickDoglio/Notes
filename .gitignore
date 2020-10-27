@@ -11,5 +11,6 @@
 /.idea/
 /.idea/*
 !/.idea/codeStyles
+!/.idea/codeStyleSettings.xml
 !/.idea/dictionaries
 !/.idea/copyright
