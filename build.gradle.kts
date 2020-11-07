@@ -30,6 +30,8 @@ buildscript {
         jcenter()
     }
     dependencies {
+        //https://github.com/cashapp/sqldelight/issues/2058
+        classpath("xml-apis:xml-apis:1.4.01")
         classpath(GradlePlugin.android)
         classpath(GradlePlugin.kotlin)
         classpath(GradlePlugin.sqlDelight)
