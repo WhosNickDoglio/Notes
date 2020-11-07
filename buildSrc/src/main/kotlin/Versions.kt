@@ -3,13 +3,13 @@ object Versions {
 
     const val ktlintGradlePlugin = "9.4.1"
 
-    const val benManesVersions = "0.33.0"
+    const val benManesVersions = "0.35.0"
 
     const val kotlin: String = "1.4.10"
 
     const val dagger: String = "2.29.1"
 
-    const val androidBuildTools: String = "4.2.0-alpha15"
+    const val androidBuildTools: String = "4.2.0-alpha16"
 
     const val truth: String = "1.1"
 
@@ -29,11 +29,11 @@ object Versions {
 
     const val gradle: String = "6.7"
 
-    const val coroutines: String = "1.4.0"
+    const val coroutines: String = "1.4.1"
 
     const val junitJacoco = "0.16.0"
 
-    const val compose = "1.0.0-alpha05"
+    const val compose = "1.0.0-alpha06"
 
     const val router = "0.21.0"
 
